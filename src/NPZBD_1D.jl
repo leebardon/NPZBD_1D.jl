@@ -192,16 +192,14 @@ module NPZBD_1D
                 e_o, yo_ij, koverh, o2_sat, ml_boxes, t_o2relax, o2_deep,
             )
 
-
-
     @info("Model Params: \n $params \n")
     
 
+    
     N, P, Z, B, D, track_time, fsaven = run_NPZBD(params)
 
-
-    outdir = "/home/lee/Dropbox/Development/NPZBD_0D/"
-    plot_results(outdir, fsaven)
+    outdir = "/home/lee/Dropbox/Development/NPZBD_1D/"
+    depth_plots(outdir, fsaven)
 
 end
 

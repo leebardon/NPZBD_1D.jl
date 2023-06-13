@@ -2209,3 +2209,2298 @@ Stacktrace:
 └ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
 ┌ Info: N2tot at t=214: 488.76906623138655
 └ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=214: 488.77173387282653
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=214: 488.77173386988227
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=215: 488.77440238977493
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=215: 488.77440327022117
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=215: 488.777072675969
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=215: 488.7770726730275
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=216: 488.7797429558049
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=216: 488.7797438348276
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=216: 488.7824150020318
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=216: 488.7824149990933
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=217: 488.7850870419078
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=217: 488.78508791951015
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=217: 488.7877608453264
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=217: 488.7877608423909
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=218: 488.79043464240107
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=218: 488.7904355185868
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=218: 488.7931102001776
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=218: 488.79311019724497
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=219: 488.79578575161713
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=219: 488.79578662638966
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=219: 488.7984630609247
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=219: 488.7984630579949
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=220: 488.80114036390216
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=220: 488.8011412372652
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=220: 488.8038194219212
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=220: 488.80381941899435
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=221: 488.80649847361707
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=221: 488.80649934557437
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=221: 488.8091792775355
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=221: 488.8091792746115
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=222: 488.81186007513776
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=222: 488.8118609456928
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=222: 488.8145426221507
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=222: 488.8145426192297
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=223: 488.81722516285487
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=223: 488.81722603201166
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=223: 488.81990945016565
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=223: 488.8199094472474
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=224: 488.8225937311744
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=224: 488.82259459893675
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=224: 488.82527975599373
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=224: 488.82527975307846
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=225: 488.82796577451813
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=225: 488.82796664089
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=225: 488.83065353406494
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=225: 488.83065353115234
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=226: 488.8333412873236
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=226: 488.83334215230894
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=226: 488.8360307788247
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=226: 488.8360307759148
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=227: 488.8387202640444
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=227: 488.8387211276472
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=227: 488.8414114847346
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=227: 488.8414114818276
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=228: 488.8441026991504
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=228: 488.84410356137494
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=228: 488.84679564627294
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=228: 488.84679564336864
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=229: 488.8494885871283
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=229: 488.84948944797844
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=229: 488.8521832579347
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=229: 488.8521832550333
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=230: 488.85487792248114
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=230: 488.85487878196136
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=230: 488.85757431423184
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=230: 488.85757431133334
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=231: 488.8602706997294
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=231: 488.8602715578441
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=231: 488.8629688096936
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=231: 488.8629688067976
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=232: 488.86566691341125
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=232: 488.86566777016475
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=232: 488.86836673886614
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=232: 488.868366735973
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=233: 488.8710665580818
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=233: 488.8710674134784
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=233: 488.87376809631394
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=233: 488.8737680934238
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=234: 488.87646962831417
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=234: 488.87647048235846
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=234: 488.8791728766197
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=234: 488.8791728737322
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=235: 488.88187611870006
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=235: 488.88187697139654
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=235: 488.8845810743835
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=235: 488.8845810714987
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=236: 488.88728602384884
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=236: 488.88728687520245
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=236: 488.88999268422475
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=236: 488.88999268134256
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=237: 488.8926993383892
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=237: 488.8927001884041
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=237: 488.89540770078077
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=237: 488.8954076979013
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=238: 488.89811605696804
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=238: 488.8981169056494
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=238: 488.9008261187087
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=238: 488.90082611583193
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=239: 488.90353617425194
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=239: 488.9035370216044
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=239: 488.90624793268444
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=239: 488.9062479298102
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=240: 488.9089596849263
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=240: 488.908960530955
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=240: 488.9116731374034
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=240: 488.9116731345318
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=241: 488.91438658369674
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=241: 488.91438742840626
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=241: 488.9171017275808
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=241: 488.91710172471187
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=242: 488.91981686528845
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=242: 488.91981770868387
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=242: 488.92253369795213
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=242: 488.92253369508586
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=243: 488.9252505244463
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=243: 488.9252513665327
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=243: 488.92796904327264
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=243: 488.92796904040915
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=244: 488.93068755593646
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=244: 488.93068839671906
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=244: 488.93340775831865
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=244: 488.93340775545755
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=245: 488.93612795454504
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=245: 488.93612879402906
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=245: 488.9388498378865
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=245: 488.9388498350281
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=246: 488.94157171507936
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=246: 488.94157255327
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=246: 488.9442952767945
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=246: 488.9442952739385
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=247: 488.9470188323677
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=247: 488.9470196692701
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=247: 488.94974406988126
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=247: 488.94974406702784
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=248: 488.95246930125984
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=248: 488.9524701368797
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=248: 488.9551962120075
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=248: 488.95519620915667
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=249: 488.957923116627
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=249: 488.95792395096964
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=249: 488.9606516980555
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=249: 488.9606516952072
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=250: 488.96338027336276
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=250: 488.9633811064335
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=250: 488.9661105229296
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=250: 488.9661105200838
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=251: 488.9688407663822
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=251: 488.96884159818677
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=251: 488.9715726815563
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=251: 488.9715726787132
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=252: 488.97430459062315
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=252: 488.9743054211673
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=252: 488.97703816888475
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=252: 488.977038166044
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=253: 488.9797717410461
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=253: 488.97977257033546
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=253: 488.9825069798871
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=253: 488.9825069770488
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=254: 488.9852422126344
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=254: 488.9852430406745
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=254: 488.9879791095578
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=254: 488.987979106722
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=255: 488.9907160003945
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=255: 488.99071682719136
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=255: 488.9934545529151
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=255: 488.9934545500818
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=256: 488.99619309935605
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=256: 488.9961939249154
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=256: 488.9989333050008
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=256: 488.99893330217
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=257: 489.00167350457264
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=257: 489.0016743289008
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=257: 489.0044153608802
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=257: 489.00441535805174
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=258: 489.0071572111217
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=258: 489.0071580342243
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=258: 489.00990071564274
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=258: 489.0099007128168
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=259: 489.0126442141046
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=259: 489.0126450359879
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=259: 489.01538936440215
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=259: 489.0153893615785
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=260: 489.0181345086472
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=260: 489.01813532931726
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=260: 489.02088130229646
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=260: 489.0208812994751
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=261: 489.02362808990006
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=261: 489.023628909363
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=261: 489.02637652448874
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=261: 489.02637652166976
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=262: 489.02912495303855
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=262: 489.0291257713007
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=262: 489.03187502616686
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=262: 489.0318750233504
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=263: 489.03462509326306
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=263: 489.0346259103308
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=263: 489.0373768025439
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=263: 489.03737679972977
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=264: 489.0401285057997
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=264: 489.0401293216793
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=264: 489.04288184885877
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=264: 489.04288184604695
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=265: 489.0456351858997
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=265: 489.04563600059765
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=265: 489.0483901603758
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=265: 489.04839015756625
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=266: 489.05114512884046
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=266: 489.05114594236323
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=266: 489.0539017323853
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=266: 489.05390172957806
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=267: 489.0566583299254
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=267: 489.0566591422796
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=267: 489.059416560204
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=267: 489.0594165573991
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=268: 489.06217478448457
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=268: 489.06217559567676
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=268: 489.064934639175
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=268: 489.0649346363723
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=269: 489.06769448787406
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=269: 489.06769529791114
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=269: 489.07045596466816
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=269: 489.07045596186765
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=270: 489.07321743547766
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=270: 489.07321824436593
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=270: 489.0759805320801
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=270: 489.0759805292819
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=271: 489.07874362270496
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=271: 489.0787444304515
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=271: 489.08150833683493
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=271: 489.08150833403914
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=272: 489.08427304499406
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=272: 489.0842738516059
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=272: 489.0870393743844
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=272: 489.0870393715907
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=273: 489.0898056978104
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=273: 489.08980650329414
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=273: 489.0925736402074
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=273: 489.09257363741574
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=274: 489.0953415766467
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=274: 489.0953423810095
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=274: 489.098111129811
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=274: 489.09811112702164
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=275: 489.10088067702435
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=275: 489.10088148027336
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=275: 489.10365183873057
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=275: 489.1036518359434
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=276: 489.1064229944928
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=276: 489.1064237966348
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=276: 489.10919576253
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=276: 489.109195759745
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=277: 489.11196852462984
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=277: 489.1119693256724
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=277: 489.11474289680154
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=277: 489.1147428940186
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=278: 489.11751726304243
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=278: 489.1175180629926
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=278: 489.12029323716655
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=278: 489.1202932343857
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=279: 489.1230692053664
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=279: 489.1230700042313
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=279: 489.12584677927543
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=279: 489.12584677649676
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=280: 489.1286243472669
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=280: 489.12862514505406
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=280: 489.13140351880804
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=280: 489.1314035160314
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=281: 489.1341826844383
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=281: 489.1341834811552
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=281: 489.13696345147395
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=281: 489.1369634486995
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=282: 489.13974421260525
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=282: 489.13974500825924
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=282: 489.1425265730124
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=282: 489.14252657024
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=283: 489.145308927522
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=283: 489.14530972212066
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=283: 489.1480928791931
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=283: 489.14809287642254
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=284: 489.1508768249731
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=284: 489.150877618524
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=284: 489.1536623658156
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=284: 489.15366236304715
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=285: 489.15644790077374
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=285: 489.15644869328435
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=285: 489.15923502871044
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=285: 489.159235025944
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=286: 489.16202215076936
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=286: 489.16202294224775
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=286: 489.16481086373886
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=286: 489.1648108609745
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=287: 489.1675995708372
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=287: 489.16760036129074
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=287: 489.17038986679313
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=287: 489.17038986403077
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=288: 489.17318015688465
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=288: 489.1731809463216
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=288: 489.17597203379694
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=288: 489.1759720310365
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=289: 489.17876390485134
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=289: 489.1787646932793
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=289: 489.18155736070537
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=289: 489.181557357947
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=290: 489.18435081070805
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=290: 489.184351598135
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=290: 489.18714584350533
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=290: 489.18714584074877
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=291: 489.1899408704577
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=291: 489.18994165689173
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=291: 489.19273747821563
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=291: 489.1927374754612
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=292: 489.1955340801355
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=292: 489.19553486558453
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=292: 489.19833226088775
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=292: 489.19833225813494
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=293: 489.2011304358083
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=293: 489.20113122028056
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=293: 489.203930187605
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=293: 489.2039301848542
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=294: 489.20672993357647
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=294: 489.20673071708006
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=294: 489.2095312544839
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=294: 489.2095312517349
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=295: 489.2123325695725
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=295: 489.21233335211576
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=295: 489.21513545767357
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=295: 489.2151354549265
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=296: 489.2179383399624
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=296: 489.2179391215536
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=296: 489.22074279335675
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=296: 489.2207427906115
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=297: 489.22354724094527
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=297: 489.2235480215927
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=297: 489.22635325774905
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=297: 489.22635325500556
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=298: 489.22915926875356
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=298: 489.2291600484658
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=298: 489.2319668471001
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=298: 489.23196684435845
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=299: 489.2347744196538
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=299: 489.23477519843914
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=299: 489.2375835576932
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=299: 489.23758355495335
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=300: 489.2403926899462
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=300: 489.2403934678133
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=300: 489.2432033858461
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=300: 489.243203383108
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=301: 489.2460140759657
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=301: 489.2460148529229
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=301: 489.24882632791014
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=301: 489.2488263251739
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=302: 489.2516385740811
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=302: 489.25163935013717
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=302: 489.254452380272
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=302: 489.2544523775375
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=303: 489.25726618069575
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=303: 489.2572669558597
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=303: 489.2600815393526
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=303: 489.26008153662
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=304: 489.26289689224876
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=304: 489.26289766652894
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=304: 489.26571380160846
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=304: 489.2657137988774
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=305: 489.26853070521366
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=305: 489.2685314786191
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=305: 489.2713491635307
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=305: 489.2713491608014
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=306: 489.27416761609953
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=306: 489.2741683886389
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=306: 489.276987621646
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=306: 489.27698761891844
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=307: 489.2798076214509
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=307: 489.27980839313324
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=307: 489.2826291725172
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=307: 489.28262916979133
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=308: 489.28545071784833
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=308: 489.28545148868255
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=308: 489.2882738127429
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=308: 489.28827381001855
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=309: 489.29109690190813
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=309: 489.2910976719035
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=309: 489.2939215389572
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=309: 489.29392153623456
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=310: 489.2967461702833
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=310: 489.2967469394487
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=310: 489.2995723478313
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=310: 489.29957234511033
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=311: 489.3023985196629
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=311: 489.3023992880074
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=311: 489.30522623607277
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=311: 489.30522623335344
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=312: 489.3080539467727
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=312: 489.3080547143058
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=312: 489.3108832004261
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=312: 489.3108831977083
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=313: 489.31371244837567
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=313: 489.3137132151063
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=313: 489.3165432376723
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=313: 489.31654323495616
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=314: 489.3193740212716
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=314: 489.31937478720914
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=314: 489.32220634463044
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=314: 489.32220634191566
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=315: 489.32503866229786
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=315: 489.3250394274518
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=315: 489.3278725181562
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=315: 489.3278725154431
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=316: 489.3307063683294
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=316: 489.33070713270934
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=316: 489.3335417551436
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=316: 489.3335417524319
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=317: 489.33637713627894
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=317: 489.33637789989393
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=317: 489.3392140525242
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=317: 489.3392140498142
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=318: 489.3420509630969
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=318: 489.3420517259567
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=318: 489.3448894072679
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=318: 489.3448894045594
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=319: 489.34772784577245
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=319: 489.3477286078868
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=319: 489.3505678163828
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=319: 489.35056781367587
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=320: 489.353407781333
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=320: 489.35340854271124
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=320: 489.3562492769158
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=320: 489.35624927421014
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=321: 489.3590907668445
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=321: 489.35909152749645
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=321: 489.36193378595186
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=321: 489.3619337832479
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=322: 489.36477679941174
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=322: 489.36477755934715
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=322: 489.3676213406161
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=322: 489.3676213379135
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=323: 489.3704658761789
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=323: 489.37046663540747
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=323: 489.37331193807177
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=323: 489.37331193537057
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=324: 489.37615799432933
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=324: 489.37615875286116
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=324: 489.3790055755221
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=324: 489.3790055728223
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=325: 489.3818531510855
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=325: 489.38185390893045
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=325: 489.3847022502096
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=325: 489.3847022475113
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=326: 489.3875513437107
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=326: 489.38755210087845
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=326: 489.39040195941715
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=326: 489.39040195672004
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=327: 489.3932525695067
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=327: 489.3932533260076
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=327: 489.3961047004671
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=327: 489.3961046977715
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=328: 489.3989568258165
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=328: 489.3989575816604
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=328: 489.4018104707223
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=328: 489.401810468028
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=329: 489.40466411002325
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=329: 489.4046648652203
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=329: 489.40751926758605
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=329: 489.4075192648932
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=330: 489.41037441955024
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=330: 489.41037517411075
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=330: 489.4132310885025
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=330: 489.4132310858108
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=331: 489.416087751862
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=331: 489.4160885057962
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=331: 489.4189459309564
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=331: 489.4189459282661
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=332: 489.421804104464
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=332: 489.4218048577819
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=332: 489.4246637924738
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=332: 489.42466378978463
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=333: 489.4275234749027
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=333: 489.4275242276148
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=333: 489.4303846706217
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=333: 489.430384667934
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=334: 489.4332458607659
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=334: 489.4332466128826
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=334: 489.43610856300904
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=334: 489.43610856032257
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=335: 489.4389712596835
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=335: 489.43897201121507
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=335: 489.4418354672862
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=335: 489.4418354646011
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=336: 489.44469966932644
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=336: 489.4447004202834
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=336: 489.4475653811455
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=336: 489.4475653784617
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=337: 489.4504310874082
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=337: 489.45043183780126
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=337: 489.45329830232174
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=337: 489.45329829963913
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=338: 489.45616551168456
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=338: 489.4561662615242
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=338: 489.45903422859124
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=338: 489.4590342259098
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=339: 489.46190293995323
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=339: 489.46190368925016
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=339: 489.46477315777344
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=339: 489.46477315509327
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=340: 489.46764337005493
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=340: 489.46764411881963
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=340: 489.47051508773035
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=340: 489.47051508505126
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=341: 489.4733867998731
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=341: 489.4733875481163
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=341: 489.4762600163668
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=341: 489.4762600136891
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=342: 489.4791332273339
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=342: 489.4791339750665
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=342: 489.4820079416309
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=342: 489.4820079389541
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=343: 489.4848826504071
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=343: 489.48488339763986
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=343: 489.48775886151367
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=343: 489.4877588588382
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=344: 489.49063506710553
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=344: 489.4906358138496
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=344: 489.4935127740502
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=344: 489.4935127713757
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=345: 489.49639047548595
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=345: 489.49639122175194
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=345: 489.49926967731886
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=345: 489.4992696746455
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=346: 489.5021488736486
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=346: 489.5021496194476
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=346: 489.50502956944194
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=346: 489.5050295667697
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=347: 489.5079102597378
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=347: 489.50791100508087
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=347: 489.51079244858596
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=347: 489.5107924459148
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=348: 489.51367463194237
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=348: 489.51367537684035
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=348: 489.5165583129614
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=348: 489.51655831029126
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=349: 489.51944198849486
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=349: 489.51944273295896
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=349: 489.52232716082364
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=349: 489.5223271581546
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=350: 489.5252123276727
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=350: 489.5252130717141
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=350: 489.52809899047236
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=350: 489.52809898780436
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=351: 489.53098564779816
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=351: 489.5309863914281
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=351: 489.5338738002522
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=351: 489.5338737975853
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=352: 489.5367619472383
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=352: 489.5367626904682
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=352: 489.5396515885528
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=352: 489.539651585887
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=353: 489.5425412244053
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=353: 489.54254196724617
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=353: 489.54543235380925
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=353: 489.54543235114437
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=354: 489.5483234777568
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=354: 489.5483242202201
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=354: 489.55121609450157
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=354: 489.5512160918377
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=355: 489.55410870579584
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=355: 489.5541094478928
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=355: 489.5570028091555
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=355: 489.5570028064926
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=356: 489.5598969070707
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=356: 489.55989764881315
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=356: 489.56279249634304
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=356: 489.56279249368106
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=357: 489.5656880801762
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=357: 489.5656888215756
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=357: 489.5685851546812
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=357: 489.5685851520204
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=358: 489.57148222375304
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=358: 489.57148296482063
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=358: 489.5743807828343
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=358: 489.5743807801741
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=359: 489.57727933648795
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=359: 489.5772800772354
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=359: 489.58017937951183
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=359: 489.58017937685275
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=360: 489.58307941711377
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=360: 489.58308015755284
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=360: 489.5859809434704
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=360: 489.58598094081225
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=361: 489.5888824644107
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=361: 489.58888320455287
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=361: 489.5917854735131
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=361: 489.59178547085577
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=362: 489.59468847720495
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=362: 489.59468921706207
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=362: 489.59759296849
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=362: 489.5975929658336
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=363: 489.60049745437027
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=363: 489.60049819395397
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=363: 489.60340342729796
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=363: 489.6034034246425
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=364: 489.6063093948267
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=364: 489.6063101341488
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=364: 489.60921684888143
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=364: 489.6092168462267
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=365: 489.6121242975426
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=365: 489.6121250366151
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=365: 489.6150332322317
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=365: 489.61503322957776
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=366: 489.61794216153294
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=366: 489.61794290036755
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=366: 489.6208525763878
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=366: 489.6208525737349
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=367: 489.62376298586065
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=367: 489.62376372446937
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=367: 489.6266748804368
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=367: 489.6266748777845
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=368: 489.6295867696365
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=368: 489.6295875080314
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=368: 489.63250014351337
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=368: 489.6325001408619
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=369: 489.6354135120191
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=369: 489.63541425021214
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=369: 489.6383283647998
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=369: 489.6383283621493
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=370: 489.6412432122154
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=370: 489.6412439502185
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=370: 489.6441595435278
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=370: 489.6441595408778
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=371: 489.64707586948026
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=371: 489.6470766073056
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=371: 489.64999367897593
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=371: 489.649993676327
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=372: 489.65291148311746
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=372: 489.6529122207772
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=372: 489.65583077047256
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=372: 489.6558307678242
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=373: 489.65875005247915
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=373: 489.6587507899854
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=373: 489.6616708173941
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=373: 489.6616708147467
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=374: 489.6645915769662
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=374: 489.6645923143312
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=374: 489.66751381916606
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=374: 489.66751381651943
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=375: 489.6704360560288
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=375: 489.6704367932647
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=375: 489.67335977526307
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=375: 489.67335977261723
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=376: 489.6762834891657
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=376: 489.676284226285
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=376: 489.6792086852087
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=376: 489.67920868256357
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=377: 489.68213387592573
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=377: 489.68213461294084
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=377: 489.68506054857625
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=377: 489.68506054593183
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=378: 489.68798721590633
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=378: 489.6879879528293
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=378: 489.6909153649882
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=378: 489.6909153623443
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=379: 489.6938435087551
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=379: 489.6938442455986
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=379: 489.6967731341167
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=379: 489.6967731314735
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=380: 489.69970275416887
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=380: 489.69970349094564
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=380: 489.70263385568404
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=380: 489.70263385304156
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=381: 489.7055649518953
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=381: 489.7055656886173
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=381: 489.7084975294624
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=381: 489.70849752682057
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=382: 489.711430101731
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=382: 489.7114308384111
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=382: 489.71436415527387
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=382: 489.71436415263264
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=383: 489.7172982035238
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=383: 489.7172989401744
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=383: 489.7202337329911
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=383: 489.7202337303506
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=384: 489.72316925717104
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=384: 489.7231699938048
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=384: 489.72610626253714
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=384: 489.72610625989716
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=385: 489.7290432626213
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=385: 489.72904399925073
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=385: 489.7319817438855
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=385: 489.7319817412462
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=386: 489.7349202198733
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=386: 489.73492095651136
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=386: 489.7378601770606
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=386: 489.73786017442194
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=387: 489.7408001289769
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=387: 489.7408008656363
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=387: 489.74374156213764
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=387: 489.7437415594998
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=388: 489.7466829900328
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=388: 489.74668372672613
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=388: 489.749625899243
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=388: 489.7496258966056
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=389: 489.75256880319307
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=389: 489.75256953993306
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=389: 489.75551318855406
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=389: 489.7555131859172
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=390: 489.7584575686604
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=390: 489.75845830545995
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=390: 489.76140343029954
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=390: 489.7614034276633
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=391: 489.7643492866895
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=391: 489.76435002356163
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=391: 489.7672966247599
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=391: 489.76729662212426
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=392: 489.7702439575865
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=392: 489.77024469454415
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=392: 489.773192772267
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=392: 489.77319276963175
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=393: 489.77614158170906
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=393: 489.77614231876504
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=393: 489.7790918732043
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=393: 489.7790918705697
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=394: 489.78204215946676
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=394: 489.78204289663387
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=394: 489.7849939280077
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=394: 489.7849939253736
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=395: 489.78794569132094
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=395: 489.78794642861266
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=395: 489.7908989371644
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=395: 489.7908989345308
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=396: 489.7938521777856
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=396: 489.7938529152146
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=396: 489.7968069012144
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=396: 489.7968068985813
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=397: 489.7997616194263
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=397: 489.7997623570056
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=397: 489.80271782074936
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=397: 489.8027178181169
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=398: 489.8056740168613
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=398: 489.8056747546041
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=398: 489.8086316964143
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=398: 489.8086316937822
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=399: 489.8115893707612
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=399: 489.81159010868095
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=399: 489.81454852890585
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=399: 489.81454852627434
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=400: 489.81750768184975
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=400: 489.81750841995927
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=400: 489.8204683189738
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=400: 489.8204683163427
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=401: 489.8234289509026
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=401: 489.8234296892153
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=401: 489.82639106742084
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=401: 489.8263910647902
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=402: 489.82935317874905
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=402: 489.829353917278
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=402: 489.8323167751023
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=402: 489.8323167724721
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=403: 489.83528036627104
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=403: 489.8352811050297
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=403: 489.83824544292696
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=403: 489.8382454402973
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=404: 489.8412105144037
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=404: 489.84121125340505
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=404: 489.8441770718566
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=404: 489.84417706922727
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=405: 489.84714362413547
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=405: 489.84714436339306
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=405: 489.8501116629062
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=405: 489.8501116602772
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=406: 489.85307969650825
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=406: 489.8530804360353
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=406: 489.85604921714435
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=406: 489.85604921451596
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=407: 489.85901873261713
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=407: 489.85901947242724
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=407: 489.8619897356932
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=407: 489.86198973306534
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=408: 489.8649607336113
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=408: 489.8649614737179
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=408: 489.8679332197288
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=408: 489.86793321710127
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=409: 489.8709057006936
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=409: 489.8709064411099
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=409: 489.8738796704805
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=409: 489.8738796678533
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=410: 489.87685363512026
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=410: 489.87685437585986
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=410: 489.8798290892321
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=410: 489.87982908660535
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=411: 489.882804538202
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=411: 489.8828052792785
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=411: 489.8857814773212
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=411: 489.8857814746948
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=412: 489.8887584113035
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=412: 489.8887591527305
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=412: 489.8917368361394
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=412: 489.89173683351345
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=413: 489.8947152558438
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=413: 489.89471599763465
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=413: 489.89769516713295
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=413: 489.8976951645073
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=414: 489.9006750732958
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=414: 489.90067581546424
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=414: 489.90365647180204
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=414: 489.9036564691769
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=415: 489.90663786518746
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=415: 489.906638607747
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=415: 489.90962075170194
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=415: 489.9096207490769
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=416: 489.9126036331007
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=416: 489.91260437606513
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=416: 489.91558800844183
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=416: 489.9155880058171
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=417: 489.9185723786725
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=417: 489.9185731220554
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=417: 489.92155824368615
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=417: 489.9215582410617
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=418: 489.92454410359437
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=418: 489.92454484740955
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=418: 489.9275314591537
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=418: 489.9275314565296
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=419: 489.9305188096129
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=419: 489.9305195538741
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=419: 489.93350765661864
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=419: 489.933507653995
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=420: 489.93649649852944
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=420: 489.9364972432502
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=420: 489.9394868379099
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=420: 489.9394868352865
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=421: 489.94247717220054
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=421: 489.94247791739474
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=421: 489.9454690049113
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=421: 489.94546900228835
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=422: 489.94846083253776
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=422: 489.94846157821934
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=422: 489.95145415956256
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=422: 489.9514541569398
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=423: 489.95444748150805
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=423: 489.9544482276907
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=423: 489.9574423038579
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=423: 489.9574423012355
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=424: 489.9604371211336
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=424: 489.960437867831
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=424: 489.9634334398442
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=424: 489.9634334372231
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=425: 489.96642975348703
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=425: 489.9664305007106
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=425: 489.9694275696202
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=425: 489.96942756699923
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=426: 489.9724253806908
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=426: 489.97242612845463
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=426: 489.975424695336
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=426: 489.97542469271536
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=427: 489.9784240049238
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=427: 489.97842475324205
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=427: 489.98142481919865
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=427: 489.98142481657834
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=428: 489.98442562842104
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=428: 489.9844263773074
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=428: 489.98742794347066
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=428: 489.9874279408505
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=429: 489.9904302534729
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=429: 489.99043100294114
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=429: 489.99343407047024
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=429: 489.9934340678504
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=430: 489.9964378824256
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=430: 489.9964386324899
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=430: 489.99944320257185
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=430: 489.9994431999522
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=431: 490.00244851768133
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=431: 490.0024492683556
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=431: 490.0054553422056
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=431: 490.0054553395862
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=432: 490.0084621616984
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=432: 490.0084629129967
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=432: 490.0114704918579
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=432: 490.01147048923883
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=433: 490.01447881699113
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=433: 490.0144795689276
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=433: 490.01748865407126
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=433: 490.0174886514523
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=434: 490.02049848613007
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=434: 490.0204992387187
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=434: 490.0235098314442
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=434: 490.02350982882547
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=435: 490.02652117174216
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=435: 490.0265219249969
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=435: 490.0295340266317
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=435: 490.0295340240133
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=436: 490.03254687651054
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=436: 490.0325476304456
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=436: 490.03556124234547
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=436: 490.03556123972714
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=437: 490.03857560317465
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=437: 490.0385763578042
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=437: 490.04159148135307
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=437: 490.041591478735
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=438: 490.04460735453074
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=438: 490.0446081098688
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=438: 490.04762474647896
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=438: 490.0476247438612
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=439: 490.05064213343144
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=439: 490.0506428894922
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=439: 490.053661040604
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=439: 490.0536610379864
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=440: 490.0566799427863
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=440: 490.0566806995839
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=440: 490.0597003666661
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=440: 490.05970036404864
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=441: 490.06272078556094
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=441: 490.0627215431095
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=441: 490.06574272765954
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=441: 490.06574272504236
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=442: 490.0687646647782
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=442: 490.06876542309226
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=442: 490.07178812663574
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=442: 490.07178812401867
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=443: 490.0748115835182
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=443: 490.0748123426116
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=443: 490.07783656670256
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=443: 490.0778365640857
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=444: 490.080861544917
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=444: 490.0808623048043
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=444: 490.0838880510251
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=444: 490.08388804840865
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=445: 490.0869145521687
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=445: 490.0869153128639
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=445: 490.08994258282587
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=445: 490.0899425802094
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=446: 490.09297060852356
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=446: 490.09297137004097
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=446: 490.0960001653837
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=446: 490.0960001627675
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=447: 490.09902971728934
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=447: 490.0990304796433
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=447: 490.1020608020348
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=447: 490.1020607994188
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=448: 490.1050918818311
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=448: 490.1050926450359
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=448: 490.108124496173
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=448: 490.10812449355717
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=449: 490.11115710557084
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=449: 490.11115786964086
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=449: 490.11419125124894
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=449: 490.1141912486332
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=450: 490.11722539198803
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=450: 490.1172261569374
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=450: 490.12026107077065
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=450: 490.1202610681551
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=451: 490.1232967446193
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=451: 490.12329751046263
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=451: 490.1263339583036
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=451: 490.1263339556882
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=452: 490.129371167059
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=452: 490.1293719338106
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=452: 490.1324099174706
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=452: 490.1324099148554
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=453: 490.13544866295837
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=453: 490.1354494306325
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=453: 490.138488951952
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=453: 490.1384889493369
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=454: 490.1415292360269
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=454: 490.1415300046378
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=454: 490.1445710654857
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=454: 490.1445710628707
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=455: 490.1476128900309
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=455: 490.1476136595933
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=455: 490.15065626186697
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=455: 490.1506562592522
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=456: 490.1536996287946
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=456: 490.15370039932264
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=456: 490.156744544949
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=456: 490.1567445423343
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=457: 490.15978945619986
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=457: 490.1597902277082
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=457: 490.1628359186424
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=457: 490.16283591602786
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=458: 490.1658823761863
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=458: 490.1658831486891
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=458: 490.1689303869153
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=458: 490.1689303843009
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=459: 490.171978392751
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=459: 490.17197916626276
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=459: 490.17502795379403
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=459: 490.17502795117974
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=460: 490.17807750994893
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=460: 490.17807828448406
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=460: 490.18112862336244
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=460: 490.18112862074844
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=461: 490.1841797318928
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=461: 490.1841805074659
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=461: 490.18723239976225
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=461: 490.1872323971482
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=462: 490.19028506275345
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=462: 490.1902858393788
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=462: 490.19333928719266
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=462: 490.1933392845788
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=463: 490.19639350675897
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=463: 490.1963942844513
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=463: 490.19944928991146
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=463: 490.19944928729785
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=464: 490.20250506819605
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=464: 490.20250584696964
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=464: 490.20556241223386
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=464: 490.2055624096203
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=465: 490.208619751409
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=465: 490.20862053127837
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=465: 490.21167865853323
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=465: 490.21167865591974
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=466: 490.2147375607997
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=466: 490.2147383417794
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=466: 490.2177980332406
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=466: 490.2177980306272
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=467: 490.2208585008288
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=467: 490.22085928293325
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=467: 490.22392054084526
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=467: 490.22392053823194
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=468: 490.2269825760143
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=468: 490.226983359258
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=468: 490.2300461858948
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=468: 490.23004618328156
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=469: 490.23310979093264
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=469: 490.2331105753303
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=469: 490.2361749729941
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=469: 490.236174970381
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=470: 490.23924015021817
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=470: 490.2392409357841
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=470: 490.24230690680696
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=470: 490.24230690419404
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=471: 490.24537365856327
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=471: 490.2453744453121
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=471: 490.2484419920547
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=471: 490.2484419894418
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=472: 490.2515103207187
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=472: 490.2515111086649
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=472: 490.25458023351683
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=472: 490.2545802309042
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=473: 490.25765014149283
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=473: 490.2576509306508
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=473: 490.26072163603135
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=473: 490.26072163341894
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=474: 490.26379312575284
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=474: 490.2637939161373
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=474: 490.26686620449414
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=474: 490.26686620188167
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=475: 490.2699392784234
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=475: 490.26994007004896
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=475: 490.2730139438592
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=475: 490.2730139412468
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=476: 490.2760886044879
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=476: 490.2760893973689
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=476: 490.2791648591387
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=476: 490.2791648565264
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=477: 490.2822411089874
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=477: 490.2822419031385
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=477: 490.28531895540306
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=477: 490.2853189527911
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=478: 490.2883967970219
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=478: 490.28839759245756
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=478: 490.2914762377812
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=478: 490.29147623516906
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=479: 490.29455567374856
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=479: 490.2945564704836
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=479: 490.2976367114595
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=479: 490.2976367088476
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=480: 490.3007177443837
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=480: 490.30071854243243
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=480: 490.30380038168335
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=480: 490.3038003790714
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=481: 490.3068830142012
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=481: 490.3068838135782
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=481: 490.3099672537558
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=481: 490.30996725114403
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=482: 490.3130514885336
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=482: 490.31305228925345
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=482: 490.31613733303845
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=482: 490.3161373304267
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=483: 490.31922317277144
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=483: 490.3192239748487
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=483: 490.3223106249508
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=483: 490.3223106223392
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=484: 490.3253980723635
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=484: 490.3253988758127
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=484: 490.3284871349709
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=484: 490.3284871323594
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=485: 490.33157619281667
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=485: 490.3315769976523
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=485: 490.33466686863466
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=485: 490.3346668660234
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=486: 490.3377575396962
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=486: 490.3377583459329
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=486: 490.34084983153656
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=486: 490.3408498289254
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=487: 490.3439421186256
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=487: 490.3439429262778
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=487: 490.347036029329
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=487: 490.347036026718
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=488: 490.35012993528625
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=488: 490.35013074436864
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=488: 490.3532254677227
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=488: 490.3532254651118
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=489: 490.3563209954179
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=489: 490.35632180594513
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=489: 490.3594181524864
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=489: 490.35941814987547
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=490: 490.36251530481877
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=490: 490.3625161168051
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=490: 490.3656140894474
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=490: 490.3656140868365
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=491: 490.36871286934473
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=491: 490.36871368280487
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=491: 490.3718132844906
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=491: 490.37181328187984
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=492: 490.3749136949101
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=492: 490.3749145098587
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=492: 490.37801574355933
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=492: 490.37801574094885
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=493: 490.3811177874875
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=493: 490.3811186039388
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=493: 490.38422147265527
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=493: 490.38422147004474
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=494: 490.387325153107
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=494: 490.3873259710757
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=494: 490.39043047783775
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=494: 490.39043047522733
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=495: 490.3935357978575
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=495: 490.39353661735805
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=495: 490.39664276522444
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=495: 490.39664276261425
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=496: 490.3997497278856
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=496: 490.39975054893256
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=496: 490.40285834099114
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=496: 490.40285833838095
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=497: 490.4059669493958
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=497: 490.4059677720038
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=497: 490.4090772113716
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=497: 490.4090772087614
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=498: 490.41218746865127
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=498: 490.4121882928345
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=498: 490.4152993826572
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=498: 490.4152993800472
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=499: 490.41841129197246
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=499: 490.41841211774556
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=499: 490.4215248611981
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=499: 490.42152485858827
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Info: N1tot at t=500: 490.4246384257378
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:16
+┌ Info: N2tot at t=500: 490.42463925311563
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:28
+┌ Info: N3tot at t=500: 490.42775365340157
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:41
+┌ Info: Ntot at t=500: 490.427753650792
+└ @ Main.NPZBD_1D /home/lee/Dropbox/Development/NPZBD_1D/src/integrate.jl:54
+┌ Warning: Forcibly interrupting busy workers
+│   exception = ErrorException("schedule: Task not runnable")
+└ @ Distributed /cache/build/default-amdci4-2/julialang/julia-release-1-dot-8/usr/share/julia/stdlib/v1.8/Distributed/src/cluster.jl:1253
