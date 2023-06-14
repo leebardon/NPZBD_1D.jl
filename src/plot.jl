@@ -123,7 +123,7 @@ end
 
 # ----------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------
-
+#NOTE these 'time' plots are ultimately unnecessary for 1D runs
 # function get_time_variables(ds, vars)
 
 #     out = Vector{Any}()
