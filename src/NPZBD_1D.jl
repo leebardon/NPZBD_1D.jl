@@ -6,7 +6,7 @@ module NPZBD_1D
     using SparseArrays
 
     using Distributed
-    addprocs(14)
+    addprocs(14, exeflags = "--project=$(Base.active_project())")
     println("Number of cores: ", nprocs())
     println("Number of workers: ", nworkers())
 
@@ -26,7 +26,17 @@ module NPZBD_1D
     include("traits.jl")
     include("integrate.jl")
     include("plot.jl")
- 
+
+
+    #------------------------------------------------------------------------------------------------------------#
+    #TODO add test option
+    # Figure out how to pause and wait for subroutine to end if test is selected, then quit program, rather than 
+    include("../test/data/prms_for_tests.jl")
+    test_prms = TestPrms()
+    N, P, Z, B, D, track_time, fsaven = run_NPZBD(test_prms)
+    #------------------------------------------------------------------------------------------------------------#
+
+
     fsave = "out_1D"
     
     #------------------------------------------------------------------------------------------------------------#
@@ -195,8 +205,11 @@ module NPZBD_1D
     @info("Model Params: \n $params \n")
     
 
-    
-    N, P, Z, B, D, track_time, fsaven = run_NPZBD(params)
+    include("../test/data/prms_for_tests.jl")
+    test_prms = TestPrms()
+    N, P, Z, B, D, track_time, fsaven = run_NPZBD(test_prms)
+
+    # N, P, Z, B, D, track_time, fsaven = run_NPZBD(params)
 
     outdir = "/home/lee/Dropbox/Development/NPZBD_1D/"
     depth_plots(outdir, fsaven)

@@ -12,7 +12,7 @@ function message(v::String, nd::Int64=0, nb::Int64=0, np::Int64=0, nz::Int64=0, 
     m = Dict(
         "START" => "\n -------------------------------- STARTING PROGRAM ----------------------------------- \n",
         "DEF" => "Default values: \n tt = 5 \n nrec = 100 \n nn = 1 \n np = 1 \n nz = 2 \n nb = 6 \n nd = 3 \n y_i = conts. 0.3 \n SW = const. 1.0 \n vmax_i = ordered assignment \n ",
-        "DF1" => ["Use defaults", "Select custom params"],
+        "DF1" => ["Use defaults", "Select custom prms"],
         "DF2" => "Proceed with defaults or select custom params?",
         "T" => "\n Enter simulation run time (tt - number of days): ",
         "REC" => "Enter number of timepoints to record (nrec): ",
@@ -198,9 +198,9 @@ end
 
 function print_info(start_time, prms, nt)
 
-    @printf("\n np = %5.0f \n nb = %5.0f \n nz = %5.0f \n nn = %5.0f \n nd = %5.0f \n T = %5.0f \n\n", params.np, params.nb, params.nz, params.nn,  params.nd, params.tt)
+    @printf("\n np = %5.0f \n nb = %5.0f \n nz = %5.0f \n nn = %5.0f \n nd = %5.0f \n T = %5.0f \n\n", prms.np, prms.nb, prms.nz, prms.nn,  prms.nd, prms.tt)
     open("jlog.txt","w") do f
-        write(f,@sprintf("np = %5.0f, nb = %5.0f, nz = %5.0f, nn = %5.0f, nd = %5.0f, T = %5.0f \n", params.np, params.nb, params.nz, params.nn,  params.nd, params.tt))
+        write(f,@sprintf("np = %5.0f, nb = %5.0f, nz = %5.0f, nn = %5.0f, nd = %5.0f, T = %5.0f \n", prms.np, prms.nb, prms.nz, prms.nn,  prms.nd, prms.tt))
     end
 
     fsaven = string(prms.fsave,"_", Dates.format(start_time, "yyyymmdd"), ".nc")
@@ -211,10 +211,10 @@ function print_info(start_time, prms, nt)
     println("Starting time: $start_time, \nFile will be saved as: $fsaven")
 
     println("\nConsumption Matrix (CM):")
-    display("text/plain", CM)
+    display("text/plain", prms.CM)
 
     println("\nGrazing Matrix (GrM):")
-    display("text/plain", GrM)
+    display("text/plain", prms.GrM)
 
     println("nt = ", nt)
 
@@ -225,7 +225,7 @@ end
 function update_tracking_arrs(track_n, track_p, track_z, track_b, track_d, track_o, track_time, ntemp, ptemp, ztemp, btemp, dtemp, otemp, t, trec, prms)
 
     j = Int(t÷trec + 1)
-    t_id = t.*dt
+    t_id = t.*prms.dt
     track_p[:,:,j] .= ptemp
     track_b[:,:,j] .= btemp 
     track_z[:,:,j] .= ztemp 
@@ -245,26 +245,26 @@ function update_tracking_arrs(track_n, track_p, track_z, track_b, track_d, track
 end
 
 
-function savetoNC(fsaven, p, b, z, n, d, o, timet, v, uptake, tst, tfn, params)
+function savetoNC(fsaven, p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms)
 
     println("Saving to: ",fsaven)
 
     f = NCDataset(fsaven, "c") #c for create
 
     # define the dim of p, b, z, n, d
-    defDim(f,"np", params.np)
-    defDim(f,"nb",params.nb)
-    defDim(f,"nz",params.nz)
-    defDim(f,"nn",params.nn)
-    defDim(f,"nd",params.nd)
+    defDim(f,"np", prms.np)
+    defDim(f,"nb",prms.nb)
+    defDim(f,"nz",prms.nz)
+    defDim(f,"nn",prms.nn)
+    defDim(f,"nd",prms.nd)
 
     # define the dim of the depth
-    defDim(f,"ndepth",params.ngrid)
-    defDim(f,"ndepth1",params.ngrid+1)
+    defDim(f,"ndepth",prms.ngrid)
+    defDim(f,"ndepth1",prms.ngrid+1)
 
     # define the dim of the time length
-    nrec1 = Int(params.nrec+1) #bc i added time 0
-    nprey = params.np + params.nb
+    nrec1 = Int(prms.nrec+1) #bc i added time 0
+    nprey = prms.np + prms.nb
     
     defDim(f,"nrec",nrec1)
     defDim(f,"nprey",nprey)
@@ -303,23 +303,23 @@ function savetoNC(fsaven, p, b, z, n, d, o, timet, v, uptake, tst, tfn, params)
     # --------------------------------------------------
     
     w = defVar(f,"pIC",Float64,("ndepth","np"))
-    w[:,:] = params.pIC
+    w[:,:] = prms.pIC
     w.attrib["units"] = "mmol/m3 C biomass"
 
     w = defVar(f,"bIC",Float64,("ndepth","nb"))
-    w[:,:] = params.bIC
+    w[:,:] = prms.bIC
     w.attrib["units"] = "mmol/m3 C biomass"
 
     w = defVar(f,"zIC",Float64,("ndepth","nz"))
-    w[:,:] = params.zIC
+    w[:,:] = prms.zIC
     w.attrib["units"] = "mmol/m3 C biomass"
 
     w = defVar(f,"nIC",Float64,("ndepth","nn"))
-    w[:,:] = params.nIC
+    w[:,:] = prms.nIC
     w.attrib["units"] = "mmol/m3 C OM"
 
     w = defVar(f,"dIC",Float64,("ndepth","nd"))
-    w[:,:] = params.dIC
+    w[:,:] = prms.dIC
     w.attrib["units"] = "mmol/m3 C OM"
 
     # --------------------------------------------------
@@ -329,19 +329,19 @@ function savetoNC(fsaven, p, b, z, n, d, o, timet, v, uptake, tst, tfn, params)
     w.attrib["units"] = "days"
 
     w = defVar(f, "H", Int, ())
-    w[:] = params.H
+    w[:] = prms.H
     w.attrib["units"] = "m; total height"
 
     w = defVar(f, "dz", Int, ())
-    w[:] = params.dz
+    w[:] = prms.dz
     w.attrib["units"] = "m; box height"
 
     w = defVar(f, "kappa_z", Float64, ("ndepth1",))
-    w[:] = params.kappa_z
+    w[:] = prms.kappa_z
     w.attrib["units"] = "vertical water velocity"
     
     w = defVar(f, "wd", Float64, ("ndepth1","nd"))
-    w[:] = params.wd
+    w[:] = prms.wd
     w.attrib["units"] = "sinking rate"
 
     # --------------------------------------------------
@@ -351,7 +351,7 @@ function savetoNC(fsaven, p, b, z, n, d, o, timet, v, uptake, tst, tfn, params)
     w.attrib["units"] = "mmol/m3 C per d; uptake matrix"
 
     w = defVar(f,"SW",Float64,("nd",))
-    w[:,:] = params.SW 
+    w[:,:] = prms.SW 
     w.attrib["units"] = "Ind C supply weight: probability"
     
     # w = defVar(f,"SW_all",Float64,("nd","nrec"))
@@ -359,63 +359,63 @@ function savetoNC(fsaven, p, b, z, n, d, o, timet, v, uptake, tst, tfn, params)
     # w.attrib["units"] = "Ind C supply weight: over time"
 
     w = defVar(f,"pen",Float64,("nb",))
-    w[:,:] = params.pen
+    w[:,:] = prms.pen
     w.attrib["units"] = "penalty"
     
     w = defVar(f, "umax_p", Float64, ("np",))
-    w[:] = params.umax_p
+    w[:] = prms.umax_p
     w.attrib["units"] = "m3/mmol/d; max growth rate of p"
 
     w = defVar(f, "K_n", Float64, ("np",))
-    w[:] = params.K_n
+    w[:] = prms.K_n
     w.attrib["units"] = "m3/mmol; half-sat rate of p"
 
     w = defVar(f,"CM",Float64,("nd","nb"))
-    w[:,:] = params.CM
+    w[:,:] = prms.CM
     w.attrib["units"] = "Consumption Matrix"
 
     w = defVar(f,"GrM",Float64,("nz","nprey"))
-    w[:,:] = params.GrM
+    w[:,:] = prms.GrM
     w.attrib["units"] = "Grazing Matrix"
 
     w = defVar(f, "y_ij", Float64, ("nd","nb"))
-    w[:,:] = params.y_ij
+    w[:,:] = prms.y_ij
     w.attrib["units"] = "per d; max yield rate"
 
     w = defVar(f, "vmax_i", Float64, ("nd",))
-    w[:,:] = params.vmax_i
+    w[:,:] = prms.vmax_i
     w.attrib["units"] = "per d; max uptake rate"
     
     w = defVar(f, "vmax_ij", Float64, ("nd", "nb"))
-    w[:,:] = params.vmax_ij
+    w[:,:] = prms.vmax_ij
     w.attrib["units"] = "per d; max uptake rate"
     
     w = defVar(f, "Km_ij", Float64, ("nd", "nb"))
-    w[:] = params.Km_ij
+    w[:] = prms.Km_ij
     w.attrib["units"] = "mmol/m3; half-sat"
     
     w = defVar(f, "m_lb", Float64, ("nb",))
-    w[:,:] = params.m_lb
+    w[:,:] = prms.m_lb
     w.attrib["units"] = "m3/mmol; linear death rate of b"
 
     w = defVar(f, "m_qb", Float64, ("nb",))
-    w[:,:] = params.m_qb
+    w[:,:] = prms.m_qb
     w.attrib["units"] = "m3/mmol; quadratic death rate of b"
     
     w = defVar(f, "K_g", Float64, ("nz",))
-    w[:] = params.K_g
+    w[:] = prms.K_g
     w.attrib["units"] = "m3/mmol; half-sat rate of z"
     
     w = defVar(f, "γ", Float64, ("nz",))
-    w[:] = params.γ
+    w[:] = prms.γ
     w.attrib["units"] = "fraction of digestion of z"
     
     w = defVar(f, "m_lz", Float64, ("nz",))
-    w[:,:] = params.m_lz
+    w[:,:] = prms.m_lz
     w.attrib["units"] = "m3/mmol; linear death rate of z"
 
     w = defVar(f, "m_qz", Float64, ("nz",))
-    w[:,:] = params.m_qz
+    w[:,:] = prms.m_qz
     w.attrib["units"] = "m3/mmol; quadratic death rate of z"
     
     close(f)
