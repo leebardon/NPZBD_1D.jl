@@ -10,11 +10,10 @@ set_zero_subnormals(true)
 
 
 #TODO add a sinking (dsink) to remove some detritus or it wont equilibriate 
-function run_NPZBD(prms)
+function run_NPZBD(prms, pulse)
 
     start_time = now()
 
-    # dt = prms.dt
     nt = Int(prms.tt/prms.dt)
     trec = nt÷prms.nrec # frequency of recording
     fsaven = print_info(start_time, prms, nt)
@@ -25,7 +24,7 @@ function run_NPZBD(prms)
     track_p = Array{Float64, 3}(undef, prms.ngrid, prms.np, nrec1) 
     track_z = Array{Float64, 3}(undef, prms.ngrid, prms.nz, nrec1) 
     track_b = Array{Float64, 3}(undef, prms.ngrid, prms.nb, nrec1) 
-    (track_d, SW_all) = (Array{Float64, 3}(undef, prms.ngrid, prms.nd, nrec1) for _ in 1:2)
+    track_d = Array{Float64, 3}(undef, prms.ngrid, prms.nd, nrec1)
     track_o = Array{Float64, 3}(undef, prms.ngrid, 1, nrec1) 
     track_time = Array{Float64,1}(undef, nrec1)   
  
@@ -35,7 +34,6 @@ function run_NPZBD(prms)
     track_b[:,:,1] .= prms.bIC
     track_d[:,:,1] .= prms.dIC
     track_o[:,:,1] .= prms.oIC
-    SW_all[:,:,1] .= NaN
     track_time[1] = 0
 
     #--------------------------------------
@@ -61,18 +59,28 @@ function run_NPZBD(prms)
         
         end 
 
-        # nutrient pulse every 7 days
-        # if t % 700 == 0
-        #     pulse = nutrient_pulse()
-        #     ntemp = ntemp .+ pulse           
-        # end
+        if pulse == 2
+            # 2 = winter, pulse to top 80m every 10 days
+            if t % 1000 == 0
+                pulse = nutrient_pulse(pulse)
+                dtemp[1:8, :] .+= pulse     
+                ntemp[1:8, :] .+= pulse            
+            end
+        elseif pulse == 3
+            # 3 = summer, pulse to top 80m every 30 days
+            if t % 3000 == 0
+                pulse = nutrient_pulse(pulse)
+                dtemp[1:8, :] .+= pulse     
+                ntemp[1:8, :] .+= pulse        
+            end
+        end
 
         #calculate uptake and v for last timepoint
         if t == nt
 
             II, JJ = get_nonzero_axes(prms)
-            v = zeros(nd,nb) 
-            uptake = zeros(nd,nb) 
+            v = zeros(prms.nd,prms.nb) 
+            uptake = zeros(prms.nd,prms.nb) 
         
             @inbounds for n = axes(II, 1)
                 v[II[n],JJ[n]] = vmax_ij[II[n],JJ[n]] * pen[JJ[n]] .* dtemp[II[n]] ./ (dtemp[II[n]] .+ Km_ij[II[n],JJ[n]]) 
@@ -81,7 +89,7 @@ function run_NPZBD(prms)
             
             end_time = now() 
 
-            savetoNC(fsaven, track_p, track_b, track_z, track_n, track_d, track_o, track_time, v, uptake, start_time, end_time, params)
+            savetoNC(fsaven, track_p, track_b, track_z, track_n, track_d, track_o, track_time, v, uptake, start_time, end_time, params, pulse)
 
         end
     end 
@@ -269,10 +277,17 @@ function get_nonzero_axes(prms)
 end 
 
 
-function nutrient_pulse()
+function nutrient_pulse(pulse)
 
-    pulse = 5.0
+        #NOTE turn off and tune to R* for the phyto - but this could be useful to simulate lateral supply
+        # also consider taking sum of top 80m and add the mean - so this simulates mixing - everything will be mixed!
+        # for testing, we can work with just N only 
+    if pulse == 1
+        pulse_size = 0.1
+    else
+        pulse_size = 0.05
+    end
 
-    return pulse
+    return pulse_size
 
 end

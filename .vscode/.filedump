@@ -1,0 +1,6 @@
+
+		begin
+      f = addfile("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/out_1D_20230626_2240.nc","r")
+      print(f)
+		end
+    

@@ -4,15 +4,23 @@ using DataFrames
 
 default(show = true)
 
-# outdir = "/home/lee/Dropbox/Development/NPZBD_1D/"
-# outfile = "out_1D_20230613.nc"
+# outfile = "results/outfiles/out_1D_20230626.nc"
 
-function depth_plots(outdir, outfile)
 
-    ds = NCDataset(outdir*outfile)
-    file = replace(outfile, "out_0D_" => "", ".nc" => "")
+function depth_plots(fsaven, pulse)
 
-    n, p, z, b, d, o = get_depth_variables(ds, ["n", "p", "z", "b", "d", "o"])
+    ds = NCDataset(fsaven)
+    file = replace(fsaven, "out_1D_" => "", ".nc" => "", "results/outfiles/" => "")
+
+    if pulse == 0 
+        season = "" 
+    elseif pulse == 1
+        season = "win"
+    else 
+        season = "sum"
+    end 
+
+    n, p, z, b, d, o = get_endpoints(ds, ["n", "p", "z", "b", "d", "o"])
 
     H = ds["H"][:]
     dz = ds["dz"][:]
@@ -20,11 +28,11 @@ function depth_plots(outdir, outfile)
     
     f1 = plot_depth_profiles(p, b, z, d, n, zc)
     f2 = plot_stacked_bio_nuts(p, b, z, d, n, o, zc)
-    f3 = plot_depth_individual(b, d, zc)
+    f3 = plot_depth_individual(b, d, z, zc)
 
-    savefig(f1,"results/plots/depth/$(file)_1.pdf")
-    savefig(f2,"results/plots/depth/$(file)_2.pdf")
-    savefig(f3,"results/plots/depth/$(file)_3.pdf")
+    savefig(f1,"results/plots/depth/$(file)_$(season)_1.pdf")
+    savefig(f2,"results/plots/depth/$(file)_$(season)_2.pdf")
+    savefig(f3,"results/plots/depth/$(file)_$(season)_3.pdf")
 
 end
 
@@ -47,11 +55,11 @@ end
 function plot_stacked_bio_nuts(p, b, z, d, n, o, zc)
 
     p1 = plot(sum(p, dims = 2), -zc, lc="green", grid=false, xrotation=45, label="Total P")
-    plot!(sum(b, dims = 2), -zc, lc="black", label="Total B") 
-    plot!(sum(z, dims = 2), -zc, lc="brown", label="Total Z") 
-    p2 = plot(sum(d, dims = 2), -zc, grid=false, xrotation=45, label=false)
-    p3 = plot(sum(n, dims = 2), -zc, grid=false, xrotation=45, label=false)
-    p4 = plot(sum(o, dims = 2), -zc, grid=false, xrotation=45, label=false)
+    plot!(sum(b, dims = 2), -zc, lc="grey", label="Total B") 
+    plot!(sum(z, dims = 2), -zc, lc="black", label="Total Z") 
+    p2 = plot(sum(d, dims = 2), -zc, lc="orange", ls=:dot, grid=false, xrotation=45, label=false)
+    p3 = plot(sum(n, dims = 2), -zc, lc="blue", ls=:dot, grid=false, xrotation=45, label=false)
+    p4 = plot(sum(o, dims = 2), -zc, lc="pink", ls=:dot, grid=false, xrotation=45, label=false)
     f2 = plot(p1, p2, p3, p4,
         linewidth = 2,
         layout = [1 1 1 1],
@@ -63,29 +71,42 @@ function plot_stacked_bio_nuts(p, b, z, d, n, o, zc)
 end
 
 
-function plot_depth_individual(b, d, zc)
+function plot_depth_individual(b, d, z, zc)
     
-    sizes = get_size([b, d])
-    nb, nd = sizes[1], sizes[2]
+    sizes = get_size([b, d, z])
+    nb, nd, nz = sizes[1], sizes[2], sizes[3]
 
-    p1 = plot(d[:,1], -zc, linecolor = "orange", label=" D Pools", ylabel = "Depth (m)", xlabel = "mmol N/m3")
-    cp1 = Plots.palette(:reds, nd)
+    p1 = plot(d[:,1], -zc, linecolor = "orange", label="", ylabel = "Depth (m)", xlabel = "mmol N/m3", xrotation=45)
+    cp1 = Plots.palette(:turbid, nd)
     for i in 2:nd
-        plot!(d[:,i], -zc, palette=cp1, grid=false, label=" ")
+        plot!(d[:,i], -zc, palette=cp1, grid=false, label="")
     end
 
-    p2 = plot(b[:,1], -zc, linecolor = "purple", label = " B Species", xlabel = "mmol N/m3")
-    cp2 = Plots.palette(:blues, nb)
+    p2 = plot(b[:,1], -zc, linecolor = "grey", label = "", xlabel = "mmol N/m3", xrotation=45)
+    cp2 = Plots.palette(:dense, nb)
     for j in 2:nb
-        plot!(b[:,j], -zc, palette=cp2, grid=false, label=" ")
+        plot!(b[:,j], -zc, palette=cp2, grid=false, label="")
     end
-    
-    f3 = plot(p1, p2,
+
+    f3 = plot(p1, p2, 
             linewidth = 2,
             layout = 2,
             fg_legend = :transparent,
             title = ["Organic matter" "B Biomass"]
         )
+
+    # p3 = plot(z[:,1], -zc, linecolor = "black", label = "", xlabel = "mmol N/m3", xrotation=45)
+    # cp3 = Plots.palette(:solar, nb)
+    # for j in 2:nz
+    #     plot!(z[:,j], -zc, palette=cp3, grid=false, label="")
+    # end
+    
+    # f3 = plot(p1, p2, p3,
+    #         linewidth = 2,
+    #         layout = 3,
+    #         fg_legend = :transparent,
+    #         title = ["Organic matter" "B Biomass" "Z Biomass"]
+    #     )
     
     return f3
 
@@ -107,7 +128,7 @@ function get_size(arr)
 end
 
 
-function get_depth_variables(ds, vars)
+function get_endpoints(ds, vars)
 
     out = Vector{Any}()
 
@@ -119,7 +140,7 @@ function get_depth_variables(ds, vars)
 
 end
 
-# depth_plots(outdir, outfile)
+# depth_plots(outfile, 1)
 
 # ----------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------

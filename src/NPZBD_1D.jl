@@ -3,12 +3,12 @@ module NPZBD_1D
     import REPL
     using REPL.TerminalMenus
     using Logging, LoggingExtras, Dates
-    using SparseArrays
+    using SparseArrays, Distributions
 
     using Distributed
     addprocs(14, exeflags = "--project=$(Base.active_project())")
-    println("Number of cores: ", nprocs())
-    println("Number of workers: ", nworkers())
+    println("\n > Number of cores: ", nprocs())
+    println(" > Number of workers: ", nworkers())
 
     logger = TeeLogger(
         MinLevelLogger(FileLogger("logs/info.log"), Logging.Info),
@@ -31,13 +31,12 @@ module NPZBD_1D
     #------------------------------------------------------------------------------------------------------------#
     #TODO add test option
     # Figure out how to pause and wait for subroutine to end if test is selected, then quit program, rather than 
-    include("../test/data/prms_for_tests.jl")
-    test_prms = TestPrms()
-    N, P, Z, B, D, track_time, fsaven = run_NPZBD(test_prms)
+    # include("../test/data/prms_for_tests.jl")
+    # test_prms = TestPrms()
+    # N, P, Z, B, D, track_time, fsaven = run_NPZBD(test_prms, 1)
     #------------------------------------------------------------------------------------------------------------#
 
-
-    fsave = "out_1D"
+    fsave = "results/outfiles/out_1D"
     
     #------------------------------------------------------------------------------------------------------------#
     #   GRID SETUP
@@ -57,11 +56,10 @@ module NPZBD_1D
         defaults = request(message("DF2"), RadioMenu(message("DF1")))
 
         if defaults == 1 
-            tt, nrec, nd, nb, np, nz, nn, y_i, SW, vmax_i = get_defaults()
+            tt, nrec, nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, pulse = get_defaults()
         else 
-            tt, nrec, nd, nb, np, nz, nn, yield, supply_weight, uptake = user_select()
+            tt, nrec, nd, nb, np, nz, nn, yield, supply_weight, uptake, pulse = user_select()
             yield == 1 ? y_i = ones(nd)*0.3 : y_i = rand(nd)*0.5
-            supply_weight == 1 ? SW = ones(nd) : SW = rand(nd)
             uptake == 1 ? vmax_i = ordered_vmax(nd) : vmax_i = random_vmax(nd)
         end
     
@@ -69,7 +67,11 @@ module NPZBD_1D
     #   HETEROTROPHIC MICROBE PARAMS
     #------------------------------------------------------------------------------------------------------------#
         println(message("CM", nd, nb))
-        CM = build_consumption_matrix(nd, nb)
+        if isfile("NPZBD_1D/results/matrices/CM_$(np)p$(nd)d$(nb)b$(nz)z.jdl")
+            CM = load_matrix("CM", nd, nb, np, nz)
+        else
+            CM = build_consumption_matrix(nd, nb)
+        end
 
         y_ij = broadcast(*, y_i, CM)
         yo_ij = y_ij*10                     # PLACEHOLDER VALUE mol B/mol O2. not realistic
@@ -104,32 +106,39 @@ module NPZBD_1D
         γ = ones(nz)*0.3
 
         println(message("GM", nd, nb, np, nz))
-        GrM = build_grazing_matrix(np, nb, nz)
+        if isfile("NPZBD_1D/results/matrices/GrM_$(np)p$(nd)d$(nb)b$(nz)z.jdl")
+            GrM = load_matrix("GrM", nd, nb, np, nz)
+        else
+            GrM = build_grazing_matrix(np, nb, nz)
+        end
 
         
     # -----------------------------------------------------------------------------------------------------------#
     #   MORTALITY
     #------------------------------------------------------------------------------------------------------------#
         m_lp = ones(np) * 1e-1  
-        m_qp = ones(np) 
+        m_qp = ones(np) * 0.1  # (.1 if grazers, if not, 1) for just one p, remove from GrM, but could scale up and use Darwin tradeoffs from darwin (and bac Gr)
 
         m_lb = ones(nb) * 1e-2 
         m_qb = ones(nb) * 0.1 
-        m_qb[1] = 1  # POM consumer
+        # m_qb[1] = 1  # POM consumer 
 
         m_lz = ones(nz) * 1e-2
-        m_qz = ones(nz) 
+        m_qz = ones(nz) #NOTE with quadratic mort for zoo, experiment, see how system changes) for 0.1)
 
     # -----------------------------------------------------------------------------------------------------------#
     #   ORGANIC MATTER
     #------------------------------------------------------------------------------------------------------------#
         # Distribution of OM from mortality to detritus pools
-        prob_generate_d = zeros(nd) 
-        prob_generate_d[1] = 0.3        # POM
-        prob_generate_d[2] = 0.6        # POM
-        prob_generate_d[3] = 0.1        # POM
+        if supply_weight == 1 
+            prob_generate_d = ones(nd) * (1/nd)
+        else
+            dist = LogNormal(1.5,2)
+            x = rand(dist, nd)
+            prob_generate_d =  x / sum(x)
+        end
 
-        # Sinking rate for POM
+        # Sinking rate for POM  #NOTE could be randomly assigned range 1 t0 10
         ws = zeros(nd)                  # sinking speed of POM (m/day)
         ws[1] = 10 
         w = zeros(ngrid + 1)            # water vertical velocity, if there was any
@@ -141,7 +150,7 @@ module NPZBD_1D
     #   PHYSICAL ENVIRONMENT
     #------------------------------------------------------------------------------------------------------------#
 
-        # VERTICAL MIXING
+        # VERTICAL MIXING #NOTE Summer vs winter - miced layer shallower in summer - try 15 summer, 25 winter (instead of pulse?)
             mlz=25                      # mixed layer lengthscale
             kappazmin=1e-4              # min mixing coeff -value for most of the deep ocean (higher at top and bottom)
             kappazmax=1e-2              # max mixing coeff -value at top of mixed layer (and bottom boundary mixed layer)
@@ -150,7 +159,7 @@ module NPZBD_1D
             kappa_z[end]=0
 
         # LIGHT (Irradiance, I) 
-            euz = 25                    # euphotic zone lengthscale
+            euz = 25                    # euphotic zone lengthscale #NOTE scales with amount of biomass but VERY sensitive
             light_top = 700             # avg incoming PAR = (1400/2)  Light_avg*(cos(t*dt*2*3.1416)+1) for light daily cycle
             light = light_top .* exp.( -zc ./ euz)
 
@@ -165,11 +174,15 @@ module NPZBD_1D
             t_o2relax = 0.01            # 1/day, range from 0.01 to 0.1. Set to 0 to turn off.
 
 
-        # TEMPERATURE (fit to N. Pacific oligo gyre data from Zakem et al 2018 Nat Comm)
-        #TODO fit to SPOT data
-            temp = 12 .*exp.(-zc./ 150) .+ 12 .*exp.(-zc ./ 500) .+ 2
+        # TEMPERATURE (SPOT along water column)
+        #fit to SPOT data (approx 20 to 4, approx 16 to 4)
+            if pulse == 2 
+                temp = 6.5 .*exp.(-zc ./ 150) .+ 9 .*exp.(-zc ./ 500) .+ 3
+            elseif pulse == 1 || pulse == 3
+                temp = 10 .*exp.(-zc ./ 150) .+ 9 .*exp.(-zc ./ 500) .+ 2.9
+            end
 
-        # tempERATURE (modification to metabolic rates)
+        # TEMPERATURE (modification to metabolic rates)
             temp_coeff_arr = 0.8
             temp_ae_arr = -4000
             temp_ref_arr = 293.15   
@@ -180,11 +193,11 @@ module NPZBD_1D
     # -----------------------------------------------------------------------------------------------------------#
     #   INITIAL CONDITIONS
     #------------------------------------------------------------------------------------------------------------#
-        nIC = ones(Float64, ngrid, nn) * 5.0
+        nIC = ones(Float64, ngrid, nn) * 30.0
         pIC = ones(Float64, ngrid, np) * 0.1 
         zIC = ones(Float64, ngrid, nz) * 0.01
-        dIC = ones(Float64, ngrid, nd) * 0.1
-        bIC = ones(Float64, ngrid, nb) * 0.01
+        dIC = ones(Float64, ngrid, nd) * (0.01 / nd)
+        bIC = ones(Float64, ngrid, nb) * (0.1 / nb)
         oIC = ones(Float64, ngrid, 1)  * 100.0
 
 
@@ -197,22 +210,18 @@ module NPZBD_1D
     params = Prms(
                 tt, dt, nrec, H, dz, np, nb, nz, nn, nd, pIC, bIC, zIC, nIC, dIC, oIC, 
                 umax_p, K_n, m_lp, m_qp, CM, y_ij, vmax_i, vmax_ij, Km_i, Km_ij, 
-                m_lb, m_qb, g_max, K_g, γ, m_lz, m_qz, fsave, GrM, pen, SW, 
+                m_lb, m_qb, g_max, K_g, γ, m_lz, m_qz, fsave, GrM, pen, 
                 prob_generate_d, kappa_z, wd, light, temp_fun, K_I, ngrid, 
                 e_o, yo_ij, koverh, o2_sat, ml_boxes, t_o2relax, o2_deep,
             )
 
     @info("Model Params: \n $params \n")
-    
 
-    include("../test/data/prms_for_tests.jl")
-    test_prms = TestPrms()
-    N, P, Z, B, D, track_time, fsaven = run_NPZBD(test_prms)
+    N, P, Z, B, D, O, track_time, fsaven = run_NPZBD(params, pulse)
 
-    # N, P, Z, B, D, track_time, fsaven = run_NPZBD(params)
+    save_matrices(CM, GrM, nd, nb, np, nz)
 
-    outdir = "/home/lee/Dropbox/Development/NPZBD_1D/"
-    depth_plots(outdir, fsaven)
+    depth_plots(fsaven, pulse)
 
 end
 

@@ -34,16 +34,16 @@ temp_fun = temp_coeff_arr .* exp.(temp_ae_arr .*(1 ./ (temp .+ t_kel) .- 1 ./ te
 
 
 @with_kw struct TestPrms
-    tt::Int64  = 2
+    tt::Int64  = 1.0
     dt::Float64  = 0.01                  
     nrec::Int64  = 100 
-    H::Int64  = 400                 
+    H::Int64  = 890                 
     dz::Int64  = 10              
     np::Int64    = 1                 
     nb::Int64    = 6                
     nz::Int64    = 2                  
     nn::Int64    = 1                 
-    nd::Int64    = nd                 
+    nd::Int64    = 3                
     pIC::Array{Float64,2} = ones(Float64, 40, 1) * 0.1     
     bIC::Array{Float64,2} = ones(Float64, 40, 6) * 0.01         
     zIC::Array{Float64,2} = ones(Float64, 40, 2) * 0.01         
@@ -70,7 +70,6 @@ temp_fun = temp_coeff_arr .* exp.(temp_ae_arr .*(1 ./ (temp .+ t_kel) .- 1 ./ te
     fsave::String  = "test_out_1D"                  
     GrM::Array{Bool,2}  = [0 1 1 1 1 1 1; 1 0 1 0 1 1 1]           
     pen::Array{Float64,1} = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]         
-    SW::Array{Float64,1} = [1.0, 1.0, 1.0]      
     prob_generate_d::Array{Float64, 1} = [0.3, 0.6, 0.1]
     kappa_z::Array{Float64, 1} = kappa_z
     wd::Array{Float64, 2} = wd

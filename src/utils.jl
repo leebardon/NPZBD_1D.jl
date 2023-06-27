@@ -11,7 +11,8 @@ function message(v::String, nd::Int64=0, nb::Int64=0, np::Int64=0, nz::Int64=0, 
 
     m = Dict(
         "START" => "\n -------------------------------- STARTING PROGRAM ----------------------------------- \n",
-        "DEF" => "Default values: \n tt = 5 \n nrec = 100 \n nn = 1 \n np = 1 \n nz = 2 \n nb = 6 \n nd = 3 \n y_i = conts. 0.3 \n SW = const. 1.0 \n vmax_i = ordered assignment \n ",
+        "DEF" => """Default values: \n tt = 5 \n nrec = 100 \n nn = 1 \n np = 1 \n nz = 2 \n nb = 6 \n nd = 3 
+                    y_i = conts. 0.3 \n SW = const. 1.0 \n vmax_i = ordered assignment \n pulse = none \n """,
         "DF1" => ["Use defaults", "Select custom prms"],
         "DF2" => "Proceed with defaults or select custom params?",
         "T" => "\n Enter simulation run time (tt - number of days): ",
@@ -27,7 +28,7 @@ function message(v::String, nd::Int64=0, nb::Int64=0, np::Int64=0, nz::Int64=0, 
         "GM" => "\n >> Building grazing matrix with $np phy, $nb bac and $nz zoo populations << ",
         "Y1" => ["Equal for all bacteria", "Randomised"],
         "Y2" => "\n Select yield rates for bacteria populations (y_i):",
-        "SW1" => ["Equal distribution", "Randomised"],
+        "SW1" => ["Equal distribution", "Lognormal distribution"],
         "SW2" => "\n Select supply weight for OM pools (SW):",
         "SUB" => "\n SETTING SUBSTRATE TRAITS \n -------------------------- ",
         "UP1" => ["Ordered assignment", "Randomly selected along log range"],
@@ -35,6 +36,9 @@ function message(v::String, nd::Int64=0, nb::Int64=0, np::Int64=0, nz::Int64=0, 
         "MIC" => "\n SETTING MICROBIAL TRAITS \n --------------------------",
         "GA1" => ["Tradeoff", "Constant affinity"],
         "GA2" => "Apply bacterial growth rate-affinity tradeoff?",
+        "ENV" => "\n SETTING NUTRIENT SUPPLY \n -------------------------- ",
+        "PU2" => "Simulate winter or summer conditions? 'None' for no nutrient pulse.",
+        "PU1" => ["None", "Winter", "Summer"],
         "SV" => "Saving to: $fsaven",
 
     )
@@ -53,10 +57,11 @@ function get_defaults()
     nb = 6
     nd = 3
     y_i = ones(nd)*0.3 
-    SW = ones(nd) 
+    supply_weight = 1 
     vmax_i = ordered_vmax(nd)
+    pulse = 1
 
-    return tt, nrec, nd, nb, np, nz, nn, y_i, SW, vmax_i
+    return tt, nrec, nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, pulse
 
 end
 
@@ -95,26 +100,21 @@ function user_select()
     nn = 1
 
     yield = request(message("Y2"), RadioMenu(message("Y1")))
-    OM_supply_weight = request(message("SW2"), RadioMenu(message("SW1")))
+    supply_weight = request(message("SW2"), RadioMenu(message("SW1")))
     println(message("SUB"))
     uptake = request(message("UP2"), RadioMenu(message("UP1")))
-    input = readline()
+    println(message("ENV"))
+    pulse = request(message("PU2"), RadioMenu(message("PU1")))
 
-    return tt, nrec, nd, nb, np, nz, nn, yield, OM_supply_weight, uptake
+    return tt, nrec, nd, nb, np, nz, nn, yield, supply_weight, uptake, pulse
 
 end
 
 
-function load_matrix(mtype, nd, nb, np=0, nz=0)
+function load_matrix(mtype, nd, nb, np, nz)
     
-    if nz == 0       
-        M = jldopen("results/matrices/$(mtype)_$(nd)dx$(nb)b.jdl", "r") do file
-            read(file, "A")
-        end
-    else
-        M = jldopen("results/matrices/$(mtype)_($(np)p+$(nb)b)x$(nz)z.jdl", "r") do file
-            read(file, "A")
-        end
+    M = jldopen("results/matrices/$(mtype)_$(np)p$(nd)d$(nb)b$(nz)z.jdl", "r") do file
+        read(file, "A")
     end
 
     return M
@@ -122,16 +122,13 @@ function load_matrix(mtype, nd, nb, np=0, nz=0)
 end
 
 
-function save_matrix(M, mtype, nd, nb, np=0, nz=0)
+function save_matrices(M1, M2, nd, nb, np=0, nz=0)
 
-    if nz == 0
-        jldopen("results/matrices/$(mtype)_$(nd)dx$(nb)b.jdl", "w") do file
-            write(file, "A", M)  
-        end
-    else
-        jldopen("results/matrices/$(mtype)_($(np)p+$(nb)b)x$(nz)z.jdl", "w") do file
-            write(file, "A", M)  
-        end
+    jldopen("results/matrices/CM_$(np)p$(nd)d$(nb)b$(nz)z.jdl", "w") do file
+        write(file, "A", M1)  
+    end
+    jldopen("results/matrices/GrM_$(np)p$(nd)d$(nb)b$(nz)z.jdl", "w") do file
+            write(file, "A", M2)  
     end
 
 end
@@ -245,11 +242,21 @@ function update_tracking_arrs(track_n, track_p, track_z, track_b, track_d, track
 end
 
 
-function savetoNC(fsaven, p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms)
+function savetoNC(fsaven, p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, pulse)
 
-    println("Saving to: ",fsaven)
+    outdir = "/home/lee/Dropbox/Development/NPZBD_1D/"
+    path = joinpath(outdir, fsaven) 
+    println("\nSaving to: ", path)
 
-    f = NCDataset(fsaven, "c") #c for create
+    if pulse == 1
+        season = "N/A (no pulse)"
+    elseif pulse == 2
+        season = "winter"
+    else
+        season = "summer"
+    end
+
+    f = NCDataset(path, "c") #c for create
 
     # define the dim of p, b, z, n, d
     defDim(f,"np", prms.np)
@@ -274,6 +281,7 @@ function savetoNC(fsaven, p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms)
     f.attrib["Start time"] = string(tst)
     f.attrib["End time"] = string(tfn)
     f.attrib["Run time"] = string(tfn - tst) 
+    f.attrib["Season"] = season
 
     # simulated results
     w = defVar(f,"p",Float64,("ndepth" ,"np","nrec"))
@@ -351,7 +359,7 @@ function savetoNC(fsaven, p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms)
     w.attrib["units"] = "mmol/m3 C per d; uptake matrix"
 
     w = defVar(f,"SW",Float64,("nd",))
-    w[:,:] = prms.SW 
+    w[:,:] = prms.prob_generate_d 
     w.attrib["units"] = "Ind C supply weight: probability"
     
     # w = defVar(f,"SW_all",Float64,("nd","nrec"))

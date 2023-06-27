@@ -40,7 +40,6 @@ using Parameters
     fsave::String                  # save file name
     GrM::Array{Bool,2}             # grazing matrix: nz x (np + nb)
     pen::Array{Float64,1}          # bacteria generalists penalty
-    SW::Array{Float64,1}           # organic matter supply weight
     prob_generate_d::Array{Float64, 1} # distribution of OM to each d pool from mortality
     kappa_z::Array{Float64, 1}     # vertical eddy diffusivities
     wd::Array{Float64, 2}          # sinking rate for POM
@@ -51,7 +50,7 @@ using Parameters
     e_o::Float64                   # production of O2 (excretion) (mol O2 per mol N uptake)
     yo_ij::Array{Float64, 2}       # O2 yield rate of bacteria j on d_i (mol B/mol O2)
     koverh::Float64                # gas transfer coefficient for each box comprising the mixed layer
-    o2sat::Float64                 # O2 half-sat constant (mmol/m3)
+    o2_sat::Float64                 # O2 half-sat constant (mmol/m3)
     ml_boxes::Int64                # num boxes in mixed layer, close to 100m total sum
     t_o2relax::Float64             # deep oxygen relaxation (1/day)
     o2_deep::Float64               # mmol/m3

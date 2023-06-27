@@ -22,3 +22,5 @@ docs/site/
 *.nc
 /logs
 /results/plots
+/results/matrices/*.jdl
+
