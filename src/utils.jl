@@ -7,35 +7,35 @@ using SparseArrays
 
 
 
-function message(v::String, nd::Int64=0, nb::Int64=0, np::Int64=0, nz::Int64=0, fsaven::String="")
+function message(v::String, nd::Int64=0, nb::Int64=0, nn::Int64=0, np::Int64=0, nz::Int64=0, fsaven::String="")
 
     m = Dict(
         "START" => "\n -------------------------------- STARTING PROGRAM ----------------------------------- \n",
-        "DEF" => """Default values: \n tt = 5 \n nrec = 100 \n nn = 1 \n np = 1 \n nz = 2 \n nb = 6 \n nd = 3 
-                    y_i = conts. 0.3 \n SW = const. 1.0 \n vmax_i = ordered assignment \n pulse = none \n """,
+        "DEF" => """Default values: \n tt = 2 \n nrec = 40 \n nn = 1 \n np = 4 \n nz = 3 \n nb = 8 \n nd = 4 
+                    y_i = conts. 0.3 \n SW = const. 1.0 \n vmax_i = ordered \n umax_i = ordered \n pulse = none \n """,
         "DF1" => ["Use defaults", "Select custom prms"],
         "DF2" => "Proceed with defaults or select custom params?",
         "T" => "\n Enter simulation run time (tt - number of days): ",
         "REC" => "Enter number of timepoints to record (nrec): ",
-        "OM" => "Enter number of organic matter pools (nd): ",
-        "BA" => "Enter number of bacteria populations (nb): ",
-        "NPZ" => """\n 
-        -----------------------------------
-        Currently running with default of: 
-        1 phyto (np) \n  2 zoo (nz) \n  1 inorganic matter pool (nn) 
-        -----------------------------------""",
-        "CM" => "\n >> Building consumption matrix with $nd OM pools and $nb bac populations << ",
-        "GM" => "\n >> Building grazing matrix with $np phy, $nb bac and $nz zoo populations << ",
+        "DN" => "Enter number of detritus pools (nd): ",
+        "BN" => "Enter number of bacteria populations (nb): ",
+        "PN" => "Enter number of phyto populations (np): ",
+        "ZN" => "Enter number of zooplank populations (nz): ",
+        "CM" => "\n >> Building consumption matrices - $(nb)bx$(nd)d & $(np)px$(nn)n << ",
+        "GM" => "\n >> Building grazing matrix - ($(np)p + $(nb)b) x $(nz)z << ",
         "Y1" => ["Equal for all bacteria", "Randomised"],
         "Y2" => "\n Select yield rates for bacteria populations (y_i):",
         "SW1" => ["Equal distribution", "Lognormal distribution"],
         "SW2" => "\n Select supply weight for OM pools (SW):",
         "SUB" => "\n SETTING SUBSTRATE TRAITS \n -------------------------- ",
         "UP1" => ["Ordered assignment", "Randomly selected along log range"],
-        "UP2" => "Select max uptake rate (vmax_i, 1/d):",
+        "UP2" => "Select max bacteria uptake rate (vmax_i, 1/d):",
+        "UPP1" => ["Ordered assignment", "Randomly selected along log range"],
+        "UPP2" => "\nSelect max phyto uptake rate (umax_i, 1/d):",
         "MIC" => "\n SETTING MICROBIAL TRAITS \n --------------------------",
-        "GA1" => ["Tradeoff", "Constant affinity"],
-        "GA2" => "Apply bacterial growth rate-affinity tradeoff?",
+        "T1" => ["Tradeoff", "Constant affinity"],
+        "TB2" => "Apply bacterial growth rate-affinity tradeoff?",
+        "TP2" => "\nApply phyto growth rate-affinity tradeoff?",
         "ENV" => "\n SETTING NUTRIENT SUPPLY \n -------------------------- ",
         "PU2" => "Simulate winter or summer conditions? 'None' for no nutrient pulse.",
         "PU1" => ["None", "Winter", "Summer"],
@@ -49,28 +49,29 @@ end
 
 
 function get_defaults()
-    tt = 5
-    nrec = 100 
+    tt = 2
+    nrec = 40 
     nn = 1
-    np = 1
-    nz = 2
-    nb = 6
-    nd = 3
+    np = 4
+    nz = 3
+    nb = 8
+    nd = 4
     y_i = ones(nd)*0.3 
     supply_weight = 1 
-    vmax_i = ordered_vmax(nd)
+    vmax_i = ordered_uptake_arr(nd)
+    umax_i = ordered_uptake_arr(np) #NOTE based on nn = 1 system
     pulse = 1
 
-    return tt, nrec, nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, pulse
+    return tt, nrec, nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, umax_i, pulse
 
 end
 
 
-function bacteria_num()
-    println(message("BA"))
+function microbe_num(MSG)
+    println(message(MSG))
     input = readline()
-    nb = parse(Int64, input)
-    return nb
+    n = parse(Int64, input)
+    return n
 end
 
 
@@ -84,37 +85,52 @@ function user_select()
     input = readline()
     nrec = parse(Int64, input) 
 
-    println(message("OM"))
+    println(message("DN"))
     input = readline()
     nd = parse(Int64, input) 
 
-    nb = bacteria_num()
+    nb = microbe_num("BN")
     if !iseven(nb)
-        println("\n !!! PLEASE SELECT EVEN NUMBER OF BACTERIA !!! \n\n")
-        nb = bacteria_num()
+        println("\n !!! PLEASE ENTER EVEN NUMBER !!! \n\n")
+        nb = microbe_num("BN")
     end
 
-    println(message("NPZ"))
-    np = 1
-    nz = 2
+    np = microbe_num("PN")
+    if !iseven(np)
+        println("\n !!! PLEASE ENTER EVEN NUMBER !!! \n\n")
+        np = microbe_num("PN")
+    end
+
+    nz = microbe_num("ZN")
     nn = 1
 
     yield = request(message("Y2"), RadioMenu(message("Y1")))
     supply_weight = request(message("SW2"), RadioMenu(message("SW1")))
     println(message("SUB"))
     uptake = request(message("UP2"), RadioMenu(message("UP1")))
+    uptake_p = request(message("UPP2"), RadioMenu(message("UPP1")))
     println(message("ENV"))
     pulse = request(message("PU2"), RadioMenu(message("PU1")))
 
-    return tt, nrec, nd, nb, np, nz, nn, yield, supply_weight, uptake, pulse
+    return tt, nrec, nd, nb, np, nz, nn, yield, supply_weight, uptake, uptake_p, pulse
 
 end
 
 
-function load_matrix(mtype, nd, nb, np, nz)
+function load_matrix(mtype, nd, nb, nn=0, np=0, nz=0)
     
-    M = jldopen("results/matrices/$(mtype)_$(np)p$(nd)d$(nb)b$(nz)z.jdl", "r") do file
-        read(file, "A")
+    if mtype == "CM"
+        M = jldopen("results/matrices/$(mtype)_$(nd)d$(nb)b.jdl", "r") do file
+            read(file, "A")
+        end
+    elseif mtype == "CMp"
+        M = jldopen("results/matrices/$(mtype)_$(nn)n$(np)p.jdl", "r") do file
+            read(file, "A")
+        end
+    else 
+        M = jldopen("results/matrices/$(mtype)_$(np)p$(nb)b$(nz)z.jdl", "r") do file
+            read(file, "A")
+        end
     end
 
     return M
@@ -122,13 +138,16 @@ function load_matrix(mtype, nd, nb, np, nz)
 end
 
 
-function save_matrices(M1, M2, nd, nb, np=0, nz=0)
+function save_matrices(M1, M2, M3, nd, nb, nn, np, nz)
 
-    jldopen("results/matrices/CM_$(np)p$(nd)d$(nb)b$(nz)z.jdl", "w") do file
+    jldopen("results/matrices/CM_$(nd)d$(nb)b.jdl", "w") do file
         write(file, "A", M1)  
     end
-    jldopen("results/matrices/GrM_$(np)p$(nd)d$(nb)b$(nz)z.jdl", "w") do file
-            write(file, "A", M2)  
+    jldopen("results/matrices/CMp_$(nn)n$(np)p.jdl", "w") do file
+        write(file, "A", M2)  
+    end
+    jldopen("results/matrices/GrM_$(np)p$(nb)b$(nz)z.jdl", "w") do file
+            write(file, "A", M3)  
     end
 
 end
@@ -195,9 +214,9 @@ end
 
 function print_info(start_time, prms, nt)
 
-    @printf("\n np = %5.0f \n nb = %5.0f \n nz = %5.0f \n nn = %5.0f \n nd = %5.0f \n T = %5.0f \n\n", prms.np, prms.nb, prms.nz, prms.nn,  prms.nd, prms.tt)
+    @printf("\n np = %5.0f \n nb = %5.0f \n nz = %5.0f \n nn = %5.0f \n nd = %5.0f \n days = %5.0f \n\n", prms.np, prms.nb, prms.nz, prms.nn, prms.nd, prms.tt)
     open("jlog.txt","w") do f
-        write(f,@sprintf("np = %5.0f, nb = %5.0f, nz = %5.0f, nn = %5.0f, nd = %5.0f, T = %5.0f \n", prms.np, prms.nb, prms.nz, prms.nn,  prms.nd, prms.tt))
+        write(f,@sprintf("np = %5.0f, nb = %5.0f, nz = %5.0f, nn = %5.0f, nd = %5.0f, days = %5.0f \n", prms.np, prms.nb, prms.nz, prms.nn, prms.nd, prms.tt))
     end
 
     fsaven = string(prms.fsave,"_", Dates.format(start_time, "yyyymmdd"), ".nc")
@@ -206,12 +225,6 @@ function print_info(start_time, prms, nt)
     end
 
     println("Starting time: $start_time, \nFile will be saved as: $fsaven")
-
-    println("\nConsumption Matrix (CM):")
-    display("text/plain", prms.CM)
-
-    println("\nGrazing Matrix (GrM):")
-    display("text/plain", prms.GrM)
 
     println("nt = ", nt)
 
@@ -246,7 +259,16 @@ function savetoNC(fsaven, p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, pu
 
     outdir = "/home/lee/Dropbox/Development/NPZBD_1D/"
     path = joinpath(outdir, fsaven) 
-    println("\nSaving to: ", path)
+    println("\nSaving output to: ", path)
+
+    println("\nConsumption Matrix (nb x nd):")
+    display("text/plain", prms.CM)
+
+    println("\nConsumption Matrix (np x nn):")
+    display("text/plain", prms.CMp)
+
+    println("\nGrazing Matrix (GrM):")
+    display("text/plain", prms.GrM)
 
     if pulse == 1
         season = "N/A (no pulse)"
@@ -370,17 +392,25 @@ function savetoNC(fsaven, p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, pu
     w[:,:] = prms.pen
     w.attrib["units"] = "penalty"
     
-    w = defVar(f, "umax_p", Float64, ("np",))
-    w[:] = prms.umax_p
+    w = defVar(f, "umax_i", Float64, ("np",))
+    w[:] = prms.umax_i
     w.attrib["units"] = "m3/mmol/d; max growth rate of p"
 
-    w = defVar(f, "K_n", Float64, ("np",))
-    w[:] = prms.K_n
-    w.attrib["units"] = "m3/mmol; half-sat rate of p"
+    w = defVar(f, "umax_ij", Float64, ("nn", "np"))
+    w[:,:] = prms.umax_ij
+    w.attrib["units"] = "per n; max uptake rate"
+
+    w = defVar(f, "Kp_ij", Float64, ("nn", "np"))
+    w[:] = prms.Kp_ij
+    w.attrib["units"] = "mmol/m3; half-sat"
 
     w = defVar(f,"CM",Float64,("nd","nb"))
     w[:,:] = prms.CM
-    w.attrib["units"] = "Consumption Matrix"
+    w.attrib["units"] = "Consumption Matrix (nb x nd)"
+
+    w = defVar(f,"CMp",Float64,("nn","np"))
+    w[:,:] = prms.CMp
+    w.attrib["units"] = "Consumption Matrix (np x nn)"
 
     w = defVar(f,"GrM",Float64,("nz","nprey"))
     w[:,:] = prms.GrM

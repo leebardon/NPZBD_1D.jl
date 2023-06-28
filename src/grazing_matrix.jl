@@ -11,7 +11,7 @@ end
 
 function gmatrix(nb, np, nz)
  
-    GM = sprand(Bool, nz, (nb+np), 0.6)
+    GM = sprand(Bool, nz, (nb+np), 0.4)
     GrM = check_for_empty_cols(GM)
 
     return GrM

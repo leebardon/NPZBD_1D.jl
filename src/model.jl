@@ -59,28 +59,28 @@ function run_NPZBD(prms, pulse)
         
         end 
 
-        if pulse == 2
-            # 2 = winter, pulse to top 80m every 10 days
-            if t % 1000 == 0
-                pulse = nutrient_pulse(pulse)
-                dtemp[1:8, :] .+= pulse     
-                ntemp[1:8, :] .+= pulse            
-            end
-        elseif pulse == 3
-            # 3 = summer, pulse to top 80m every 30 days
-            if t % 3000 == 0
-                pulse = nutrient_pulse(pulse)
-                dtemp[1:8, :] .+= pulse     
-                ntemp[1:8, :] .+= pulse        
-            end
-        end
+        # if pulse == 2
+        #     # 2 = winter, pulse to top 80m every 10 days
+        #     if t % 1000 == 0
+        #         pulse = nutrient_pulse(pulse)
+        #         dtemp[1:8, :] .+= pulse     
+        #         ntemp[1:8, :] .+= pulse            
+        #     end
+        # elseif pulse == 3
+        #     # 3 = summer, pulse to top 80m every 30 days
+        #     if t % 3000 == 0
+        #         pulse = nutrient_pulse(pulse)
+        #         dtemp[1:8, :] .+= pulse     
+        #         ntemp[1:8, :] .+= pulse        
+        #     end
+        # end
 
-        #calculate uptake and v for last timepoint
+        #calculate bacteria uptake and v for last timepoint
         if t == nt
 
-            II, JJ = get_nonzero_axes(prms)
-            v = zeros(prms.nd,prms.nb) 
-            uptake = zeros(prms.nd,prms.nb) 
+            II, JJ = get_nonzero_axes(prms.CM)
+            v = zeros(prms.nd, prms.nb) 
+            uptake = zeros(prms.nd, prms.nb) 
         
             @inbounds for n = axes(II, 1)
                 v[II[n],JJ[n]] = vmax_ij[II[n],JJ[n]] * pen[JJ[n]] .* dtemp[II[n]] ./ (dtemp[II[n]] .+ Km_ij[II[n],JJ[n]]) 
@@ -143,14 +143,38 @@ function model_functions(N, P, Z, B, D, O, prms, t)
 end 
 
 
-function phyto_uptake(prms, N, P, dNdt, dPdt, dOdt, t)
-    #NOTE > only works for nn = 1 at present. Implement CM for p_i on n_i and adapt loops accordingly
+# function phyto_uptake(prms, N, P, dNdt, dPdt, dOdt, t)
+#     #NOTE > only works for nn = 1 at present. Implement CM for p_i on n_i and adapt loops accordingly 
     
-    for i = 1:prms.np
-        uptake = P[:,i] .* prms.temp_fun .* prms.umax_p[i] .* min.(N ./ (N .+ prms.K_n[i]), prms.light ./ (prms.light .+ prms.K_I[i]))
+#     for i = 1:prms.np
+#         uptake = P[:,i] .* prms.temp_fun .* prms.umax_p[i] .* min.(N ./ (N .+ prms.K_n[i]), prms.light ./ (prms.light .+ prms.K_I[i]))
+#         dNdt += -uptake
+#         dOdt += uptake * prms.e_o
+#         dPdt[:,i] += uptake 
+#     end
+
+#     return dPdt, dNdt, dOdt
+
+# end 
+
+function phyto_uptake(prms, N, P, dNdt, dPdt, dOdt, t)
+
+    II, JJ = get_nonzero_axes(prms.CMp)
+
+    # for j = axes(II, 1)
+    #     uptake = prms.vmax_ij[II[j],JJ[j]] * prms.pen[JJ[j]] * D[II[j]] / (D[II[j]] + prms.Km_ij[II[j],JJ[j]]) * B[JJ[j]]
+    #     uptake = B[:,JJ[j]] .* prms.temp_fun .* prms.vmax_ij[II[j],JJ[j]] .* D[:,II[j]] ./ (D[:,II[j]] .+ prms.Km_ij[II[j],JJ[j]]) 
+    #     dDdt[:,II[j]] += -uptake
+    #     dBdt[:,JJ[j]] += uptake .* prms.y_ij[II[j],JJ[j]]
+    #     dNdt += uptake .* (1 - prms.y_ij[II[j],JJ[j]])
+    #     dOdt +=  -uptake .* prms.y_ij[II[j],JJ[j]] ./ prms.yo_ij[II[j],JJ[j]]
+    # end
+
+    for j = axes(II, 1)
+        uptake = P[:,JJ[j]] .* prms.temp_fun .* prms.umax_ij[II[j],JJ[j]] .* min.(N./ (N .+ prms.Kp_ij[II[j],JJ[j]]), prms.light ./ (prms.light .+ prms.K_I))
         dNdt += -uptake
         dOdt += uptake * prms.e_o
-        dPdt[:,i] += uptake 
+        dPdt[:,JJ[j]] += uptake 
     end
 
     return dPdt, dNdt, dOdt
@@ -158,12 +182,13 @@ function phyto_uptake(prms, N, P, dNdt, dPdt, dOdt, t)
 end 
 
 
+
+
 function bacteria_uptake(prms, B, D, dDdt, dBdt, dNdt, dOdt, t)
 
-    II, JJ = get_nonzero_axes(prms)
+    II, JJ = get_nonzero_axes(prms.CM)
 
     for j = axes(II, 1)
-        uptake = prms.vmax_ij[II[j],JJ[j]] * prms.pen[JJ[j]] * D[II[j]] / (D[II[j]] + prms.Km_ij[II[j],JJ[j]]) * B[JJ[j]]
         uptake = B[:,JJ[j]] .* prms.temp_fun .* prms.vmax_ij[II[j],JJ[j]] .* D[:,II[j]] ./ (D[:,II[j]] .+ prms.Km_ij[II[j],JJ[j]]) 
         dDdt[:,II[j]] += -uptake
         dBdt[:,JJ[j]] += uptake .* prms.y_ij[II[j],JJ[j]]
@@ -267,9 +292,9 @@ function distribute_d_gain(prms, dDdt, d_gain_total, t)
 end
 
 
-function get_nonzero_axes(prms)
+function get_nonzero_axes(M)
 
-    Cs = sparse(prms.CM)
+    Cs = sparse(M)
     (II, JJ, _) = findnz(Cs) 
     
     return II, JJ

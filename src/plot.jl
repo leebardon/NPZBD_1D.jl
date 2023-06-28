@@ -4,7 +4,7 @@ using DataFrames
 
 default(show = true)
 
-# outfile = "results/outfiles/out_1D_20230626.nc"
+# outfile = "results/outfiles/out_1D_20230627_2332.nc"
 
 
 function depth_plots(fsaven, pulse)
@@ -28,7 +28,7 @@ function depth_plots(fsaven, pulse)
     
     f1 = plot_depth_profiles(p, b, z, d, n, zc)
     f2 = plot_stacked_bio_nuts(p, b, z, d, n, o, zc)
-    f3 = plot_depth_individual(b, d, z, zc)
+    f3 = plot_depth_individual(b, d, z, p, zc)
 
     savefig(f1,"results/plots/depth/$(file)_$(season)_1.pdf")
     savefig(f2,"results/plots/depth/$(file)_$(season)_2.pdf")
@@ -55,10 +55,10 @@ end
 function plot_stacked_bio_nuts(p, b, z, d, n, o, zc)
 
     p1 = plot(sum(p, dims = 2), -zc, lc="green", grid=false, xrotation=45, label="Total P")
-    plot!(sum(b, dims = 2), -zc, lc="grey", label="Total B") 
+    plot!(sum(b, dims = 2), -zc, lc="blue", label="Total B") 
     plot!(sum(z, dims = 2), -zc, lc="black", label="Total Z") 
     p2 = plot(sum(d, dims = 2), -zc, lc="orange", ls=:dot, grid=false, xrotation=45, label=false)
-    p3 = plot(sum(n, dims = 2), -zc, lc="blue", ls=:dot, grid=false, xrotation=45, label=false)
+    p3 = plot(sum(n, dims = 2), -zc, lc="grey", ls=:dot, grid=false, xrotation=45, label=false)
     p4 = plot(sum(o, dims = 2), -zc, lc="pink", ls=:dot, grid=false, xrotation=45, label=false)
     f2 = plot(p1, p2, p3, p4,
         linewidth = 2,
@@ -71,10 +71,10 @@ function plot_stacked_bio_nuts(p, b, z, d, n, o, zc)
 end
 
 
-function plot_depth_individual(b, d, z, zc)
+function plot_depth_individual(b, d, z, p, zc)
     
-    sizes = get_size([b, d, z])
-    nb, nd, nz = sizes[1], sizes[2], sizes[3]
+    sizes = get_size([b, d, z, p])
+    nb, nd, nz, np = sizes[1], sizes[2], sizes[3], sizes[4]
 
     p1 = plot(d[:,1], -zc, linecolor = "orange", label="", ylabel = "Depth (m)", xlabel = "mmol N/m3", xrotation=45)
     cp1 = Plots.palette(:turbid, nd)
@@ -82,31 +82,31 @@ function plot_depth_individual(b, d, z, zc)
         plot!(d[:,i], -zc, palette=cp1, grid=false, label="")
     end
 
-    p2 = plot(b[:,1], -zc, linecolor = "grey", label = "", xlabel = "mmol N/m3", xrotation=45)
-    cp2 = Plots.palette(:dense, nb)
-    for j in 2:nb
-        plot!(b[:,j], -zc, palette=cp2, grid=false, label="")
+    p2 = plot(z[:,1], -zc, linecolor = "black", label = "", xlabel = "mmol N/m3", xrotation=45)
+    cp3 = Plots.palette(:solar, nb)
+    for j in 2:nz
+        plot!(z[:,j], -zc, palette=cp3, grid=false, label="")
     end
 
-    f3 = plot(p1, p2, 
-            linewidth = 2,
-            layout = 2,
-            fg_legend = :transparent,
-            title = ["Organic matter" "B Biomass"]
-        )
+    p3 = plot(b[:,1], -zc, linecolor = "blue", label = "", xlabel = "mmol N/m3", xrotation=45)
+    cp2 = Plots.palette(:dense, nb)
+    for k in 2:nb
+        plot!(b[:,k], -zc, palette=cp2, grid=false, label="")
+    end
 
-    # p3 = plot(z[:,1], -zc, linecolor = "black", label = "", xlabel = "mmol N/m3", xrotation=45)
-    # cp3 = Plots.palette(:solar, nb)
-    # for j in 2:nz
-    #     plot!(z[:,j], -zc, palette=cp3, grid=false, label="")
-    # end
-    
-    # f3 = plot(p1, p2, p3,
-    #         linewidth = 2,
-    #         layout = 3,
-    #         fg_legend = :transparent,
-    #         title = ["Organic matter" "B Biomass" "Z Biomass"]
-    #     )
+    p4 = plot(p[:,1], -zc, linecolor = "green", label = "", xlabel = "mmol N/m3", xrotation=45)
+    cp2 = Plots.palette(:algae, nb)
+    for l in 2:np
+        plot!(p[:,l], -zc, palette=cp2, grid=false, label="")
+    end
+
+    f3 = plot(p1, p2, p3, p4,
+            linewidth = 2,
+            layout = 4,
+            fg_legend = :transparent,
+            size=(400,800),
+            title = ["Organic Matter" "Z Biomass" "B Biomass" "P Biomass"]
+        )
     
     return f3
 
@@ -140,8 +140,9 @@ function get_endpoints(ds, vars)
 
 end
 
-# depth_plots(outfile, 1)
 
+
+# depth_plots(outfile, 1)
 # ----------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------
 #NOTE these 'time' plots are ultimately unnecessary for 1D runs
