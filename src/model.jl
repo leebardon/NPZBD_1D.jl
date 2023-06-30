@@ -10,13 +10,10 @@ set_zero_subnormals(true)
 
 
 #TODO add a sinking (dsink) to remove some detritus or it wont equilibriate 
-function run_NPZBD(prms, pulse)
+function run_NPZBD(prms, season, pulse=false)
 
+    trec = prms.nt÷prms.nrec # frequency of recording
     start_time = now()
-
-    nt = Int(prms.tt/prms.dt)
-    trec = nt÷prms.nrec # frequency of recording
-    fsaven = print_info(start_time, prms, nt)
 
     # Generate empty arrays
     nrec1 = Int(prms.nrec + 1)
@@ -46,7 +43,7 @@ function run_NPZBD(prms, pulse)
     otemp = copy(prms.oIC) 
 
 
-    for t = 1:nt 
+    @time for t = 1:prms.nt 
 
         # Runge-Kutta 4th order 
         ntemp, ptemp, ztemp, btemp, dtemp, otemp = rk4(ntemp, ptemp, ztemp, btemp, dtemp, otemp, prms, t)
@@ -59,43 +56,44 @@ function run_NPZBD(prms, pulse)
         
         end 
 
-        # if pulse == 2
-        #     # 2 = winter, pulse to top 80m every 10 days
-        #     if t % 1000 == 0
-        #         pulse = nutrient_pulse(pulse)
-        #         dtemp[1:8, :] .+= pulse     
-        #         ntemp[1:8, :] .+= pulse            
-        #     end
-        # elseif pulse == 3
-        #     # 3 = summer, pulse to top 80m every 30 days
-        #     if t % 3000 == 0
-        #         pulse = nutrient_pulse(pulse)
-        #         dtemp[1:8, :] .+= pulse     
-        #         ntemp[1:8, :] .+= pulse        
-        #     end
-        # end
+        if pulse == true
+            if season == 1
+                # winter, pulse to top 80m every 10 days
+                if t % 1000 == 0
+                    pulse = nutrient_pulse(pulse)
+                    dtemp[1:8, :] .+= pulse     
+                    ntemp[1:8, :] .+= pulse            
+                end
+            else
+                # summer, pulse to top 80m every 30 days
+                if t % 3000 == 0
+                    pulse = nutrient_pulse(pulse)
+                    dtemp[1:8, :] .+= pulse     
+                    ntemp[1:8, :] .+= pulse        
+                end
+            end
+        end 
 
         #calculate bacteria uptake and v for last timepoint
-        if t == nt
+        if t == prms.nt
 
             II, JJ = get_nonzero_axes(prms.CM)
             v = zeros(prms.nd, prms.nb) 
             uptake = zeros(prms.nd, prms.nb) 
         
             @inbounds for n = axes(II, 1)
-                v[II[n],JJ[n]] = vmax_ij[II[n],JJ[n]] * pen[JJ[n]] .* dtemp[II[n]] ./ (dtemp[II[n]] .+ Km_ij[II[n],JJ[n]]) 
+                v[II[n],JJ[n]] = prms.vmax_ij[II[n],JJ[n]] * prms.pen[JJ[n]] .* dtemp[II[n]] ./ (dtemp[II[n]] .+ prms.Km_ij[II[n],JJ[n]]) 
                 uptake[II[n],JJ[n]] = v[II[n],JJ[n]] .* btemp[JJ[n]]
             end  
             
             end_time = now() 
-
-            savetoNC(fsaven, track_p, track_b, track_z, track_n, track_d, track_o, track_time, v, uptake, start_time, end_time, params, pulse)
+            savetoNC(track_p, track_b, track_z, track_n, track_d, track_o, track_time, v, uptake, start_time, end_time, prms, season)
 
         end
     end 
 
 
-    return ntemp, ptemp, ztemp, btemp, dtemp, otemp, track_time, fsaven
+    return ntemp, ptemp, ztemp, btemp, dtemp, otemp, track_time
 
 end 
 
@@ -143,32 +141,9 @@ function model_functions(N, P, Z, B, D, O, prms, t)
 end 
 
 
-# function phyto_uptake(prms, N, P, dNdt, dPdt, dOdt, t)
-#     #NOTE > only works for nn = 1 at present. Implement CM for p_i on n_i and adapt loops accordingly 
-    
-#     for i = 1:prms.np
-#         uptake = P[:,i] .* prms.temp_fun .* prms.umax_p[i] .* min.(N ./ (N .+ prms.K_n[i]), prms.light ./ (prms.light .+ prms.K_I[i]))
-#         dNdt += -uptake
-#         dOdt += uptake * prms.e_o
-#         dPdt[:,i] += uptake 
-#     end
-
-#     return dPdt, dNdt, dOdt
-
-# end 
-
 function phyto_uptake(prms, N, P, dNdt, dPdt, dOdt, t)
 
     II, JJ = get_nonzero_axes(prms.CMp)
-
-    # for j = axes(II, 1)
-    #     uptake = prms.vmax_ij[II[j],JJ[j]] * prms.pen[JJ[j]] * D[II[j]] / (D[II[j]] + prms.Km_ij[II[j],JJ[j]]) * B[JJ[j]]
-    #     uptake = B[:,JJ[j]] .* prms.temp_fun .* prms.vmax_ij[II[j],JJ[j]] .* D[:,II[j]] ./ (D[:,II[j]] .+ prms.Km_ij[II[j],JJ[j]]) 
-    #     dDdt[:,II[j]] += -uptake
-    #     dBdt[:,JJ[j]] += uptake .* prms.y_ij[II[j],JJ[j]]
-    #     dNdt += uptake .* (1 - prms.y_ij[II[j],JJ[j]])
-    #     dOdt +=  -uptake .* prms.y_ij[II[j],JJ[j]] ./ prms.yo_ij[II[j],JJ[j]]
-    # end
 
     for j = axes(II, 1)
         uptake = P[:,JJ[j]] .* prms.temp_fun .* prms.umax_ij[II[j],JJ[j]] .* min.(N./ (N .+ prms.Kp_ij[II[j],JJ[j]]), prms.light ./ (prms.light .+ prms.K_I))
@@ -180,8 +155,6 @@ function phyto_uptake(prms, N, P, dNdt, dPdt, dOdt, t)
     return dPdt, dNdt, dOdt
 
 end 
-
-
 
 
 function bacteria_uptake(prms, B, D, dDdt, dBdt, dNdt, dOdt, t)

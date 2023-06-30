@@ -4,13 +4,13 @@ using DataFrames
 
 default(show = true)
 
-# outfile = "results/outfiles/out_1D_20230627_2332.nc"
+# outfile = "results/outfiles/out_27y_20230628_0956.nc"
 
 
-function depth_plots(fsaven, pulse)
+function depth_plots(fsaven, pulse, years)
 
     ds = NCDataset(fsaven)
-    file = replace(fsaven, "out_1D_" => "", ".nc" => "", "results/outfiles/" => "")
+    file = replace(fsaven, "out_$(years)y_" => "", ".nc" => "", "results/outfiles/" => "")
 
     if pulse == 0 
         season = "" 
@@ -26,21 +26,22 @@ function depth_plots(fsaven, pulse)
     dz = ds["dz"][:]
     zc = [dz/2:dz:(H-dz/2)]
     
-    f1 = plot_depth_profiles(p, b, z, d, n, zc)
+    f1 = plot_depth_profiles(p, b, z, d, n, o, zc)
     f2 = plot_stacked_bio_nuts(p, b, z, d, n, o, zc)
     f3 = plot_depth_individual(b, d, z, p, zc)
 
-    savefig(f1,"results/plots/depth/$(file)_$(season)_1.pdf")
-    savefig(f2,"results/plots/depth/$(file)_$(season)_2.pdf")
-    savefig(f3,"results/plots/depth/$(file)_$(season)_3.pdf")
+    savefig(f1,"results/plots/all/$(file)_$(season)_$(years)y.pdf")
+    savefig(f2,"results/plots/total/$(file)_$(season)_$(years)y.pdf")
+    savefig(f3,"results/plots/biomass/$(file)_$(season)_$(years)y.pdf")
 
 end
 
 
-function plot_depth_profiles(p, b, z, d, n, zc)
+function plot_depth_profiles(p, b, z, d, n, o, zc)
 
     f1 = plot([sum(p, dims = 2), sum(b, dims = 2), sum(z, dims = 2), sum(d, dims = 2), n], -zc; 
     layout = 5, 
+    size=(600,800),
     xrotation=45,
     linewidth = 2, 
     legend = false, 
@@ -140,98 +141,4 @@ function get_endpoints(ds, vars)
 
 end
 
-
-
-# depth_plots(outfile, 1)
-# ----------------------------------------------------------------------------------
-# ----------------------------------------------------------------------------------
-#NOTE these 'time' plots are ultimately unnecessary for 1D runs
-# function get_time_variables(ds, vars)
-
-#     out = Vector{Any}()
-
-#     for v in vars
-#         append!(out, [ds["$v"]])
-#     end
-
-#     return out[1], out[2], out[3], out[4], out[5], out[6], out[7]
-
-# end
-
-# function time_plots(outdir, outfile)
-
-#     ds = NCDataset(outdir*outfile)
-#     file = replace(outfile, "out_0D_" => "", ".nc" => "")
-
-#     H = ds["H"][:]
-#     dz = ds["dz"][:]
-#     zc = [dz/2:dz:(H-dz/2)]
-
-#     n, p, z, b, d, o, timet = get_time_variables(ds, ["n", "p", "z", "b", "d", "o", "timet"])
-
-#     plot_time_total(n, p, z, b, d, o, zc, timet, file)
-#     plot_time_individual_pzb(n, p, z, b, d, o, zc, timet, file)
-
-# end
-
-
-# function plot_time_total(n, p, z, b, d, o, zc, timet, file)
-
-#     all_n, all_p, all_z, all_b, all_d, all_o = sum_subtypes([n, p, z, b, d, o])
-
-#     p = plot(timet[:], [all_p[:], all_b[:], all_z[:]], lw=2, lc=[:limegreen :skyblue3 :coral3], label=["P" "B" "Z"], grid=false)
-#     plot!(timet[:], [all_n[:], all_d[:], all_o[:]], lw=2, linecolor=[:darkgrey :olive], ls=:dash, label=["N" "D" "O"])
-
-#     title!("Total NPZBD over time")
-#     xlabel!("Time (days)")
-#     ylabel!("Concentration")
-
-#     savefig(p,"results/plots/time/total/$(file)_t.pdf")
-
-# end
-
-
-# function plot_time_individual_pzb(n, p, z, b, d, o, zc, timet, file)
-
-#     nn, np, nz, nb, nd = get_size([n,p,z,b,d])
-
-#     p = plot(timet[:], p[1, :], lw=2, linecolor="limegreen", grid=false, label="Phy ($np)")
-
-#     if np > 1
-#         cp1 = Plots.palette(:greens, np)
-#         for i in 2:np
-#             plot!(timet[:], p[i, :], lw=2, palette=cp1, grid=false, label=" ")
-#         end
-#     end 
-
-#     cp2 = Plots.palette(:blues, nb)
-#     for j in 1:nb
-#         j == 1 ? lab="Bac ($nb)" : lab=" "
-#         plot!(timet[:], b[j, :], lw=2, palette=cp2, grid=false, label=lab)
-#     end
-
-#     cp3 = Plots.palette(:reds, nz)
-#     for k in 1:nz
-#         k == 1 ? lab="Zoo ($nz)" : lab=" "
-#         plot!(timet[:], z[k, :], lw=2, palette=cp3, grid=false, label=lab)
-#     end
-
-#     title!("PZB over time")
-#     xlabel!("Time (days)")
-#     ylabel!("Concentration (mmol/m^3)")
-
-#     savefig(p,"results/plots/time/individual/$(file)_i.pdf")
-
-# end
-
-
-# function sum_subtypes(all_states)
-
-#     out = Vector{Any}()
-
-#     for s in all_states
-#         append!(out, [sum(s[:,:], dims=2)])
-#     end
-
-#     return out[1], out[2], out[3], out[4], out[5], out[6]
-# end
+# depth_plots(outfile, 2, 27)

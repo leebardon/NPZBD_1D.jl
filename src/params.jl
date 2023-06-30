@@ -6,6 +6,7 @@ using Parameters
 @with_kw struct Prms
     tt::Int64                      # num days (run time)
     dt::Float64                    # length of one time-step
+    nt::Int64                      # num days / num timesteps
     nrec::Int64                    # num timepoints to record
     H::Int64                       # total depth (m)
     dz::Int64                      # height of each box/parcel of water (m)
@@ -56,7 +57,7 @@ using Parameters
     ml_boxes::Int64                # num boxes in mixed layer, close to 100m total sum
     t_o2relax::Float64             # deep oxygen relaxation (1/day)
     o2_deep::Float64               # mmol/m3
-    fsave::String                  # save file name
+    fsaven::String                 # save file name
 end
 
 # @with_kw struct Prms

@@ -10,13 +10,6 @@ module NPZBD_1D
     println("\n > Number of cores: ", nprocs())
     println(" > Number of workers: ", nworkers())
 
-    logger = TeeLogger(
-        MinLevelLogger(FileLogger("logs/info.log"), Logging.Info),
-        MinLevelLogger(FileLogger("logs/error.log"), Logging.Warn),
-    );
-
-    global_logger(logger)
-
     include("model.jl")
     include("params.jl")
     include("physics.jl")
@@ -26,6 +19,7 @@ module NPZBD_1D
     include("traits.jl")
     include("integrate.jl")
     include("plot.jl")
+    include("save_params.jl")
 
 
     #------------------------------------------------------------------------------------------------------------#
@@ -35,9 +29,56 @@ module NPZBD_1D
     # test_prms = TestPrms()
     # N, P, Z, B, D, track_time, fsaven = run_NPZBD(test_prms, 1)
     #------------------------------------------------------------------------------------------------------------#
-
-    fsave = "results/outfiles/out_1D"
     
+
+
+    #------------------------------------------------------------------------------------------------------------#
+    #   TIMES AND LOGS
+    #------------------------------------------------------------------------------------------------------------#
+        println(message("START"))
+
+        simulation_time = request(message("TM2"), RadioMenu(message("TM1")))
+        if simulation_time == 1
+            years = 1
+            tt = 366
+            nrec = 7320
+        elseif simulation_time == 2
+            years = 10
+            tt = 3660
+            nrec = 73200
+        else 
+            years = 100
+            tt = 36600
+            nrec = 732000
+        end
+
+        dt = 0.01
+        nt = Int(tt/dt)
+
+        fsaven, logger = set_savefiles(now(), years)
+    
+    #------------------------------------------------------------------------------------------------------------#
+    #   COLLECT USER INPUT
+    #------------------------------------------------------------------------------------------------------------#
+        run_type = request(message("ST2"), RadioMenu(message("ST1")))
+
+        if run_type == 1 
+            nd, nb, np, nz, nn, yield, supply_weight, uptake, uptake_p, season = user_select()
+            yield == 1 ? y_i = ones(nd)*0.3 : y_i = rand(nd)*0.5
+            uptake == 1 ? vmax_i = ordered_uptake_arr(nd) : vmax_i = random_uptake_arr(nd)
+            uptake_p == 1 ? umax_i = fill(1., np) : umax_i = random_uptake_arr(np)
+        else
+            options = readdir("results/saved_params/")
+            file = request(message("LVP"), RadioMenu(options))
+            params, season = load_saved_params(dt, tt, nrec, nt, fsaven, options[file])
+
+            N, P, Z, B, D, O, track_time = run_NPZBD(params, season)
+        
+            depth_plots(fsaven, season, years)
+
+            exit()
+        end
+            
     #------------------------------------------------------------------------------------------------------------#
     #   GRID SETUP
     #------------------------------------------------------------------------------------------------------------#
@@ -46,34 +87,11 @@ module NPZBD_1D
         ngrid = Int(H/dz)               # number of boxes
         zc = [dz/2 : dz : H - dz/2;]    # centered depth 
         zf = [0 : dz : H;]              # face depth; 1 longer than zc
-    
-    #------------------------------------------------------------------------------------------------------------#
-    #   COLLECT USER INPUT
-    #------------------------------------------------------------------------------------------------------------#
-        #TODO expand code to allow for multiple n 
-        println(message("START"))
-        println(message("DEF"))
-        defaults = request(message("DF2"), RadioMenu(message("DF1")))
-
-        if defaults == 1 
-            tt, nrec, nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, umax_i, pulse = get_defaults()
-        else 
-            tt, nrec, nd, nb, np, nz, nn, yield, supply_weight, uptake, uptake_p, pulse = user_select()
-            yield == 1 ? y_i = ones(nd)*0.3 : y_i = rand(nd)*0.5
-            uptake == 1 ? vmax_i = ordered_uptake_arr(nd) : vmax_i = random_uptake_arr(nd)
-            uptake_p == 1 ? umax_i = fill(1., np) : umax_i = fill(1., np) 
-            # uptake_p == 1 ? umax_i = ordered_uptake_arr(np, true) : umax_i = random_uptake_arr(np)
-        end
-            
 
     # -----------------------------------------------------------------------------------------------------------#
     #   HETEROTROPHIC MICROBE PARAMS
     #------------------------------------------------------------------------------------------------------------#
-        if isfile("NPZBD_1D/results/matrices/CM_$(nd)d$(nb)b.jdl")
-            CM = load_matrix("CM", nd, nb)
-        else
-            CM = build_consumption_matrix(nd, nb)
-        end
+        CM = get_matrix("CM", nd, nb, nn, np, nz)
 
         y_ij = broadcast(*, y_i, CM)
         yo_ij = y_ij*10                     # PLACEHOLDER VALUE mol B/mol O2. not realistic
@@ -83,8 +101,8 @@ module NPZBD_1D
 
         println(message("MIC"))
 
-        tradeoff = request(message("TB2"), RadioMenu(message("T1")))  
-        if tradeoff == 1 
+        tradeoff_b = request(message("TB2"), RadioMenu(message("T1")))  
+        if tradeoff_b == 1 
             vmax_ij, Km_ij = apply_tradeoff(nb, nd, CM, vmax_i)
         else
             vmax_ij = ones(nd, nb) * vmax_i
@@ -95,18 +113,14 @@ module NPZBD_1D
     # -----------------------------------------------------------------------------------------------------------#
     #   PHYTOPLANKTON PARAMS 
     #------------------------------------------------------------------------------------------------------------#
-        if isfile("NPZBD_1D/results/matrices/CMp_$(np)p$(nd)d$(nb)b$(nz)z.jdl")
-            CMp = load_matrix("CMp", nd, nb, nn, np)
-        else
-            CMp = build_consumption_matrix(nn, np)
-        end
+        CMp = get_matrix("CMp", nd, nb, nn, np, nz)
 
         K_I = 10.0         
         e_o = 150/16   
         Kp_i = umax_i./10 
 
-        tradeoff = request(message("TP2"), RadioMenu(message("T1")))  
-        if tradeoff == 1 
+        tradeoff_p = request(message("TP2"), RadioMenu(message("T1")))  
+        if tradeoff_p == 1 
             umax_ij, Kp_ij = apply_tradeoff(np, nn, CMp, umax_i)
         else
             umax_ij = ones(nn, np) * umax_i
@@ -116,18 +130,12 @@ module NPZBD_1D
     # -----------------------------------------------------------------------------------------------------------#
     #   ZOOPLANKTON GRAZING 
     #------------------------------------------------------------------------------------------------------------#
+        GrM = get_matrix("GrM", nd, nb, nn, np, nz)
+    
         g_max = ones(nz)
-        K_g = ones(nz)*0.2
+        K_g = ones(nz)*1.0
         γ = ones(nz)*0.3
 
-        if isfile("NPZBD_1D/results/matrices/GrM_$(np)p$(nb)b$(nz)z.jdl")
-            GrM = load_matrix("GrM", nd, nb, nn, np, nz)
-        else
-            GrM = build_grazing_matrix(np, nb, nz)
-        end
-
-        println(message("CM", nd, nb, nn, np))
-        println(message("GM", nd, nb, nn, np, nz))
     # -----------------------------------------------------------------------------------------------------------#
     #   MORTALITY
     #------------------------------------------------------------------------------------------------------------#
@@ -136,10 +144,10 @@ module NPZBD_1D
 
         m_lb = ones(nb) * 1e-2 
         m_qb = ones(nb) * 0.1 
-        # m_qb[1] = 1  # POM consumer 
+        m_qb[1] = 1  # POM consumer 
 
         m_lz = ones(nz) * 1e-2
-        m_qz = ones(nz) * 0.1 
+        m_qz = ones(nz) * 1.0 
 
     # -----------------------------------------------------------------------------------------------------------#
     #   ORGANIC MATTER
@@ -155,10 +163,7 @@ module NPZBD_1D
 
         # Sinking rate for POM  #NOTE could be randomly assigned range 1 t0 10
         ws = zeros(nd)                  # sinking speed of POM (m/day)
-        ws[1] = 5
-        #NOTE because I have something sinking too fast and accumulating
-        # make one pool from average vmax and one could be sinking speed of zero
-        # we can remove from ADVECT 
+        ws[1] = 3 
         w = zeros(ngrid + 1)            # water vertical velocity, if there was any
         wd = transpose(repeat(ws, 1, ngrid + 1)) + repeat(w, 1, nd) # ngrid+1 x nd
         wd[1,:] .= 0                    # no flux boundary at surface 
@@ -168,13 +173,8 @@ module NPZBD_1D
     #   PHYSICAL ENVIRONMENT
     #------------------------------------------------------------------------------------------------------------#
 
-        # VERTICAL MIXING #NOTE Summer vs winter - mixed layer shallower in summer - try 15 summer, 25 winter (instead of pulse?)
-            if pulse == 2 
-                mlz = 15     # mixed layer lengthscale
-            elseif pulse == 1 || pulse == 3
-                mlz = 25
-            end
-
+        # VERTICAL MIXING 
+            season == 1 ? mlz = 30 : mlz = 15  # mixed layer lengthscale
             kappazmin = 1e-4              # min mixing coeff -value for most of the deep ocean (higher at top and bottom)
             kappazmax = 1e-2              # max mixing coeff -value at top of mixed layer (and bottom boundary mixed layer)
             kappa_z = (kappazmax .* exp.(-zf/mlz) .+ kappazmin .+ kappazmax .* exp.((zf .- H) / 100.)) .* 3600 .* 24 
@@ -190,7 +190,7 @@ module NPZBD_1D
             o2_sat = 212.1              # mmol/m3 from calc_oxsat(25+273,35) in matlab. WOCE clim-avg surf T at 10S, E. Pac.
             Kgast = 3e-5*86400          # m/d
             ml_boxes = 100/dz           # discrete n of boxes in the mixed layer, close to 100m total sum
-            koverh = Kgast/100/ml_boxes # gas transfer coeff for each of the n boxes comprising the ml. why the 100 here?
+            koverh = Kgast/ml_boxes # gas transfer coeff for each of the n boxes comprising the ml. 
 
         # OXYGEN (deep oxygen relaxation)
             o2_deep = 200.0             # mmol/m3, avg (for ~7 C) and 35
@@ -199,9 +199,9 @@ module NPZBD_1D
 
         # TEMPERATURE (SPOT along water column)
         #fit to SPOT data (approx 20 to 4, approx 16 to 4)
-            if pulse == 2 
+            if season == 1 
                 temp = 6.5 .*exp.(-zc ./ 150) .+ 9 .*exp.(-zc ./ 500) .+ 3
-            elseif pulse == 1 || pulse == 3
+            else
                 temp = 10 .*exp.(-zc ./ 150) .+ 9 .*exp.(-zc ./ 500) .+ 2.9
             end
 
@@ -216,44 +216,35 @@ module NPZBD_1D
     # -----------------------------------------------------------------------------------------------------------#
     #   INITIAL CONDITIONS
     #------------------------------------------------------------------------------------------------------------#
-        nIC = ones(Float64, ngrid, nn) * 10.0
+        nIC = ones(Float64, ngrid, nn) * 20.0
         pIC = ones(Float64, ngrid, np) * 0.1 
         zIC = ones(Float64, ngrid, nz) * 0.01
-        # dIC = ones(Float64, ngrid, nd) * (0.01 / nd)
-        # bIC = ones(Float64, ngrid, nb) * (0.1 / nb)
-        dIC = ones(Float64, ngrid, nd) * 0.1
-        bIC = ones(Float64, ngrid, nb) * 0.01
+        dIC = ones(Float64, ngrid, nd) * (0.01 / nd)
+        bIC = ones(Float64, ngrid, nb) * (0.1 / nb)
         oIC = ones(Float64, ngrid, 1)  * 100.0
-
 
 
     # -----------------------------------------------------------------------------------------------------------#
     #   INSTANTIATE PARAMS & RUN MODEL
     #------------------------------------------------------------------------------------------------------------#
+        params = Prms(
+                    tt, dt, nt, nrec, H, dz, np, nb, nz, nn, nd, pIC, bIC, zIC, nIC, dIC, oIC, 
+                    umax_i, umax_ij, Kp_i, Kp_ij, m_lp, m_qp, light, temp_fun, K_I, CMp,
+                    vmax_i, vmax_ij, Km_i, Km_ij, y_ij, m_lb, m_qb, prob_generate_d, CM,
+                    g_max, K_g, γ, m_lz, m_qz, GrM, pen, kappa_z, wd, ngrid, 
+                    e_o, yo_ij, koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, fsaven
+                )
 
-    dt = 0.01
-    params = Prms(
-                tt, dt, nrec, H, dz, np, nb, nz, nn, nd, pIC, bIC, zIC, nIC, dIC, oIC, 
-                umax_i, umax_ij, Kp_i, Kp_ij, m_lp, m_qp, light, temp_fun, K_I, CMp,
-                vmax_i, vmax_ij, Km_i, Km_ij, y_ij, m_lb, m_qb, prob_generate_d, CM,
-                g_max, K_g, γ, m_lz, m_qz, GrM, pen, kappa_z, wd, ngrid, 
-                e_o, yo_ij, koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, fsave
-            )
-    # params = Prms(
-    #             tt, dt, nrec, H, dz, np, nb, nz, nn, nd, pIC, bIC, zIC, nIC, dIC, oIC, 
-    #             umax_p, K_n, m_lp, m_qp, CM, y_ij, vmax_i, vmax_ij, Km_i, Km_ij, 
-    #             m_lb, m_qb, g_max, K_g, γ, m_lz, m_qz, fsave, GrM, pen, 
-    #             prob_generate_d, kappa_z, wd, light, temp_fun, K_I, ngrid, 
-    #             e_o, yo_ij, koverh, o2_sat, ml_boxes, t_o2relax, o2_deep,
-    #         )
+        @info("Model Params: \n $params \n") ; print_info(params)
 
-    @info("Model Params: \n $params \n")
+        N, P, Z, B, D, O, track_time = run_NPZBD(params, season)
+    
+        save_matrices(CM, CMp, GrM, nd, nb, nn, np, nz)
+        
+        depth_plots(fsaven, season, years)
 
-    N, P, Z, B, D, O, track_time, fsaven = run_NPZBD(params, pulse)
-
-    save_matrices(CM, CMp, GrM, nd, nb, nn, np, nz)
-
-    depth_plots(fsaven, pulse)
+        save_prm = request(message("SVP2"), RadioMenu(message("SVP1")))
+        save_prm == 1 ? save_params(params) : exit()
 
 end
 

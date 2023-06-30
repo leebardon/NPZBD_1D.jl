@@ -11,18 +11,14 @@ function message(v::String, nd::Int64=0, nb::Int64=0, nn::Int64=0, np::Int64=0, 
 
     m = Dict(
         "START" => "\n -------------------------------- STARTING PROGRAM ----------------------------------- \n",
-        "DEF" => """Default values: \n tt = 2 \n nrec = 40 \n nn = 1 \n np = 4 \n nz = 3 \n nb = 8 \n nd = 4 
-                    y_i = conts. 0.3 \n SW = const. 1.0 \n vmax_i = ordered \n umax_i = ordered \n pulse = none \n """,
-        "DF1" => ["Use defaults", "Select custom prms"],
-        "DF2" => "Proceed with defaults or select custom params?",
-        "T" => "\n Enter simulation run time (tt - number of days): ",
-        "REC" => "Enter number of timepoints to record (nrec): ",
-        "DN" => "Enter number of detritus pools (nd): ",
+        "ST1" => ["Start New Run", "Use Saved Params"],
+        "ST2" => "\nStart new run, or load saved params?",
+        "TM1" => ["1 year (tt=366)", "10 years (tt=3660)", "100 years (tt=36600)"],
+        "TM2" => "Select Simulation Runtime:",
+        "DN" => "\nEnter number of detritus pools (nd): ",
         "BN" => "Enter number of bacteria populations (nb): ",
         "PN" => "Enter number of phyto populations (np): ",
         "ZN" => "Enter number of zooplank populations (nz): ",
-        "CM" => "\n >> Building consumption matrices - $(nb)bx$(nd)d & $(np)px$(nn)n << ",
-        "GM" => "\n >> Building grazing matrix - ($(np)p + $(nb)b) x $(nz)z << ",
         "Y1" => ["Equal for all bacteria", "Randomised"],
         "Y2" => "\n Select yield rates for bacteria populations (y_i):",
         "SW1" => ["Equal distribution", "Lognormal distribution"],
@@ -37,32 +33,16 @@ function message(v::String, nd::Int64=0, nb::Int64=0, nn::Int64=0, np::Int64=0, 
         "TB2" => "Apply bacterial growth rate-affinity tradeoff?",
         "TP2" => "\nApply phyto growth rate-affinity tradeoff?",
         "ENV" => "\n SETTING NUTRIENT SUPPLY \n -------------------------- ",
-        "PU2" => "Simulate winter or summer conditions? 'None' for no nutrient pulse.",
-        "PU1" => ["None", "Winter", "Summer"],
+        "SE2" => "\nSimulate winter or summer conditions?",
+        "SE1" => ["Winter", "Summer"],
+        "LVP" => "\nSelect params to load: ",
+        "SVP1" => ["Yes", "No"],
+        "SVP2" => "\n Save params from this run?",
         "SV" => "Saving to: $fsaven",
 
     )
 
     return m["$v"]
-
-end
-
-
-function get_defaults()
-    tt = 2
-    nrec = 40 
-    nn = 1
-    np = 4
-    nz = 3
-    nb = 8
-    nd = 4
-    y_i = ones(nd)*0.3 
-    supply_weight = 1 
-    vmax_i = ordered_uptake_arr(nd)
-    umax_i = ordered_uptake_arr(np) #NOTE based on nn = 1 system
-    pulse = 1
-
-    return tt, nrec, nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, umax_i, pulse
 
 end
 
@@ -76,14 +56,6 @@ end
 
 
 function user_select()
-
-    println(message("T"))
-    input = readline()
-    tt = parse(Int64, input) 
-
-    println(message("REC"))
-    input = readline()
-    nrec = parse(Int64, input) 
 
     println(message("DN"))
     input = readline()
@@ -110,9 +82,11 @@ function user_select()
     uptake = request(message("UP2"), RadioMenu(message("UP1")))
     uptake_p = request(message("UPP2"), RadioMenu(message("UPP1")))
     println(message("ENV"))
-    pulse = request(message("PU2"), RadioMenu(message("PU1")))
+    season = request(message("SE2"), RadioMenu(message("SE1")))
 
-    return tt, nrec, nd, nb, np, nz, nn, yield, supply_weight, uptake, uptake_p, pulse
+    @info("User Selections: \n SW = $supply_weight \n B yield = $yield \n B uptake = $uptake \n P uptake = $uptake_p \n Season == $season \n")
+
+    return nd, nb, np, nz, nn, yield, supply_weight, uptake, uptake_p, season
 
 end
 
@@ -140,13 +114,13 @@ end
 
 function save_matrices(M1, M2, M3, nd, nb, nn, np, nz)
 
-    jldopen("results/matrices/CM_$(nd)d$(nb)b.jdl", "w") do file
+    jldopen("results/saved_matrices/CM_$(nd)d$(nb)b.jdl", "w") do file
         write(file, "A", M1)  
     end
-    jldopen("results/matrices/CMp_$(nn)n$(np)p.jdl", "w") do file
+    jldopen("results/saved_matrices/CMp_$(nn)n$(np)p.jdl", "w") do file
         write(file, "A", M2)  
     end
-    jldopen("results/matrices/GrM_$(np)p$(nb)b$(nz)z.jdl", "w") do file
+    jldopen("results/saved_matrices/GrM_$(np)p$(nb)b$(nz)z.jdl", "w") do file
             write(file, "A", M3)  
     end
 
@@ -193,6 +167,7 @@ function nan_or_inf(x)
 
 end
 
+
 function big_or_small(x)
 
     if typeof(x) == Float64 || typeof(x) == Int64
@@ -212,25 +187,71 @@ function big_or_small(x)
 end
 
 
-function print_info(start_time, prms, nt)
+function get_matrix(Mtype, nd, nb, nn, np, nz) 
+    
+    if Mtype == "CM"
+        if isfile("NPZBD_1D/results/saved_matrices/CM_$(nd)d$(nb)b.jdl")
+            M = load_matrix("CM", nd, nb)
+        else
+            M = build_consumption_matrix(nd, nb)
+        end
+    elseif Mtype == "CMp"
+        if isfile("NPZBD_1D/results/saved_matrices/CMp_$(np)p$(nd)d$(nb)b$(nz)z.jdl")
+            M = load_matrix("CMp", nd, nb, nn, np)
+        else
+            M = build_consumption_matrix(nn, np)
+        end  
+    else
+        if isfile("NPZBD_1D/results/saved_matrices/GrM_$(np)p$(nb)b$(nz)z.jdl")
+            M = load_matrix(Mtype, nd, nb, nn, np, nz)
+        else
+            M = build_grazing_matrix(np, nb, nz)
+        end
+    end
+
+    return M
+end
+
+
+function print_info(prms)
 
     @printf("\n np = %5.0f \n nb = %5.0f \n nz = %5.0f \n nn = %5.0f \n nd = %5.0f \n days = %5.0f \n\n", prms.np, prms.nb, prms.nz, prms.nn, prms.nd, prms.tt)
-    open("jlog.txt","w") do f
-        write(f,@sprintf("np = %5.0f, nb = %5.0f, nz = %5.0f, nn = %5.0f, nd = %5.0f, days = %5.0f \n", prms.np, prms.nb, prms.nz, prms.nn, prms.nd, prms.tt))
-    end
-
-    fsaven = string(prms.fsave,"_", Dates.format(start_time, "yyyymmdd"), ".nc")
-    if isfile(fsaven)
-        fsaven = string(prms.fsave, "_", Dates.format(start_time, "yyyymmdd_HHMM"), ".nc")
-    end
-
-    println("Starting time: $start_time, \nFile will be saved as: $fsaven")
-
-    println("nt = ", nt)
-
-    return fsaven
+    println("File will be saved as: ", prms.fsaven)
+    println("nt = ", prms.nt)
 
 end
+
+
+function set_savefiles(launch_time, years)
+
+    fsave = "results/outfiles/out_$(years)y"
+
+    fsaven = string(fsave,"_", Dates.format(launch_time, "yyyymmdd"), ".nc")
+    if isfile(fsaven)
+        fsaven = string(fsave, "_", Dates.format(launch_time, "yyyymmdd_HHMM"), ".nc")
+    end
+
+    loginfo = replace(fsaven, "out_$(years)y_" => "", ".nc" => ".log", "results/outfiles/" => "")
+    logger = activate_logger(loginfo)
+
+    return fsaven, logger
+
+end
+
+
+function activate_logger(loginfo)
+
+    logger = TeeLogger(
+        MinLevelLogger(FileLogger("logs/$loginfo"), Logging.Info),
+        MinLevelLogger(FileLogger("logs/error.log"), Logging.Warn),
+    ); 
+    
+    global_logger(logger)
+
+    return logger 
+
+end
+
 
 function update_tracking_arrs(track_n, track_p, track_z, track_b, track_d, track_o, track_time, ntemp, ptemp, ztemp, btemp, dtemp, otemp, t, trec, prms)
 
@@ -255,28 +276,21 @@ function update_tracking_arrs(track_n, track_p, track_z, track_b, track_d, track
 end
 
 
-function savetoNC(fsaven, p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, pulse)
+function savetoNC(p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, sen)
 
     outdir = "/home/lee/Dropbox/Development/NPZBD_1D/"
-    path = joinpath(outdir, fsaven) 
-    println("\nSaving output to: ", path)
+    path = joinpath(outdir, prms.fsaven) 
+    println("\nSaving output file to: ", path)
 
-    println("\nConsumption Matrix (nb x nd):")
-    display("text/plain", prms.CM)
+    display_CM = display("text/plain", prms.CM)
+    display_CMp = display("text/plain", prms.CMp)
+    display_GrM = display("text/plain", prms.GrM)
 
-    println("\nConsumption Matrix (np x nn):")
-    display("text/plain", prms.CMp)
+    @info("\nConsumption Matrix (nb x nd): \n $display_CM \n")
+    @info("\nConsumption Matrix (np x nn): \n $display_CMp \n")
+    @info("\nGrazing Matrix (GrM): \n $display_GrM \n")
 
-    println("\nGrazing Matrix (GrM):")
-    display("text/plain", prms.GrM)
-
-    if pulse == 1
-        season = "N/A (no pulse)"
-    elseif pulse == 2
-        season = "winter"
-    else
-        season = "summer"
-    end
+    sen == 1 ? season = "winter" : season = "summer"
 
     f = NCDataset(path, "c") #c for create
 

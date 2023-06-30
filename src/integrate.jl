@@ -13,7 +13,7 @@ function rk4(ntemp, ptemp, ztemp, btemp, dtemp, otemp, prms, t)
     track_o1 = o .+ prms.dt/2 .* dOdt1
 
     N1tot = sum(track_p1) + sum(track_b1) + sum(track_z1) + sum(track_n1) + sum(track_d1)
-    nan_or_inf(N1tot) ? @error("Nan or Inf at t=$t: \n N1tot: $N1tot") : @info("N1tot at t=$t: $N1tot")
+    nan_or_inf(N1tot) && @error("Nan or Inf at t=$t: \n N1tot: $N1tot")
     
     dNdt2, dPdt2, dZdt2, dBdt2, dDdt2, dOdt2 = model_functions(track_n1, track_p1, track_z1, track_b1, track_d1, track_o1, prms, t)
 
@@ -25,8 +25,7 @@ function rk4(ntemp, ptemp, ztemp, btemp, dtemp, otemp, prms, t)
     track_o2 = o .+ prms.dt/2 .* dOdt2
 
     N2tot = sum(track_p2) + sum(track_b2) + sum(track_z2) + sum(track_n2) + sum(track_d2)
-    nan_or_inf(N2tot) ? @error("Nan or Inf at t=$t: \n N2tot: $N2tot") : @info("N2tot at t=$t: $N2tot")
-
+    nan_or_inf(N2tot) && @error("Nan or Inf at t=$t: \n N2tot: $N2tot") 
     
     dNdt3, dPdt3, dZdt3, dBdt3, dDdt3, dOdt3  = model_functions(track_n2, track_p2, track_z2, track_b2, track_d2, track_o2, prms, t)
 
@@ -38,8 +37,7 @@ function rk4(ntemp, ptemp, ztemp, btemp, dtemp, otemp, prms, t)
     track_o3 = o .+ prms.dt .* dOdt3
 
     N3tot = sum(track_p3) + sum(track_b3) + sum(track_z3) + sum(track_n3) + sum(track_d3)
-    nan_or_inf(N3tot) ? @error("Nan or Inf at t=$t: \n N3tot: $N3tot") : @info("N3tot at t=$t: $N3tot")
-
+    nan_or_inf(N3tot) && @error("Nan or Inf at t=$t: \n N3tot: $N3tot") 
     
     dNdt4, dPdt4, dZdt4, dBdt4, dDdt4, dOdt4 = model_functions(track_n3, track_p3, track_z3, track_b3, track_d3, track_o3, prms, t)
 
@@ -51,7 +49,7 @@ function rk4(ntemp, ptemp, ztemp, btemp, dtemp, otemp, prms, t)
     o .+= (dOdt1 .+ 2 .* dOdt2 .+ 2 .* dOdt3 .+ dOdt4) .* (prms.dt / 6)
      
     Ntot = sum(p) + sum(b) + sum(n) + sum(d) + sum(z)
-    nan_or_inf(Ntot) ? @error("Nan or Inf at t=$t: \n Ntot: $Ntot") : @info("Ntot at t=$t: $Ntot")
+    nan_or_inf(Ntot) && @error("Nan or Inf at t=$t: \n Ntot: $Ntot") 
 
     return n, p, z, b, d, o
 
