@@ -2,8 +2,12 @@ module NPZBD_1D
     
     import REPL
     using REPL.TerminalMenus
-    using Logging, LoggingExtras, Dates
-    using SparseArrays, Distributions
+    using Logging, LoggingExtras 
+    using Dates, Printf, Parameters
+    using SparseArrays, Distributions, LinearAlgebra
+    using Statistics, StatsBase, Random
+    using DataFrames, NCDatasets, JLD
+    using Plots, ColorSchemes
 
     using Distributed
     addprocs(14, exeflags = "--project=$(Base.active_project())")
@@ -23,16 +27,6 @@ module NPZBD_1D
 
 
     #------------------------------------------------------------------------------------------------------------#
-    #TODO add test option
-    # Figure out how to pause and wait for subroutine to end if test is selected, then quit program, rather than 
-    # include("../test/data/prms_for_tests.jl")
-    # test_prms = TestPrms()
-    # N, P, Z, B, D, track_time, fsaven = run_NPZBD(test_prms, 1)
-    #------------------------------------------------------------------------------------------------------------#
-    
-
-
-    #------------------------------------------------------------------------------------------------------------#
     #   TIMES AND LOGS
     #------------------------------------------------------------------------------------------------------------#
         println(message("START"))
@@ -46,6 +40,10 @@ module NPZBD_1D
             years = 10
             tt = 3660
             nrec = 73200
+        elseif simulation_time == 3
+            years = 30
+            tt = 10980
+            nrec = 219600
         else 
             years = 100
             tt = 36600
@@ -64,7 +62,7 @@ module NPZBD_1D
 
         if run_type == 1 
             nd, nb, np, nz, nn, yield, supply_weight, uptake, uptake_p, season = user_select()
-            yield == 1 ? y_i = ones(nd)*0.3 : y_i = rand(nd)*0.5
+            yield == 1 ? y_i = ones(nd)*0.4 : y_i = rand(nd)*0.5
             uptake == 1 ? vmax_i = ordered_uptake_arr(nd) : vmax_i = random_uptake_arr(nd)
             uptake_p == 1 ? umax_i = fill(1., np) : umax_i = random_uptake_arr(np)
         else
@@ -79,6 +77,8 @@ module NPZBD_1D
             exit()
         end
             
+        umax_i = [1.8804349518192198, 2.191275617275966, 1.0040553436725859, 0.49765246281643066, 0.28554080759569855, 2.1758270878643895]
+        vmax_i = [5.771102517899136, 0.19857069218143547, 8.928166469876407, 5.391054155817703]
     #------------------------------------------------------------------------------------------------------------#
     #   GRID SETUP
     #------------------------------------------------------------------------------------------------------------#
@@ -91,7 +91,12 @@ module NPZBD_1D
     # -----------------------------------------------------------------------------------------------------------#
     #   HETEROTROPHIC MICROBE PARAMS
     #------------------------------------------------------------------------------------------------------------#
-        CM = get_matrix("CM", nd, nb, nn, np, nz)
+        # CM = get_matrix("CM", nd, nb, nn, np, nz)
+
+        CM =   [1  0  0  0  0  0  1  0  0  0
+                0  1  0  0  0  1  0  0  1  1
+                0  0  1  0  0  1  1  0  0  1
+                0  0  0  1  0  1  1  1  1  1]
 
         y_ij = broadcast(*, y_i, CM)
         yo_ij = y_ij*10                     # PLACEHOLDER VALUE mol B/mol O2. not realistic
@@ -127,10 +132,17 @@ module NPZBD_1D
             Kp_ij = ones(nn, np) * Kp_i
         end 
 
+        save_prm = request(message("SVP2"), RadioMenu(message("SVP1")))
+
     # -----------------------------------------------------------------------------------------------------------#
     #   ZOOPLANKTON GRAZING 
     #------------------------------------------------------------------------------------------------------------#
-        GrM = get_matrix("GrM", nd, nb, nn, np, nz)
+        # GrM = get_matrix("GrM", nd, nb, nn, np, nz)
+
+        GrM = [ 0  0  1  1  0  1  0  1  1  0  1  1  1  0  1  0
+                1  1  1  1  1  0  0  0  0  1  1  1  1  1  1  0
+                0  0  0  0  0  0  1  0  1  0  1  0  0  0  1  1
+                ]
     
         g_max = ones(nz)
         K_g = ones(nz)*1.0
@@ -153,6 +165,7 @@ module NPZBD_1D
     #   ORGANIC MATTER
     #------------------------------------------------------------------------------------------------------------#
         # Distribution of OM from mortality to detritus pools
+        #NOTE lognormal ends up with very small
         if supply_weight == 1 
             prob_generate_d = ones(nd) * (1/nd)
         else
@@ -163,7 +176,7 @@ module NPZBD_1D
 
         # Sinking rate for POM  #NOTE could be randomly assigned range 1 t0 10
         ws = zeros(nd)                  # sinking speed of POM (m/day)
-        ws[1] = 3 
+        ws[1] = 2.1 
         w = zeros(ngrid + 1)            # water vertical velocity, if there was any
         wd = transpose(repeat(ws, 1, ngrid + 1)) + repeat(w, 1, nd) # ngrid+1 x nd
         wd[1,:] .= 0                    # no flux boundary at surface 
@@ -174,7 +187,8 @@ module NPZBD_1D
     #------------------------------------------------------------------------------------------------------------#
 
         # VERTICAL MIXING 
-            season == 1 ? mlz = 30 : mlz = 15  # mixed layer lengthscale
+            # season == 1 ? mlz = 30 : mlz = 15  # mixed layer lengthscale
+            season == 1 ? mlz = 30 : mlz = 15 # mixed layer lengthscale
             kappazmin = 1e-4              # min mixing coeff -value for most of the deep ocean (higher at top and bottom)
             kappazmax = 1e-2              # max mixing coeff -value at top of mixed layer (and bottom boundary mixed layer)
             kappa_z = (kappazmax .* exp.(-zf/mlz) .+ kappazmin .+ kappazmax .* exp.((zf .- H) / 100.)) .* 3600 .* 24 
@@ -201,8 +215,10 @@ module NPZBD_1D
         #fit to SPOT data (approx 20 to 4, approx 16 to 4)
             if season == 1 
                 temp = 6.5 .*exp.(-zc ./ 150) .+ 9 .*exp.(-zc ./ 500) .+ 3
+                # temp = 10 .*exp.(-zc ./ 150) .+ 9 .*exp.(-zc ./ 500) .+ 2.9
             else
-                temp = 10 .*exp.(-zc ./ 150) .+ 9 .*exp.(-zc ./ 500) .+ 2.9
+                temp = 6.5 .*exp.(-zc ./ 150) .+ 9 .*exp.(-zc ./ 500) .+ 3
+                # temp = 10 .*exp.(-zc ./ 150) .+ 9 .*exp.(-zc ./ 500) .+ 2.9
             end
 
         # TEMPERATURE (modification to metabolic rates)
@@ -219,8 +235,8 @@ module NPZBD_1D
         nIC = ones(Float64, ngrid, nn) * 20.0
         pIC = ones(Float64, ngrid, np) * 0.1 
         zIC = ones(Float64, ngrid, nz) * 0.01
-        dIC = ones(Float64, ngrid, nd) * (0.01 / nd)
-        bIC = ones(Float64, ngrid, nb) * (0.1 / nb)
+        dIC = ones(Float64, ngrid, nd) * 0.01
+        bIC = ones(Float64, ngrid, nb) * 0.1 
         oIC = ones(Float64, ngrid, 1)  * 100.0
 
 
@@ -240,24 +256,8 @@ module NPZBD_1D
         N, P, Z, B, D, O, track_time = run_NPZBD(params, season)
     
         save_matrices(CM, CMp, GrM, nd, nb, nn, np, nz)
-        
         depth_plots(fsaven, season, years)
-
-        save_prm = request(message("SVP2"), RadioMenu(message("SVP1")))
         save_prm == 1 ? save_params(params) : exit()
 
 end
 
-
-#####################################################
-#TODO
-# """
-
-# 1. Consumption matrix and a function for pulsing nutrients - random and periodic - done
-
-# 2. Grazing and cell size (start with just one grazer for each)
-
-# Add a way to scale the input of P into the consumption matrix, in the way we do for the bacteria
-# Later - ammonia oxidizers and nitrite oxidisers - can wait until later in the year 
-
-# """

@@ -24,3 +24,4 @@ docs/site/
 /results/plots
 /results/saved_matrices/*.jdl
 /results/saved_params/*.jdl
+/data

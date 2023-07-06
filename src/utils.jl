@@ -1,11 +1,3 @@
-using AutomaticDocstrings
-import REPL
-using REPL.TerminalMenus
-using Printf, NCDatasets
-using Dates
-using SparseArrays
-
-
 
 function message(v::String, nd::Int64=0, nb::Int64=0, nn::Int64=0, np::Int64=0, nz::Int64=0, fsaven::String="")
 
@@ -13,7 +5,7 @@ function message(v::String, nd::Int64=0, nb::Int64=0, nn::Int64=0, np::Int64=0, 
         "START" => "\n -------------------------------- STARTING PROGRAM ----------------------------------- \n",
         "ST1" => ["Start New Run", "Use Saved Params"],
         "ST2" => "\nStart new run, or load saved params?",
-        "TM1" => ["1 year (tt=366)", "10 years (tt=3660)", "100 years (tt=36600)"],
+        "TM1" => ["1 year (tt=366)", "10 years (tt=3660)", "30 years (tt=10980)", "100 years (tt=36600)"],
         "TM2" => "Select Simulation Runtime:",
         "DN" => "\nEnter number of detritus pools (nd): ",
         "BN" => "Enter number of bacteria populations (nb): ",
@@ -33,7 +25,7 @@ function message(v::String, nd::Int64=0, nb::Int64=0, nn::Int64=0, np::Int64=0, 
         "TB2" => "Apply bacterial growth rate-affinity tradeoff?",
         "TP2" => "\nApply phyto growth rate-affinity tradeoff?",
         "ENV" => "\n SETTING NUTRIENT SUPPLY \n -------------------------- ",
-        "SE2" => "\nSimulate winter or summer conditions?",
+        "SE2" => "Simulate winter or summer conditions?",
         "SE1" => ["Winter", "Summer"],
         "LVP" => "\nSelect params to load: ",
         "SVP1" => ["Yes", "No"],
@@ -94,15 +86,15 @@ end
 function load_matrix(mtype, nd, nb, nn=0, np=0, nz=0)
     
     if mtype == "CM"
-        M = jldopen("results/matrices/$(mtype)_$(nd)d$(nb)b.jdl", "r") do file
+        M = jldopen("results/saved_matrices/$(mtype)_$(nd)d$(nb)b.jdl", "r") do file
             read(file, "A")
         end
     elseif mtype == "CMp"
-        M = jldopen("results/matrices/$(mtype)_$(nn)n$(np)p.jdl", "r") do file
+        M = jldopen("results/saved_matrices/$(mtype)_$(nn)n$(np)p.jdl", "r") do file
             read(file, "A")
         end
     else 
-        M = jldopen("results/matrices/$(mtype)_$(np)p$(nb)b$(nz)z.jdl", "r") do file
+        M = jldopen("results/saved_matrices/$(mtype)_$(np)p$(nb)b$(nz)z.jdl", "r") do file
             read(file, "A")
         end
     end
@@ -225,11 +217,7 @@ end
 function set_savefiles(launch_time, years)
 
     fsave = "results/outfiles/out_$(years)y"
-
-    fsaven = string(fsave,"_", Dates.format(launch_time, "yyyymmdd"), ".nc")
-    if isfile(fsaven)
-        fsaven = string(fsave, "_", Dates.format(launch_time, "yyyymmdd_HHMM"), ".nc")
-    end
+    fsaven = string(fsave, "_", Dates.format(launch_time, "yyyymmdd_HHMM"), ".nc")
 
     loginfo = replace(fsaven, "out_$(years)y_" => "", ".nc" => ".log", "results/outfiles/" => "")
     logger = activate_logger(loginfo)
@@ -265,34 +253,22 @@ function update_tracking_arrs(track_n, track_p, track_z, track_b, track_d, track
     track_o[:,:,j] .= otemp
     track_time[j] = t_id 
 
-
     @printf("Day %7.1f out of %5.0f = %4.0f%% done at %s \n", t_id, prms.tt, t_id/prms.tt*100, now())
-    open("jlog.txt","a") do f
-        write(f,@sprintf("Day %7.1f out of %5.0f = %4.0f%% done at %s \n", t_id, prms.tt, t_id/prms.tt*100, now()))
-    end
 
     return track_n, track_p, track_z, track_b, track_d, track_o, track_time
 
 end
 
 
-function savetoNC(p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, sen)
+function savetoNC(p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, season_num)
 
     outdir = "/home/lee/Dropbox/Development/NPZBD_1D/"
     path = joinpath(outdir, prms.fsaven) 
     println("\nSaving output file to: ", path)
 
-    display_CM = display("text/plain", prms.CM)
-    display_CMp = display("text/plain", prms.CMp)
-    display_GrM = display("text/plain", prms.GrM)
+    season_num == 1 ? season = "winter" : season = "summer"
 
-    @info("\nConsumption Matrix (nb x nd): \n $display_CM \n")
-    @info("\nConsumption Matrix (np x nn): \n $display_CMp \n")
-    @info("\nGrazing Matrix (GrM): \n $display_GrM \n")
-
-    sen == 1 ? season = "winter" : season = "summer"
-
-    f = NCDataset(path, "c") #c for create
+    f = NCDataset(path, "c") 
 
     # define the dim of p, b, z, n, d
     defDim(f,"np", prms.np)

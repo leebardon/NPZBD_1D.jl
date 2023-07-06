@@ -1,7 +1,7 @@
-using Printf
-using Dates
-using NCDatasets
-using SparseArrays, LinearAlgebra
+# using Printf
+# using Dates
+# using NCDatasets
+# using SparseArrays, LinearAlgebra
 
 
 #make sum drop dimension automatically and set subnormals to zero to avoid slowdown
@@ -162,7 +162,7 @@ function bacteria_uptake(prms, B, D, dDdt, dBdt, dNdt, dOdt, t)
     II, JJ = get_nonzero_axes(prms.CM)
 
     for j = axes(II, 1)
-        uptake = B[:,JJ[j]] .* prms.temp_fun .* prms.vmax_ij[II[j],JJ[j]] .* D[:,II[j]] ./ (D[:,II[j]] .+ prms.Km_ij[II[j],JJ[j]]) 
+        uptake = B[:,JJ[j]] .* prms.temp_fun .* prms.vmax_ij[II[j],JJ[j]] .* D[:,II[j]] ./ (D[:,II[j]] .+ prms.Km_ij[II[j],JJ[j]])
         dDdt[:,II[j]] += -uptake
         dBdt[:,JJ[j]] += uptake .* prms.y_ij[II[j],JJ[j]]
         dNdt += uptake .* (1 - prms.y_ij[II[j],JJ[j]])

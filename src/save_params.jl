@@ -44,11 +44,12 @@ struct SavePrms
     e_o::Float64                   # production of O2 (excretion) (mol O2 per mol N uptake)
     yo_ij::Array{Float64, 2}       # O2 yield rate of bacteria j on d_i (mol B/mol O2)
     koverh::Float64                # gas transfer coefficient for each box comprising the mixed layer
-    o2_sat::Float64                 # O2 half-sat constant (mmol/m3)
+    o2_sat::Float64                # O2 half-sat constant (mmol/m3)
     ml_boxes::Int64                # num boxes in mixed layer, close to 100m total sum
     t_o2relax::Float64             # deep oxygen relaxation (1/day)
     o2_deep::Float64               # mmol/m3
 end
+
 
 function save_params(prms)
 
@@ -60,7 +61,7 @@ function save_params(prms)
                     prms.e_o, prms.yo_ij, prms.koverh, prms.o2_sat, prms.ml_boxes, prms.t_o2relax, prms.o2_deep
                 )
 
-    savefile = replace(prms.fsaven, "out_$(years)y_" => "", ".nc" => "", "results/outfiles/" => "")
+    savefile = replace(prms.fsaven, ".nc" => "", "results/outfiles/" => "")
 
     jldopen("results/saved_params/$(savefile).jdl", "w") do f
             write(f, "A", prms_to_save)  

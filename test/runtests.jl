@@ -1,4 +1,4 @@
-using NPZBD_0D
+using NPZBD_1D
 using Test
 
 # see structure of https://github.com/JuliaOcean/AIBECS.jl/tree/master/src 
