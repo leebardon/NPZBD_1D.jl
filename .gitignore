@@ -25,3 +25,4 @@ docs/site/
 /results/saved_matrices/*.jdl
 /results/saved_params/*.jdl
 /data
+/src/prescribed.jl

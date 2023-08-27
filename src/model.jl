@@ -43,8 +43,8 @@ function run_NPZBD(prms, season, pulse=false)
     otemp = copy(prms.oIC) 
 
 
-    @time for t = 1:prms.nt 
-
+    # @time for t = 1:prms.nt 
+    for t = 1:prms.nt
         # Runge-Kutta 4th order 
         ntemp, ptemp, ztemp, btemp, dtemp, otemp = rk4(ntemp, ptemp, ztemp, btemp, dtemp, otemp, prms, t)
 
@@ -99,7 +99,7 @@ end
 
 
 function model_functions(N, P, Z, B, D, O, prms, t)
-
+    #TODO - figure out if there's any memory issues, is it increasing memory usage over time? seeems to be, figure out why
     #Transport
     dNdt = diffusion(N, prms.kappa_z, prms.dz)
     dPdt = diffusion(P, prms.kappa_z, prms.dz)

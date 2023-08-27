@@ -3,8 +3,8 @@ function message(v::String, nd::Int64=0, nb::Int64=0, nn::Int64=0, np::Int64=0, 
 
     m = Dict(
         "START" => "\n -------------------------------- STARTING PROGRAM ----------------------------------- \n",
-        "ST1" => ["Start New Run", "Use Saved Params"],
-        "ST2" => "\nStart new run, or load saved params?",
+        "ST1" => ["Start New Run", "Use Saved Params", "Use Prescribed Model"],
+        "ST2" => "\nStart new run, load saved params or run prescribed model?",
         "TM1" => ["1 year (tt=366)", "10 years (tt=3660)", "30 years (tt=10980)", "100 years (tt=36600)"],
         "TM2" => "Select Simulation Runtime:",
         "DN" => "\nEnter number of detritus pools (nd): ",
@@ -13,7 +13,7 @@ function message(v::String, nd::Int64=0, nb::Int64=0, nn::Int64=0, np::Int64=0, 
         "ZN" => "Enter number of zooplank populations (nz): ",
         "Y1" => ["Equal for all bacteria", "Randomised"],
         "Y2" => "\n Select yield rates for bacteria populations (y_i):",
-        "SW1" => ["Equal distribution", "Lognormal distribution"],
+        "SW1" => ["Prescribed distribution", "Equal distribution", "Lognormal distribution"],
         "SW2" => "\n Select supply weight for OM pools (SW):",
         "SUB" => "\n SETTING SUBSTRATE TRAITS \n -------------------------- ",
         "UP1" => ["Ordered assignment", "Randomly selected along log range"],
@@ -47,38 +47,39 @@ function microbe_num(MSG)
 end
 
 
-function user_select()
+function user_select(run_type=0)
 
     println(message("DN"))
     input = readline()
     nd = parse(Int64, input) 
-
     nb = microbe_num("BN")
-    if !iseven(nb)
-        println("\n !!! PLEASE ENTER EVEN NUMBER !!! \n\n")
-        nb = microbe_num("BN")
-    end
-
     np = microbe_num("PN")
-    if !iseven(np)
-        println("\n !!! PLEASE ENTER EVEN NUMBER !!! \n\n")
-        np = microbe_num("PN")
-    end
-
     nz = microbe_num("ZN")
     nn = 1
 
     yield = request(message("Y2"), RadioMenu(message("Y1")))
+    yield == 1 ? y_i = ones(nd)*0.4 : y_i = rand(nd)*0.5
+
     supply_weight = request(message("SW2"), RadioMenu(message("SW1")))
-    println(message("SUB"))
-    uptake = request(message("UP2"), RadioMenu(message("UP1")))
-    uptake_p = request(message("UPP2"), RadioMenu(message("UPP1")))
+
+    if run_type != 3
+        println(message("SUB"))
+        uptake = request(message("UP2"), RadioMenu(message("UP1")))
+        uptake == 1 ? vmax_i = ordered_uptake_arr(nd) : vmax_i = random_uptake_arr(nd)
+
+        uptake_p = request(message("UPP2"), RadioMenu(message("UPP1")))
+        uptake_p == 1 ? umax_i = fill(1., np) : umax_i = random_uptake_arr(np)
+    else 
+        vmax_i = get_prescribed_params("vmax_i") 
+        umax_i = get_prescribed_params("umax_i") 
+    end 
+
     println(message("ENV"))
     season = request(message("SE2"), RadioMenu(message("SE1")))
 
-    @info("User Selections: \n SW = $supply_weight \n B yield = $yield \n B uptake = $uptake \n P uptake = $uptake_p \n Season == $season \n")
+    @info("User Selections: \n SW = $supply_weight \n B yield = $y_i \n B uptake = $vmax_i \n P uptake = $umax_i \n Season == $season \n")
 
-    return nd, nb, np, nz, nn, yield, supply_weight, uptake, uptake_p, season
+    return nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, umax_i, season
 
 end
 
@@ -202,6 +203,24 @@ function get_matrix(Mtype, nd, nb, nn, np, nz)
     end
 
     return M
+end
+
+
+function check_for_empty_cols(M, n)
+
+    empty_cols = findall(x -> x == 0, sum(M, dims=1))
+    s = size(empty_cols)
+
+    if s[1] > 0
+        for i in 1:s[1]
+            new_col = sprand(Bool, n, 1, 0.5)
+            M[:, empty_cols[i][2]] = new_col
+        end
+        M = check_for_empty_cols(M, n)
+    end
+
+    return M
+
 end
 
 

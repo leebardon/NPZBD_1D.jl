@@ -7,10 +7,10 @@ module NPZBD_1D
     using SparseArrays, Distributions, LinearAlgebra
     using Statistics, StatsBase, Random
     using DataFrames, NCDatasets, JLD
-    using Plots, ColorSchemes
+    using Plots, ColorSchemes, Colors
 
     using Distributed
-    addprocs(14, exeflags = "--project=$(Base.active_project())")
+    addprocs(16, exeflags = "--project=$(Base.active_project())")
     println("\n > Number of cores: ", nprocs())
     println(" > Number of workers: ", nworkers())
 
@@ -22,10 +22,11 @@ module NPZBD_1D
     include("grazing_matrix.jl")
     include("traits.jl")
     include("integrate.jl")
+    include("prescribed.jl")
     include("plot.jl")
     include("save_params.jl")
 
-
+    #TODO write tests to check all are equal?
     #------------------------------------------------------------------------------------------------------------#
     #   TIMES AND LOGS
     #------------------------------------------------------------------------------------------------------------#
@@ -61,24 +62,31 @@ module NPZBD_1D
         run_type = request(message("ST2"), RadioMenu(message("ST1")))
 
         if run_type == 1 
-            nd, nb, np, nz, nn, yield, supply_weight, uptake, uptake_p, season = user_select()
-            yield == 1 ? y_i = ones(nd)*0.4 : y_i = rand(nd)*0.5
-            uptake == 1 ? vmax_i = ordered_uptake_arr(nd) : vmax_i = random_uptake_arr(nd)
-            uptake_p == 1 ? umax_i = fill(1., np) : umax_i = random_uptake_arr(np)
-        else
+            nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, umax_i, season = user_select()
+            CM = get_matrix("CM", nd, nb, nn, np, nz)
+            GrM = get_matrix("GrM", nd, nb, nn, np, nz)
+            CMp = get_matrix("CMp", nd, nb, nn, np, nz)
+
+        elseif run_type == 2
+            #NOTE saved params pathway not working correctly - matrices don't retain same order
             options = readdir("results/saved_params/")
             file = request(message("LVP"), RadioMenu(options))
             params, season = load_saved_params(dt, tt, nrec, nt, fsaven, options[file])
 
             N, P, Z, B, D, O, track_time = run_NPZBD(params, season)
         
-            depth_plots(fsaven, season, years)
-
+            depth_plots(fsaven, season, years, run_type)
             exit()
+
+        elseif run_type == 3
+            nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, umax_i, season = user_select(3)
+            CM = get_prescribed_params("CM") 
+            GrM = get_prescribed_params("GrM") 
+            CMp = get_matrix("CMp", nd, nb, nn, np, nz)
+
         end
-            
-        umax_i = [1.8804349518192198, 2.191275617275966, 1.0040553436725859, 0.49765246281643066, 0.28554080759569855, 2.1758270878643895]
-        vmax_i = [5.771102517899136, 0.19857069218143547, 8.928166469876407, 5.391054155817703]
+
+                  
     #------------------------------------------------------------------------------------------------------------#
     #   GRID SETUP
     #------------------------------------------------------------------------------------------------------------#
@@ -88,16 +96,10 @@ module NPZBD_1D
         zc = [dz/2 : dz : H - dz/2;]    # centered depth 
         zf = [0 : dz : H;]              # face depth; 1 longer than zc
 
+
     # -----------------------------------------------------------------------------------------------------------#
     #   HETEROTROPHIC MICROBE PARAMS
     #------------------------------------------------------------------------------------------------------------#
-        # CM = get_matrix("CM", nd, nb, nn, np, nz)
-
-        CM =   [1  0  0  0  0  0  1  0  0  0
-                0  1  0  0  0  1  0  0  1  1
-                0  0  1  0  0  1  1  0  0  1
-                0  0  0  1  0  1  1  1  1  1]
-
         y_ij = broadcast(*, y_i, CM)
         yo_ij = y_ij*10                     # PLACEHOLDER VALUE mol B/mol O2. not realistic
         num_uptakes = sum(CM, dims=1)[1, :]
@@ -117,9 +119,7 @@ module NPZBD_1D
 
     # -----------------------------------------------------------------------------------------------------------#
     #   PHYTOPLANKTON PARAMS 
-    #------------------------------------------------------------------------------------------------------------#
-        CMp = get_matrix("CMp", nd, nb, nn, np, nz)
-
+    #------------------------------------------------------------------------------------------------------------
         K_I = 10.0         
         e_o = 150/16   
         Kp_i = umax_i./10 
@@ -137,12 +137,8 @@ module NPZBD_1D
     # -----------------------------------------------------------------------------------------------------------#
     #   ZOOPLANKTON GRAZING 
     #------------------------------------------------------------------------------------------------------------#
-        # GrM = get_matrix("GrM", nd, nb, nn, np, nz)
-
-        GrM = [ 0  0  1  1  0  1  0  1  1  0  1  1  1  0  1  0
-                1  1  1  1  1  0  0  0  0  1  1  1  1  1  1  0
-                0  0  0  0  0  0  1  0  1  0  1  0  0  0  1  1
-                ]
+        #TODO - remove specialists vs generalists for now, per chat with emily. Have each bacteria consuming 1 D
+        #TODO - potentially look into it with more detail later?
     
         g_max = ones(nz)
         K_g = ones(nz)*1.0
@@ -165,18 +161,20 @@ module NPZBD_1D
     #   ORGANIC MATTER
     #------------------------------------------------------------------------------------------------------------#
         # Distribution of OM from mortality to detritus pools
-        #NOTE lognormal ends up with very small
         if supply_weight == 1 
+            prob_generate_d = [0.25, 0.25, 0.25, 0.25]
+            # for larger pool nums, narrow range of lability for POM and larger range for DOM
+        elseif supply_weight == 2
             prob_generate_d = ones(nd) * (1/nd)
-        else
+        else 
             dist = LogNormal(1.5,2)
             x = rand(dist, nd)
             prob_generate_d =  x / sum(x)
         end
 
         # Sinking rate for POM  #NOTE could be randomly assigned range 1 t0 10
-        ws = zeros(nd)                  # sinking speed of POM (m/day)
-        ws[1] = 2.1 
+        ws = zeros(nd)                  # sinking speed of POM (m/day) - #TODO have this be the average lability, with max growth rate for POM as 1 /day
+        ws[1] = 6.0                    # then the DOM has lability rates at either side of average  
         w = zeros(ngrid + 1)            # water vertical velocity, if there was any
         wd = transpose(repeat(ws, 1, ngrid + 1)) + repeat(w, 1, nd) # ngrid+1 x nd
         wd[1,:] .= 0                    # no flux boundary at surface 
@@ -187,7 +185,6 @@ module NPZBD_1D
     #------------------------------------------------------------------------------------------------------------#
 
         # VERTICAL MIXING 
-            # season == 1 ? mlz = 30 : mlz = 15  # mixed layer lengthscale
             season == 1 ? mlz = 30 : mlz = 15 # mixed layer lengthscale
             kappazmin = 1e-4              # min mixing coeff -value for most of the deep ocean (higher at top and bottom)
             kappazmax = 1e-2              # max mixing coeff -value at top of mixed layer (and bottom boundary mixed layer)
@@ -215,10 +212,8 @@ module NPZBD_1D
         #fit to SPOT data (approx 20 to 4, approx 16 to 4)
             if season == 1 
                 temp = 6.5 .*exp.(-zc ./ 150) .+ 9 .*exp.(-zc ./ 500) .+ 3
-                # temp = 10 .*exp.(-zc ./ 150) .+ 9 .*exp.(-zc ./ 500) .+ 2.9
             else
-                temp = 6.5 .*exp.(-zc ./ 150) .+ 9 .*exp.(-zc ./ 500) .+ 3
-                # temp = 10 .*exp.(-zc ./ 150) .+ 9 .*exp.(-zc ./ 500) .+ 2.9
+                temp = 10 .*exp.(-zc ./ 150) .+ 9 .*exp.(-zc ./ 500) .+ 2.9
             end
 
         # TEMPERATURE (modification to metabolic rates)
@@ -256,7 +251,7 @@ module NPZBD_1D
         N, P, Z, B, D, O, track_time = run_NPZBD(params, season)
     
         save_matrices(CM, CMp, GrM, nd, nb, nn, np, nz)
-        depth_plots(fsaven, season, years)
+        depth_plots(fsaven, season, years, run_type)
         save_prm == 1 ? save_params(params) : exit()
 
 end
