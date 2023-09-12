@@ -163,10 +163,11 @@ function bacteria_uptake(prms, B, D, dDdt, dBdt, dNdt, dOdt, t)
 
     for j = axes(II, 1)
         uptake = B[:,JJ[j]] .* prms.temp_fun .* prms.vmax_ij[II[j],JJ[j]] .* D[:,II[j]] ./ (D[:,II[j]] .+ prms.Km_ij[II[j],JJ[j]])
+        yield = prms.y_ij[II[j],JJ[j]]
         dDdt[:,II[j]] += -uptake
-        dBdt[:,JJ[j]] += uptake .* prms.y_ij[II[j],JJ[j]]
-        dNdt += uptake .* (1 - prms.y_ij[II[j],JJ[j]])
-        dOdt +=  -uptake .* prms.y_ij[II[j],JJ[j]] ./ prms.yo_ij[II[j],JJ[j]]
+        dBdt[:,JJ[j]] += uptake .* yield
+        dNdt += uptake .* (1 - yield)
+        dOdt +=  -uptake .* yield ./ prms.yo_ij[II[j],JJ[j]]
     end
 
     return dDdt, dBdt, dNdt, dOdt

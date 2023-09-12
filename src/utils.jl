@@ -308,7 +308,7 @@ function savetoNC(p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, season_num
     defDim(f,"nprey",nprey)
    
     # info
-    f.attrib["title"] = "NPZBD 0D model i/o"
+    f.attrib["title"] = "NPZBD 1D model i/o"
     f.attrib["Start time"] = string(tst)
     f.attrib["End time"] = string(tfn)
     f.attrib["Run time"] = string(tfn - tst) 
@@ -382,6 +382,10 @@ function savetoNC(p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, season_num
     w = defVar(f, "wd", Float64, ("ndepth1","nd"))
     w[:] = prms.wd
     w.attrib["units"] = "sinking rate"
+
+    # w = defVar(f, "temp_fun", Float64, ("ndepth",))
+    # w[:] = prms.temp_fun
+    # w.attrib["units"] = "temp mod to metabolic rate"
 
     # --------------------------------------------------
 

@@ -26,6 +26,8 @@ module NPZBD_1D
     include("plot.jl")
     include("save_params.jl")
 
+    include("plot_test.jl")
+
     #TODO write tests to check all are equal?
     #------------------------------------------------------------------------------------------------------------#
     #   TIMES AND LOGS
@@ -211,9 +213,9 @@ module NPZBD_1D
         # TEMPERATURE (SPOT along water column)
         #fit to SPOT data (approx 20 to 4, approx 16 to 4)
             if season == 1 
-                temp = 6.5 .*exp.(-zc ./ 150) .+ 9 .*exp.(-zc ./ 500) .+ 3
+                temp = 6.5 .* exp.(-zc ./ 150) .+ 9 .* exp.(-zc ./ 500) .+ 3
             else
-                temp = 10 .*exp.(-zc ./ 150) .+ 9 .*exp.(-zc ./ 500) .+ 2.9
+                temp = 10 .* exp.(-zc ./ 150) .+ 9 .* exp.(-zc ./ 500) .+ 2.9
             end
 
         # TEMPERATURE (modification to metabolic rates)
