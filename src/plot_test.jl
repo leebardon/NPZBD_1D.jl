@@ -165,6 +165,6 @@ function get_endpoints(ds, vars)
 end
 
 
-default(show = true)
-outfile = "results/outfiles/out_100y_20230906_1413.nc"
-depth_plots(outfile, 2, 100, 3)
+# default(show = true)
+# outfile = "results/outfiles/out_100y_20230906_1413.nc"
+# depth_plots(outfile, 2, 100, 3)

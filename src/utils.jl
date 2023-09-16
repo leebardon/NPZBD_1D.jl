@@ -1,4 +1,6 @@
 
+using DataFrames, NCDatasets, JLD
+
 function message(v::String, nd::Int64=0, nb::Int64=0, nn::Int64=0, np::Int64=0, nz::Int64=0, fsaven::String="")
 
     m = Dict(
@@ -232,18 +234,25 @@ function print_info(prms)
 
 end
 
+function set_logger(launch_time)
 
-function set_savefiles(launch_time, years)
-
-    fsave = "results/outfiles/out_$(years)y"
-    fsaven = string(fsave, "_", Dates.format(launch_time, "yyyymmdd_HHMM"), ".nc")
-
-    loginfo = replace(fsaven, "out_$(years)y_" => "", ".nc" => ".log", "results/outfiles/" => "")
+    loginfo = string(Dates.format(launch_time, "yyyymmdd_HHMM"), ".log")
     logger = activate_logger(loginfo)
 
-    return fsaven, logger
+    return logger
 
 end
+
+
+# function set_savefiles(launch_time, season, years, np, nz, nb, nd)
+
+#     season == 1 ? season_str = "Wi" : season_str = "Su"
+#     fsave = "results/outfiles/$(season_str)$(years)y"
+#     fsaven = string(fsave, "_", Dates.format(launch_time, "yymmdd_HH:MM"), "_$(np)P$(nz)Z$(nb)B$(nd)D.nc")
+
+#     return fsaven
+
+# end
 
 
 function activate_logger(loginfo)
@@ -279,211 +288,31 @@ function update_tracking_arrs(track_n, track_p, track_z, track_b, track_d, track
 end
 
 
-function savetoNC(p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, season_num)
+function get_endpoints(ds, vars)
 
-    outdir = "/home/lee/Dropbox/Development/NPZBD_1D/"
-    path = joinpath(outdir, prms.fsaven) 
-    println("\nSaving output file to: ", path)
+    endpoints = Vector{Any}()
 
-    season_num == 1 ? season = "winter" : season = "summer"
-
-    f = NCDataset(path, "c") 
-
-    # define the dim of p, b, z, n, d
-    defDim(f,"np", prms.np)
-    defDim(f,"nb",prms.nb)
-    defDim(f,"nz",prms.nz)
-    defDim(f,"nn",prms.nn)
-    defDim(f,"nd",prms.nd)
-
-    # define the dim of the depth
-    defDim(f,"ndepth",prms.ngrid)
-    defDim(f,"ndepth1",prms.ngrid+1)
-
-    # define the dim of the time length
-    nrec1 = Int(prms.nrec+1) #bc i added time 0
-    nprey = prms.np + prms.nb
-    
-    defDim(f,"nrec",nrec1)
-    defDim(f,"nprey",nprey)
-   
-    # info
-    f.attrib["title"] = "NPZBD 1D model i/o"
-    f.attrib["Start time"] = string(tst)
-    f.attrib["End time"] = string(tfn)
-    f.attrib["Run time"] = string(tfn - tst) 
-    f.attrib["Season"] = season
-
-    # simulated results
-    w = defVar(f,"p",Float64,("ndepth" ,"np","nrec"))
-    w[:,:,:] = p
-    w.attrib["units"] = "mmol/m3 C biomass"
-
-    w = defVar(f,"b",Float64,("ndepth" ,"nb","nrec"))
-    w[:,:,:] = b
-    w.attrib["units"] = "mmol/m3 C biomass"
-
-    w = defVar(f,"z",Float64,("ndepth" ,"nz","nrec"))
-    w[:,:,:] = z
-    w.attrib["units"] = "mmol/m3 C biomass"
-    
-    w = defVar(f,"n",Float64,("ndepth" ,"nn","nrec"))
-    w[:,:,:] = n
-    w.attrib["units"] = "mmol/m3 C OM"
-
-    w = defVar(f,"d",Float64,("ndepth" ,"nd","nrec"))
-    w[:,:,:] = d
-    w.attrib["units"] = "mmol/m3 C OM"
-    
-    w = defVar(f,"o",Float64,("ndepth" ,"nrec"))
-    w[:,:] = o
-    w.attrib["units"] = "mmol/m3 O2"
-
-    # --------------------------------------------------
-    
-    w = defVar(f,"pIC",Float64,("ndepth","np"))
-    w[:,:] = prms.pIC
-    w.attrib["units"] = "mmol/m3 C biomass"
-
-    w = defVar(f,"bIC",Float64,("ndepth","nb"))
-    w[:,:] = prms.bIC
-    w.attrib["units"] = "mmol/m3 C biomass"
-
-    w = defVar(f,"zIC",Float64,("ndepth","nz"))
-    w[:,:] = prms.zIC
-    w.attrib["units"] = "mmol/m3 C biomass"
-
-    w = defVar(f,"nIC",Float64,("ndepth","nn"))
-    w[:,:] = prms.nIC
-    w.attrib["units"] = "mmol/m3 C OM"
-
-    w = defVar(f,"dIC",Float64,("ndepth","nd"))
-    w[:,:] = prms.dIC
-    w.attrib["units"] = "mmol/m3 C OM"
-
-    # --------------------------------------------------
-    
-    w = defVar(f, "timet", Float64, ("nrec",))
-    w[:] = timet
-    w.attrib["units"] = "days"
-
-    w = defVar(f, "H", Int, ())
-    w[:] = prms.H
-    w.attrib["units"] = "m; total height"
-
-    w = defVar(f, "dz", Int, ())
-    w[:] = prms.dz
-    w.attrib["units"] = "m; box height"
-
-    w = defVar(f, "kappa_z", Float64, ("ndepth1",))
-    w[:] = prms.kappa_z
-    w.attrib["units"] = "vertical water velocity"
-    
-    w = defVar(f, "wd", Float64, ("ndepth1","nd"))
-    w[:] = prms.wd
-    w.attrib["units"] = "sinking rate"
-
-    # w = defVar(f, "temp_fun", Float64, ("ndepth",))
-    # w[:] = prms.temp_fun
-    # w.attrib["units"] = "temp mod to metabolic rate"
-
-    # --------------------------------------------------
-
-    w = defVar(f,"uptake",Float64,("nd","nb"))
-    w[:,:,:] = uptake
-    w.attrib["units"] = "mmol/m3 C per d; uptake matrix"
-
-    w = defVar(f,"SW",Float64,("nd",))
-    w[:,:] = prms.prob_generate_d 
-    w.attrib["units"] = "Ind C supply weight: probability"
-    
-    # w = defVar(f,"SW_all",Float64,("nd","nrec"))
-    # w[:,:] = SW_all
-    # w.attrib["units"] = "Ind C supply weight: over time"
-
-    w = defVar(f,"pen",Float64,("nb",))
-    w[:,:] = prms.pen
-    w.attrib["units"] = "penalty"
-    
-    w = defVar(f, "umax_i", Float64, ("np",))
-    w[:] = prms.umax_i
-    w.attrib["units"] = "m3/mmol/d; max growth rate of p"
-
-    w = defVar(f, "umax_ij", Float64, ("nn", "np"))
-    w[:,:] = prms.umax_ij
-    w.attrib["units"] = "per n; max uptake rate"
-
-    w = defVar(f, "Kp_ij", Float64, ("nn", "np"))
-    w[:] = prms.Kp_ij
-    w.attrib["units"] = "mmol/m3; half-sat"
-
-    w = defVar(f,"CM",Float64,("nd","nb"))
-    w[:,:] = prms.CM
-    w.attrib["units"] = "Consumption Matrix (nb x nd)"
-
-    w = defVar(f,"CMp",Float64,("nn","np"))
-    w[:,:] = prms.CMp
-    w.attrib["units"] = "Consumption Matrix (np x nn)"
-
-    w = defVar(f,"GrM",Float64,("nz","nprey"))
-    w[:,:] = prms.GrM
-    w.attrib["units"] = "Grazing Matrix"
-
-    w = defVar(f, "y_ij", Float64, ("nd","nb"))
-    w[:,:] = prms.y_ij
-    w.attrib["units"] = "per d; max yield rate"
-
-    w = defVar(f, "vmax_i", Float64, ("nd",))
-    w[:,:] = prms.vmax_i
-    w.attrib["units"] = "per d; max uptake rate"
-    
-    w = defVar(f, "vmax_ij", Float64, ("nd", "nb"))
-    w[:,:] = prms.vmax_ij
-    w.attrib["units"] = "per d; max uptake rate"
-    
-    w = defVar(f, "Km_ij", Float64, ("nd", "nb"))
-    w[:] = prms.Km_ij
-    w.attrib["units"] = "mmol/m3; half-sat"
-    
-    w = defVar(f, "m_lb", Float64, ("nb",))
-    w[:,:] = prms.m_lb
-    w.attrib["units"] = "m3/mmol; linear death rate of b"
-
-    w = defVar(f, "m_qb", Float64, ("nb",))
-    w[:,:] = prms.m_qb
-    w.attrib["units"] = "m3/mmol; quadratic death rate of b"
-    
-    w = defVar(f, "K_g", Float64, ("nz",))
-    w[:] = prms.K_g
-    w.attrib["units"] = "m3/mmol; half-sat rate of z"
-    
-    w = defVar(f, "γ", Float64, ("nz",))
-    w[:] = prms.γ
-    w.attrib["units"] = "fraction of digestion of z"
-    
-    w = defVar(f, "m_lz", Float64, ("nz",))
-    w[:,:] = prms.m_lz
-    w.attrib["units"] = "m3/mmol; linear death rate of z"
-
-    w = defVar(f, "m_qz", Float64, ("nz",))
-    w[:,:] = prms.m_qz
-    w.attrib["units"] = "m3/mmol; quadratic death rate of z"
-    
-    close(f)
-
-end
-
-function define_dims(ds, prms, nrec1)
-
-    vars = Dict("nb" => prms.nb, "nd" => prms.nd, "nrec" => nrec1)
-
-    for (k, v) in x
-        defDim(ds, k, v)
+    for v in vars
+        append!(endpoints, [ds["$v"][:,:,end]])
     end
 
-    return ds
-
+    return endpoints
 end
+
+# function get_endpoints_save(vars)
+
+#     endpoints = Vector{Any}()
+
+#     for v in vars
+#         append!(endpoints, [v[:,:,end]])
+#     end
+
+#     return endpoints
+# end
+
+
+
+
 
 # BELOW WAS INSERTED INTO FUNCTIONS TO TRACE NAN AND INF WEIRDNESS - CAUSED BY USING UNDEF TO 
 # INITIALISE EMPTY ARRS TO BE LATER USED DURING INTEGRATION

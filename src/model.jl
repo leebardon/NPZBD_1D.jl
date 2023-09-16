@@ -87,7 +87,8 @@ function run_NPZBD(prms, season, pulse=false)
             end  
             
             end_time = now() 
-            savetoNC(track_p, track_b, track_z, track_n, track_d, track_o, track_time, v, uptake, start_time, end_time, prms, season)
+            save_full_run(track_p, track_b, track_z, track_n, track_d, track_o, track_time, v, uptake, start_time, end_time, prms, season)
+            save_endpoints(track_n, track_p, track_z, track_b, track_d, track_o, prms, season)
 
         end
     end 

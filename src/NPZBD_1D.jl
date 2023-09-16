@@ -1,4 +1,4 @@
-module NPZBD_1D
+ module NPZBD_1D
     
     import REPL
     using REPL.TerminalMenus
@@ -10,7 +10,7 @@ module NPZBD_1D
     using Plots, ColorSchemes, Colors
 
     using Distributed
-    addprocs(16, exeflags = "--project=$(Base.active_project())")
+    addprocs(15, exeflags = "--project=$(Base.active_project())")
     println("\n > Number of cores: ", nprocs())
     println(" > Number of workers: ", nworkers())
 
@@ -18,15 +18,16 @@ module NPZBD_1D
     include("params.jl")
     include("physics.jl")
     include("utils.jl")
+    include("save_utils.jl")
     include("consumption_matrix.jl")
     include("grazing_matrix.jl")
     include("traits.jl")
     include("integrate.jl")
     include("prescribed.jl")
-    include("plot.jl")
+    include("biomass_plots.jl")
     include("save_params.jl")
 
-    include("plot_test.jl")
+    # include("plot_test.jl")
 
     #TODO write tests to check all are equal?
     #------------------------------------------------------------------------------------------------------------#
@@ -56,7 +57,7 @@ module NPZBD_1D
         dt = 0.01
         nt = Int(tt/dt)
 
-        fsaven, logger = set_savefiles(now(), years)
+        logger = set_logger(now())
     
     #------------------------------------------------------------------------------------------------------------#
     #   COLLECT USER INPUT
@@ -88,7 +89,7 @@ module NPZBD_1D
 
         end
 
-                  
+        fsaven = set_savefiles(now(), season, years, np, nz, nb, nd)       
     #------------------------------------------------------------------------------------------------------------#
     #   GRID SETUP
     #------------------------------------------------------------------------------------------------------------#
@@ -253,7 +254,8 @@ module NPZBD_1D
         N, P, Z, B, D, O, track_time = run_NPZBD(params, season)
     
         save_matrices(CM, CMp, GrM, nd, nb, nn, np, nz)
-        depth_plots(fsaven, season, years, run_type)
+        plot_biomass(fsaven, season)
+
         save_prm == 1 ? save_params(params) : exit()
 
 end
