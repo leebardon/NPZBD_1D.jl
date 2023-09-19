@@ -177,7 +177,7 @@
 
         # Sinking rate for POM  #NOTE could be randomly assigned range 1 t0 10
         ws = zeros(nd)                  # sinking speed of POM (m/day) - #TODO have this be the average lability, with max growth rate for POM as 1 /day
-        ws[1] = 6.0                    # then the DOM has lability rates at either side of average  
+        ws[1] = 10.0                    # then the DOM has lability rates at either side of average  
         w = zeros(ngrid + 1)            # water vertical velocity, if there was any
         wd = transpose(repeat(ws, 1, ngrid + 1)) + repeat(w, 1, nd) # ngrid+1 x nd
         wd[1,:] .= 0                    # no flux boundary at surface 

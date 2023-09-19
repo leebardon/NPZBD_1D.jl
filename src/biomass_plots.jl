@@ -146,8 +146,8 @@ function get_endpoints(ds, vars)
 
 end
 
-outfile = "results/outfiles/Su100y_8P6Z13B5D_230915_17:36.nc"
-biomass_plots(outfile, 2, 100, 3)
+# outfile = "results/outfiles/Su100y_8P6Z13B5D_230915_17:36.nc"
+# biomass_plots(outfile, 2, 100, 3)
 
 # default(show = true)
 # outfile = "results/outfiles/out_100y_20230905_1716.nc"

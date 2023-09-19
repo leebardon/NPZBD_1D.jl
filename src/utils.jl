@@ -299,16 +299,16 @@ function get_endpoints(ds, vars)
     return endpoints
 end
 
-# function get_endpoints_save(vars)
+function get_endpoints_save(vars)
 
-#     endpoints = Vector{Any}()
+    endpoints = Vector{Any}()
 
-#     for v in vars
-#         append!(endpoints, [v[:,:,end]])
-#     end
+    for v in vars
+        append!(endpoints, [v[:,:,end]])
+    end
 
-#     return endpoints
-# end
+    return endpoints
+end
 
 
 
