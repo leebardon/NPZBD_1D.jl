@@ -2,6 +2,16 @@ using NCDatasets
 using Plots, Colors, LaTeXStrings
 using DataFrames
 
+bc= ["cyan3", "darkorange", "indigo", "coral4", "lightcyan4", "magenta2", "orange4", "seagreen4",
+"darkkhaki", "purple", "crimson",  "azure4", "turquoise1"]
+dc= ["blue3", "black", "maroon", "navy", "brown4"]
+pc = ["olivedrab3", "darkgreen","red4", "cyan4", "purple", "black", "hotpink2", "wheat2" ]
+nc = ["blue2"]
+ab=0.8
+ab_ext=0.8
+ls=5
+lfs=9
+
 
 function depth_plots(fsaven, season_num, years, run_type)
 

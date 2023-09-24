@@ -31,6 +31,7 @@
     temp_fun::Array{Float64, 1}    # temperature function (modification to metabolic rates)
     K_I::Float64                   # light half-saturation constant
     CMp::Array{Bool,2}             # consumption matrix: nn X np
+    Fg_p::Array{Float64, 1}        # fraction of proteome devoted to growth for each P
     vmax_i::Array{Float64,1}       # max uptake rate overall for d_i
     vmax_ij::Array{Float64,2}      # max uptake rate of bacteria j on d_i
     Km_i::Array{Float64,1}         # half saturation rate overall for d_i 
@@ -40,6 +41,7 @@
     m_qb::Array{Float64,1}         # quadratic mort of b
     prob_generate_d::Array{Float64, 1} # distribution of OM to each d pool from mortality
     CM::Array{Bool,2}              # consumption matrix: nd X nb
+    Fg_b::Array{Float64, 1}        # fraction of proteome devoted to growth for each B
     g_max::Array{Float64,1}        # max grazing rate of z
     K_g::Array{Float64,1}          # half saturation rate of z
     γ::Array{Float64,1}            # fraction of assimilation (assimilation efficiency) for z 
@@ -50,6 +52,7 @@
     kappa_z::Array{Float64, 1}     # vertical eddy diffusivities
     wd::Array{Float64, 2}          # sinking rate for POM
     ngrid::Int64                   # number of boxes at depth
+    ws_POM::Float64                # sinking rate of POM
     e_o::Float64                   # production of O2 (excretion) (mol O2 per mol N uptake)
     yo_ij::Array{Float64, 2}       # O2 yield rate of bacteria j on d_i (mol B/mol O2)
     koverh::Float64                # gas transfer coefficient for each box comprising the mixed layer

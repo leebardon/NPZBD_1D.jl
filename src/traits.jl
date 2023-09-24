@@ -25,21 +25,33 @@ function random_uptake_arr(n)
 end
 
 
-function apply_tradeoff(consumers, resources, CM, max_i)
-    #fraction of the proteome devoted to growth (F_g) vs. affinity (F_a)
-    #NOTE could also explore growth-defense tradeoff https://www.nature.com/articles/s41396-020-0619-1 
-    F_g = rand(consumers)
-    F_a = 1. .- F_g
+function reproducible_Fg(n; rng=GlobalRNG)
 
-    if resources == 1
-        max_ij = set_umax_ij(resources, consumers, max_i, CM, F_g)
-        K_ij = set_Kp_ij(resources, consumers, F_a, CM, max_ij)
-    else 
-        max_ij = set_vmax_ij(resources, consumers, max_i, CM, F_g)
-        K_ij = set_Km_ij(resources, consumers, F_a, CM, max_ij)
+    return rand(rng, n)
+
+end
+
+
+function apply_tradeoff(nconsumers, nresources, CM, max_i, season, run_type)
+    #fraction of the proteome devoted to growth (F_g) vs. affinity (F_a)
+    #NOTE could also explore growth-defense tradeoff https://www.nature.com/articles/s41396-020-0619-1 or growth-yield
+    if run_type == 3
+        Fg_b, Fg_p = get_prescribed_params("Fg_b"), get_prescribed_params("Fg_p") 
+        Fa_b, Fa_p = 1. .- Fg_b, 1. .- Fg_p
+    else
+        Fg_b, Fg_p = reproducible_Fg(nconsumers), reproducible_Fg(nconsumers)
+        Fa_b, Fa_p = 1. .- Fg_b, 1. .- Fg_p
     end 
 
-    return max_ij, K_ij
+    if nresources == 1
+        umax_ij = set_umax_ij(nresources, nconsumers, max_i, CM, Fg_p)
+        Kp_ij = set_Kp_ij(nresources, nconsumers, Fa_p, CM, umax_ij)
+        return umax_ij, Kp_ij, Fg_p
+    else 
+        vmax_ij = set_vmax_ij(nresources, nconsumers, max_i, CM, Fg_b)
+        Km_ij = set_Km_ij(nresources, nconsumers, Fa_b, CM, vmax_ij)
+        return vmax_ij, Km_ij, Fg_b
+    end 
 
 end
 

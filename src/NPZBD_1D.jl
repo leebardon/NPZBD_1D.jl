@@ -5,11 +5,12 @@
     using Logging, LoggingExtras 
     using Dates, Printf, Parameters
     using SparseArrays, Distributions, LinearAlgebra
-    using Statistics, StatsBase, Random
+    using Statistics, StatsBase, Random, StableRNGs
     using DataFrames, NCDatasets, JLD
     using Plots, ColorSchemes, Colors
-
     using Distributed
+
+    GlobalRNG = StableRNG(123)
     addprocs(15, exeflags = "--project=$(Base.active_project())")
     println("\n > Number of cores: ", nprocs())
     println(" > Number of workers: ", nworkers())
@@ -89,7 +90,9 @@
 
         end
 
-        fsaven = set_savefiles(now(), season, years, np, nz, nb, nd)       
+        fsaven = set_savefiles(now(), season, years, np, nz, nb, nd)   
+        
+        
     #------------------------------------------------------------------------------------------------------------#
     #   GRID SETUP
     #------------------------------------------------------------------------------------------------------------#
@@ -113,7 +116,7 @@
 
         tradeoff_b = request(message("TB2"), RadioMenu(message("T1")))  
         if tradeoff_b == 1 
-            vmax_ij, Km_ij = apply_tradeoff(nb, nd, CM, vmax_i)
+            vmax_ij, Km_ij, Fg_b = apply_tradeoff(nb, nd, CM, vmax_i, season, run_type)
         else
             vmax_ij = ones(nd, nb) * vmax_i
             Km_ij = ones(nd, nb) * Km_i
@@ -129,13 +132,14 @@
 
         tradeoff_p = request(message("TP2"), RadioMenu(message("T1")))  
         if tradeoff_p == 1 
-            umax_ij, Kp_ij = apply_tradeoff(np, nn, CMp, umax_i)
+            umax_ij, Kp_ij, Fg_p = apply_tradeoff(np, nn, CMp, umax_i, season, run_type)
         else
             umax_ij = ones(nn, np) * umax_i
             Kp_ij = ones(nn, np) * Kp_i
         end 
 
         save_prm = request(message("SVP2"), RadioMenu(message("SVP1")))
+
 
     # -----------------------------------------------------------------------------------------------------------#
     #   ZOOPLANKTON GRAZING 
@@ -146,6 +150,7 @@
         g_max = ones(nz)
         K_g = ones(nz)*1.0
         γ = ones(nz)*0.3
+
 
     # -----------------------------------------------------------------------------------------------------------#
     #   MORTALITY
@@ -159,6 +164,7 @@
 
         m_lz = ones(nz) * 1e-2
         m_qz = ones(nz) * 1.0 
+
 
     # -----------------------------------------------------------------------------------------------------------#
     #   ORGANIC MATTER
@@ -177,11 +183,14 @@
 
         # Sinking rate for POM  #NOTE could be randomly assigned range 1 t0 10
         ws = zeros(nd)                  # sinking speed of POM (m/day) - #TODO have this be the average lability, with max growth rate for POM as 1 /day
-        ws[1] = 10.0                    # then the DOM has lability rates at either side of average  
+        mean_DOM = mean(vmax_i[2:end])
+        ws_POM = mean_DOM
+        ws[1] = ws_POM 
         w = zeros(ngrid + 1)            # water vertical velocity, if there was any
         wd = transpose(repeat(ws, 1, ngrid + 1)) + repeat(w, 1, nd) # ngrid+1 x nd
         wd[1,:] .= 0                    # no flux boundary at surface 
         wd[end,:] .= 0                  # no flux boundary (bottom box accumulates D)
+
 
     #------------------------------------------------------------------------------------------------------------#
     #   PHYSICAL ENVIRONMENT
@@ -243,9 +252,9 @@
     #------------------------------------------------------------------------------------------------------------#
         params = Prms(
                     tt, dt, nt, nrec, H, dz, np, nb, nz, nn, nd, pIC, bIC, zIC, nIC, dIC, oIC, 
-                    umax_i, umax_ij, Kp_i, Kp_ij, m_lp, m_qp, light, temp_fun, K_I, CMp,
-                    vmax_i, vmax_ij, Km_i, Km_ij, y_ij, m_lb, m_qb, prob_generate_d, CM,
-                    g_max, K_g, γ, m_lz, m_qz, GrM, pen, kappa_z, wd, ngrid, 
+                    umax_i, umax_ij, Kp_i, Kp_ij, m_lp, m_qp, light, temp_fun, K_I, CMp, Fg_p,
+                    vmax_i, vmax_ij, Km_i, Km_ij, y_ij, m_lb, m_qb, prob_generate_d, CM, Fg_b,
+                    g_max, K_g, γ, m_lz, m_qz, GrM, pen, kappa_z, wd, ngrid, ws_POM,
                     e_o, yo_ij, koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, fsaven
                 )
 
@@ -254,7 +263,7 @@
         N, P, Z, B, D, O, track_time = run_NPZBD(params, season)
     
         save_matrices(CM, CMp, GrM, nd, nb, nn, np, nz)
-        plot_biomass(fsaven, season)
+        plot_biomasses(fsaven, season)
 
         save_prm == 1 ? save_params(params) : exit()
 

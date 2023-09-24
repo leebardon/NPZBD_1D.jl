@@ -288,135 +288,143 @@ end
 #--------------------------------------------------------------------------------------
 # Plotting
 #--------------------------------------------------------------------------------------
-function plot_rstar_13B5D(rstar_w, rstar_s, Dw, Ds, bw, bs, ds, N)
+bc= ["cyan3", "darkorange", "indigo", "coral4", "lightcyan4", "magenta2", "orange4", "seagreen4",
+"darkkhaki", "purple", "crimson",  "azure4", "turquoise1"]
+dc= ["blue3", "black", "maroon", "navy", "brown4"]
+pc = ["olivedrab3", "darkgreen","red4", "cyan4", "purple", "black", "hotpink2", "wheat2" ]
+nc = ["blue2"]
+ab=0.8
+ab_ext=0.8
+ls=5
+lfs=9
+
+function plot_rstar_13B5D(fsaven, rstar_w, rstar_s, Dw, Ds, bw, bs)
     # B1 eats D1 (POM)  |  B2, B6, B10 eat D2  |  B3, B7, B11 eat D3  |  B4, B7, B12 eat D4 | B5, B8, B13 eat D5
     # H = ds["H"][:]
-    H = 500
-    dz = ds["dz"][:]
-    zc = [dz/2:dz:(H-dz/2)]
 
+    H = 500
+    dz = 10
+    zc = [dz/2:dz:(H-dz/2)]
     # yl=(-400.0, 0)
     lg=:bottomright
     tl=:right
     tfs=22
-    # xl=(-0.01, 0.08)
-    ab=1.0
-    ab_ext=0.3
-    ls=5
+    lfs=9
 
-    p1 = plot(rstar_w[1][1:50], -zc, lw=ls, lc="cyan3", label=L" B1", ylabel="Depth (m)", xrotation=45, xguidefontsize=12, 
-    xlabel="", border=:box, legend=lg, xscale=:log10, title="D1", title_loc=tl, titlefontsize=tfs, xlim=(0.008, 0.05))
-    plot!(Dw[1:50, 1], -zc, lw=ls, lc="blue3", linestyle=:dot,label=L" D1", alpha=ab)
+    p1 = plot(rstar_w[1][1:50], -zc, lw=ls, lc=bc[1], label=" B1", ylabel="Depth (m)", xrotation=45, xguidefontsize=12, 
+    xlabel="", border=:box, legend=lg, xscale=:log10, title="D1", title_loc=tl, titlefontsize=tfs, legendfontsize=lfs)
+    plot!(Dw[1:50, 1], -zc, lw=ls, lc=dc[1], linestyle=:dot,label=" D1", alpha=ab, legendfontsize=lfs)
 
-    p2 = plot(bw[1:50, 1], -zc, lw=ls, lc="cyan3", label=L" B1", xrotation=45, xguidefontsize=12, xlabel="", 
-    border=:box, legend=lg, yformatter=Returns(""), alpha=ab, xscale=:log10, xlim=(0.002, 0.02))
+    p2 = plot(bw[1:50, 1], -zc, lw=ls, lc=bc[1], label=" B1", xrotation=45, xguidefontsize=12, xlabel="", 
+    border=:box, legend=lg, yformatter=Returns(""), alpha=ab, xscale=:log10, legendfontsize=lfs)
 
-    # p3 = plot(rstar_w[2][1:50], -zc, lw=ls, lc="darkorange", label="", xrotation=45, xguidefontsize=12, xlabel="", 
-    # border=:box, legend=lg, xscale=:log10, title="D2", title_loc=tl, yformatter=Returns(""), titlefontsize=tfs, xlim=(0.001, 10))
-    p3 = plot(rstar_w[6][1:50], -zc, lw=ls, lc="magenta2", label="", xrotation=45, xguidefontsize=12, xlabel="", 
-    border=:box, legend=lg, xscale=:log10, title="D2", title_loc=tl, yformatter=Returns(""), titlefontsize=tfs, xlim=(0.003, 1.12))
-    plot!(rstar_w[10][1:50], -zc, lw=ls, lc="purple",  label="")
-    plot!(Dw[1:50, 2], -zc, lw=ls, lc="black", linestyle=:dot, alpha=ab, label=L" D2")
+    # p3 = plot(rstar_w[2][1:50], -zc, lw=ls, lc=bc[2], label="", xrotation=45, xguidefontsize=12, xlabel="", 
+    # border=:box, legend=lg, xscale=:log10, title="D2", title_loc=tl, yformatter=Returns(""), titlefontsize=tfs)
+    p3 = plot(rstar_w[6][1:50], -zc, lw=ls, lc=bc[6], label="", xrotation=45, xguidefontsize=12, xlabel="", 
+    border=:box, legend=lg, xscale=:log10, title="D2", title_loc=tl, yformatter=Returns(""), titlefontsize=tfs)
+    plot!(rstar_w[10][1:50], -zc, lw=ls, lc=bc[10],  label="")
+    plot!(Dw[1:50, 2], -zc, lw=ls, lc=dc[2], linestyle=:dot, alpha=ab, label=" D2", legendfontsize=lfs)
 
-    p4 = plot(bw[1:50, 2], -zc, lw=ls, lc="darkorange", label=L" B2", linestyle=:dash, xrotation=45, xguidefontsize=12, xlabel="", 
-    border=:box, legend=lg, yformatter=Returns(""), alpha=ab_ext, xlim=(-0.005, 0.034))
-    plot!(bw[1:50, 6], -zc, lw=ls, lc="magenta2",  label=L" B6", alpha=ab)
-    plot!(bw[1:50, 10], -zc, lw=ls, lc="purple",  label=L" B10", alpha=ab)
+    p4 = plot(bw[1:50, 2], -zc, lw=ls, lc=bc[2], label=" B2", linestyle=:dash, xrotation=45, xguidefontsize=12, xlabel="", 
+    border=:box, legend=lg, yformatter=Returns(""), alpha=ab_ext, legendfontsize=lfs)
+    plot!(bw[1:50, 6], -zc, lw=ls, lc=bc[6],  label=" B6", alpha=ab, legendfontsize=lfs)
+    plot!(bw[1:50, 10], -zc, lw=ls, lc=bc[10],  label=" B10", alpha=ab, legendfontsize=lfs)
 
-    p5 = plot(rstar_w[3][1:50], -zc, lw=ls, lc="gold4", label="", xrotation=45, xguidefontsize=12, xlabel="", 
-    border=:box, legend=lg, xscale=:log10, title="D3", title_loc=tl, yformatter=Returns(""), titlefontsize=tfs, xlim=(0.002, 0.014))
-    # plot!(rstar_w[7][1:50], -zc, lw=ls, lc="lightcyan4", label="")
-    plot!(rstar_w[11][1:50], -zc, lw=ls, lc="darkgrey", label="")
-    plot!(Dw[1:50, 3], -zc, lw=ls, lc="maroon", linestyle=:dot, alpha=ab, label=L" D3")
+    p5 = plot(rstar_w[3][1:50], -zc, lw=ls, lc=bc[3], label="", xrotation=45, xguidefontsize=12, xlabel="", 
+    border=:box, legend=lg, xscale=:log10, title="D3", title_loc=tl, yformatter=Returns(""), titlefontsize=tfs)
+    # plot!(rstar_w[7][1:50], -zc, lw=ls, lc=bc[7], label="")
+    plot!(rstar_w[11][1:50], -zc, lw=ls, lc=bc[11], label="")
+    plot!(Dw[1:50, 3], -zc, lw=ls, lc=dc[3], linestyle=:dot, alpha=ab, label=" D3", legendfontsize=lfs)
 
-    p6 = plot(bw[1:50, 3], -zc, lw=ls, lc="gold4", label=L" B3", xrotation=45, xguidefontsize=12, xlabel="", 
-    border=:box, legend=lg, yformatter=Returns(""), alpha=ab, xlim=(-0.005, 0.032))
-    plot!(bw[1:50, 7], -zc, lw=ls, lc="orange4", label=L" B7", linestyle=:dash, alpha=ab_ext)
-    plot!(bw[1:50, 11], -zc, lw=ls, lc="darkgrey", label=L" B11", alpha=ab)
+    p6 = plot(bw[1:50, 3], -zc, lw=ls, lc=bc[3], label=" B3", xrotation=45, xguidefontsize=12, xlabel="", 
+    border=:box, legend=lg, yformatter=Returns(""), alpha=ab,legendfontsize=lfs)
+    plot!(bw[1:50, 7], -zc, lw=ls, lc=bc[7], label=" B7", linestyle=:dash, alpha=ab_ext, legendfontsize=lfs)
+    plot!(bw[1:50, 11], -zc, lw=ls, lc=bc[11], label=" B11", alpha=ab, legendfontsize=lfs)
 
-    p7 = plot(rstar_w[8][1:50], -zc, lw=ls, lc="seagreen4", label="", xrotation=45, xguidefontsize=12, xlabel="", 
-    border=:box, legend=lg, xscale=:log10, title="D4", title_loc=tl, yformatter=Returns(""), titlefontsize=tfs, xlim=(0.001, 0.01))
+    p7 = plot(rstar_w[8][1:50], -zc, lw=ls, lc=bc[8], label="", xrotation=45, xguidefontsize=12, xlabel="", 
+    border=:box, legend=lg, xscale=:log10, title="D4", title_loc=tl, yformatter=Returns(""), titlefontsize=tfs)
     # p7 = plot(rstar_w[4][1:50], -zc, lw=ls, lc="coral4", label="", xrotation=45, xguidefontsize=12, xlabel="", 
     # border=:box, legend=lg, xscale=:log10, title="D4", title_loc=tl, yformatter=Returns(""), titlefontsize=tfs, xlim=(0.001, 0.02))
-    # plot!(rstar_w[8][1:50], -zc, lw=ls, lc="seagreen4", label="")
+    # plot!(rstar_w[8][1:50], -zc, lw=ls, lc=bc[8], label="")
     # plot!(rstar_w[12][1:50], -zc, lw=ls, lc="azure4", label="")
-    plot!(Dw[1:50, 4], -zc, lw=ls, lc="navy", linestyle=:dot, alpha=0.6, label=L" D4")
+    plot!(Dw[1:50, 4], -zc, lw=ls, lc=dc[4], linestyle=:dot, alpha=0.6, label=" D4", legendfontsize=lfs)
 
-    p8 = plot(bw[1:50, 4], -zc, lw=ls, lc="coral4", linestyle=:dash, label=L" B4", xrotation=45, xguidefontsize=12, xlabel="", 
-    border=:box, legend=lg, yformatter=Returns(""), alpha=ab_ext, xlim=(-0.005, 0.06))
-    plot!(bw[1:50, 8], -zc, lw=ls, lc="seagreen4", label=L" B8", alpha=ab)
-    plot!(bw[1:50, 12], -zc, lw=ls, lc="azure4", linestyle=:dash, label=L" B12", alpha=ab_ext)
+    p8 = plot(bw[1:50, 4], -zc, lw=ls, lc=bc[4], linestyle=:dash, label=" B4", xrotation=45, xguidefontsize=12, xlabel="", 
+    border=:box, legend=lg, yformatter=Returns(""), alpha=ab_ext,  legendfontsize=lfs)
+    plot!(bw[1:50, 8], -zc, lw=ls, lc=bc[8], label=" B8", alpha=ab, legendfontsize=lfs)
+    plot!(bw[1:50, 12], -zc, lw=ls, lc=bc[12], linestyle=:dash, label=" B12", alpha=ab_ext, legendfontsize=lfs)
 
-    p9 = plot(rstar_w[5][1:50], -zc, lw=ls, lc="orchid2", label="", xrotation=45, xguidefontsize=12, xlabel="", 
-    border=:box, legend=lg, xscale=:log10, title="D5", title_loc=tl, yformatter=Returns(""), titlefontsize=tfs, xlim=(0.002, 0.01))
-    plot!(rstar_w[9][1:50], -zc, lw=ls, lc="darkkhaki", label="")
+    p9 = plot(rstar_w[5][1:50], -zc, lw=ls, lc=bc[5], label="", xrotation=45, xguidefontsize=12, xlabel="", 
+    border=:box, legend=lg, xscale=:log10, title="D5", title_loc=tl, yformatter=Returns(""), titlefontsize=tfs)
+    plot!(rstar_w[9][1:50], -zc, lw=ls, lc=bc[9], label="")
     # plot!(rstar_w[13][1:50], -zc, lw=ls, lc="turquoise1", label="")
-    plot!(Dw[1:50, 5], -zc, lw=ls, lc="brown4", linestyle=:dot, alpha=0.6, label=L" D5")
+    plot!(Dw[1:50, 5], -zc, lw=ls, lc=dc[5], linestyle=:dot, alpha=0.6, label=" D5", legendfontsize=lfs)
 
-    p10 = plot(bw[1:50, 5], -zc, lw=ls, lc="orchid2", label=L" B5", xrotation=45, xguidefontsize=12, xlabel="", 
-    border=:box, legend=lg, yformatter=Returns(""), alpha=ab, xlim=(-0.005, 0.04))
-    plot!(bw[1:50, 9], -zc, lw=ls, lc="darkkhaki", label=L" B9", alpha=ab)
-    plot!(bw[1:50, 13], -zc, lw=ls, lc="turquoise1", label=L" B13", linestyle=:dash, alpha=ab_ext)
+    p10 = plot(bw[1:50, 5], -zc, lw=ls, lc=bc[5], label=" B5", xrotation=45, xguidefontsize=12, xlabel="", 
+    border=:box, legend=lg, yformatter=Returns(""), alpha=ab, legendfontsize=lfs)
+    plot!(bw[1:50, 9], -zc, lw=ls, lc=bc[9], label=" B9", alpha=ab, legendfontsize=lfs)
+    plot!(bw[1:50, 13], -zc, lw=ls, lc=bc[13], label=" B13", linestyle=:dash, alpha=ab_ext, legendfontsize=lfs)
 
     #--------------------------------------------------------------------------------------------
 
-    p11 = plot(rstar_s[1][1:50], -zc, lw=ls, lc="cyan3", label=L" B1", ylabel="Depth (m)", xrotation=45, xguidefontsize=12, 
-    xlabel=L"R*", border=:box, legend=lg, xscale=:log10, xlim=(0.008, 0.05))
-    plot!(Ds[1:50, 1], -zc, lw=ls, lc="blue3", linestyle=:dot,label=L" D1", alpha=ab)
+    p11 = plot(rstar_s[1][1:50], -zc, lw=ls, lc=bc[1], label=" B1", ylabel="Depth (m)", xrotation=45, xguidefontsize=12, 
+    xlabel=L"R*", border=:box, legend=lg, xscale=:log10)
+    plot!(Ds[1:50, 1], -zc, lw=ls, lc=dc[1], linestyle=:dot,label=" D1", alpha=ab, legendfontsize=lfs)
 
-    p12 = plot(bs[1:50, 1], -zc, lw=ls, lc="cyan3", label=L" B1", xrotation=45, xguidefontsize=12, xlabel=L"Biomass", 
-    border=:box, legend=lg, yformatter=Returns(""), alpha=ab, xscale=:log10, xlim=(0.002, 0.1))
+    p12 = plot(bs[1:50, 1], -zc, lw=ls, lc=bc[1], label=" B1", xrotation=45, xguidefontsize=12, xlabel=L"Biomass", 
+    border=:box, legend=lg, yformatter=Returns(""), alpha=ab, xscale=:log10, legendfontsize=lfs)
 
-    # p13 = plot(rstar_s[2][1:50], -zc, lw=ls, lc="darkorange", label="", xrotation=45, xguidefontsize=12, xlabel=L"R*", 
+    # p13 = plot(rstar_s[2][1:50], -zc, lw=ls, lc=bc[2], label="", xrotation=45, xguidefontsize=12, xlabel="R*", 
     # border=:box, legend=lg, xscale=:log10, title="D2", title_loc=tl, yformatter=Returns(""), titlefontsize=tfs, xlim=(0.001, 10))
-    p13 = plot(rstar_s[6][1:50], -zc, lw=ls, lc="magenta2", label="", xrotation=45, xguidefontsize=12, xlabel=L"R*", 
-    border=:box, legend=lg, xscale=:log10, yformatter=Returns(""), xlim=(0.003, 1.12))
-    # plot!(rstar_s[10][1:50], -zc, lw=ls, lc="purple",  label="")
-    plot!(Ds[1:50, 2], -zc, lw=ls, lc="black", linestyle=:dot, alpha=0.6, label=L" D2")
+    p13 = plot(rstar_s[6][1:50], -zc, lw=ls, lc=bc[6], label="", xrotation=45, xguidefontsize=12, xlabel=L"R*", 
+    border=:box, legend=lg, xscale=:log10, yformatter=Returns(""))
+    # plot!(rstar_s[10][1:50], -zc, lw=ls, lc=bc[10],  label="")
+    plot!(Ds[1:50, 2], -zc, lw=ls, lc=dc[2], linestyle=:dot, alpha=0.6, label=" D2", legendfontsize=lfs)
 
-    p14 = plot(bs[1:50, 2], -zc, lw=ls, lc="darkorange", label=L" B2", xrotation=45, xguidefontsize=12, xlabel=L"Biomass", 
-    border=:box, legend=lg, yformatter=Returns(""), linestyle=:dash, alpha=ab_ext, xlim=(-0.01, 0.13))
-    plot!(bs[1:50, 6], -zc, lw=ls, lc="magenta2",  label=L" B6", alpha=ab)
-    plot!(bs[1:50, 10], -zc, lw=ls, lc="purple",  label=L" B10", linestyle=:dash, alpha=ab_ext)
+    p14 = plot(bs[1:50, 2], -zc, lw=ls, lc=bc[2], label=" B2", xrotation=45, xguidefontsize=12, xlabel=L"Biomass", 
+    border=:box, legend=lg, yformatter=Returns(""), linestyle=:dash, alpha=ab_ext, legendfontsize=lfs)
+    plot!(bs[1:50, 6], -zc, lw=ls, lc=bc[6],  label=" B6", alpha=ab, legendfontsize=lfs)
+    plot!(bs[1:50, 10], -zc, lw=ls, lc=bc[10],  label=" B10", linestyle=:dash, alpha=ab_ext, legendfontsize=lfs)
 
-    # p15 = plot(rstar_s[3][1:50], -zc, lw=ls, lc="gold4", label="", xrotation=45, xguidefontsize=12, xlabel=L"R*", 
-    # border=:box, legend=lg, xscale=:log10, title="D3", title_loc=tl, yformatter=Returns(""), titlefontsize=tfs, xlim=(0.001, 0.1))
-    p15 = plot(rstar_s[7][1:50], -zc, lw=ls, lc="lightcyan4", label="", xrotation=45, xguidefontsize=12, xlabel=L"R*", 
-    border=:box, legend=lg, xscale=:log10, yformatter=Returns(""), xlim=(0.001, 0.03))
-    plot!(rstar_s[11][1:50], -zc, lw=ls, lc="orange4", label="")
-    plot!(Ds[1:50, 3], -zc, lw=ls, lc="maroon", linestyle=:dot, alpha=0.6, label=L" D3")
+    # p15 = plot(rstar_s[3][1:50], -zc, lw=ls, lc=bc[3], label="", xrotation=45, xguidefontsize=12, xlabel="R*", 
+    # border=:box, legend=lg, xscale=:log10, title="D3", title_loc=tl, yformatter=Returns(""), titlefontsize=tfs)
+    p15 = plot(rstar_s[7][1:50], -zc, lw=ls, lc=bc[7], label="", xrotation=45, xguidefontsize=12, xlabel=L"R*", 
+    border=:box, legend=lg, xscale=:log10, yformatter=Returns(""))
+    plot!(rstar_s[11][1:50], -zc, lw=ls, lc=bc[11], label="")
+    plot!(Ds[1:50, 3], -zc, lw=ls, lc=dc[3], linestyle=:dot, alpha=0.6, label=" D3", legendfontsize=lfs)
 
-    p16 = plot(bs[1:50, 3], -zc, lw=ls, lc="gold4", label=L" B3", xrotation=45, xguidefontsize=12, xlabel=L"Biomass", 
-    border=:box, legend=lg, yformatter=Returns(""), linestyle=:dash, alpha=ab_ext, xlim=(-0.005, 0.09))
-    plot!(bs[1:50, 7], -zc, lw=ls, lc="orange4", label=L" B7", alpha=ab)
-    plot!(bs[1:50, 11], -zc, lw=ls, lc="darkgrey", label=L" B11", alpha=ab)
+    p16 = plot(bs[1:50, 3], -zc, lw=ls, lc=bc[3], label=" B3", xrotation=45, xguidefontsize=12, xlabel=L"Biomass", 
+    border=:box, legend=lg, yformatter=Returns(""), linestyle=:dash, alpha=ab_ext, legendfontsize=lfs)
+    plot!(bs[1:50, 7], -zc, lw=ls, lc=bc[7], label=" B7", alpha=ab, legendfontsize=lfs)
+    plot!(bs[1:50, 11], -zc, lw=ls, lc=bc[11], label=" B11", alpha=ab, legendfontsize=lfs)
 
-    p17 = plot(rstar_s[4][1:50], -zc, lw=ls, lc="coral4", label="", xrotation=45, xguidefontsize=12, xlabel=L"R*", 
-    border=:box, legend=lg, xscale=:log10, yformatter=Returns(""), xlim=(0.001, 0.02))
-    plot!(rstar_s[8][1:50], -zc, lw=ls, lc="seagreen4", label="")
-    plot!(rstar_s[12][1:50], -zc, lw=ls, lc="azure4", label="")
-    plot!(Ds[1:50, 4], -zc, lw=ls, lc="navy", linestyle=:dot, alpha=0.6, label=L" D4")
+    p17 = plot(rstar_s[4][1:50], -zc, lw=ls, lc=bc[4], label="", xrotation=45, xguidefontsize=12, xlabel=L"R*", 
+    border=:box, legend=lg, xscale=:log10, yformatter=Returns(""))
+    plot!(rstar_s[8][1:50], -zc, lw=ls, lc=bc[8], label="")
+    plot!(rstar_s[12][1:50], -zc, lw=ls, lc=bc[12], label="")
+    plot!(Ds[1:50, 4], -zc, lw=ls, lc=dc[4], linestyle=:dot, alpha=ab, label=" D4", legendfontsize=lfs)
 
-    p18 = plot(bs[1:50, 4], -zc, lw=ls, lc="coral4", label=L" B4", xrotation=45, xguidefontsize=12, xlabel=L"Biomass", 
-    border=:box, legend=lg, yformatter=Returns(""), alpha=ab, xlim=(-0.005, 0.08))
-    plot!(bs[1:50, 8], -zc, lw=ls, lc="seagreen4", label=L" B8", alpha=ab)
-    plot!(bs[1:50, 12], -zc, lw=ls, lc="azure4", label=L" B12", alpha=ab)
+    p18 = plot(bs[1:50, 4], -zc, lw=ls, lc=bc[4], label=" B4", xrotation=45, xguidefontsize=12, xlabel=L"Biomass", 
+    border=:box, legend=lg, yformatter=Returns(""), alpha=ab, legendfontsize=lfs)
+    plot!(bs[1:50, 8], -zc, lw=ls, lc=bc[8], label=" B8", alpha=ab, legendfontsize=lfs)
+    plot!(bs[1:50, 12], -zc, lw=ls, lc=bc[12], label=" B12", alpha=ab, legendfontsize=lfs)
 
-    p19 = plot(rstar_s[5][1:50], -zc, lw=ls, lc="orchid2", label="", xrotation=45, xguidefontsize=12, xlabel=L"R*", 
-    border=:box, legend=lg, xscale=:log10, yformatter=Returns(""), xlim=(0.002, 0.02))
-    plot!(rstar_s[9][1:50], -zc, lw=ls, lc="darkkhaki", label="")
-    # plot!(rstar_s[13][1:50], -zc, lw=ls, lc="turquoise1", label="")
-    plot!(Ds[1:50, 5], -zc, lw=ls, lc="brown4", linestyle=:dot, alpha=ab, label=L" D5")
+    p19 = plot(rstar_s[5][1:50], -zc, lw=ls, lc=bc[5], label="", xrotation=45, xguidefontsize=12, xlabel=L"R*", 
+    border=:box, legend=lg, xscale=:log10, yformatter=Returns(""))
+    plot!(rstar_s[9][1:50], -zc, lw=ls, lc=bc[9], alpha=ab, label="")
+    # plot!(rstar_s[13][1:50], -zc, lw=ls, lc=bc[13], label="")
+    plot!(Ds[1:50, 5], -zc, lw=ls, lc=dc[5], linestyle=:dot, alpha=ab, label=" D5", legendfontsize=lfs)
 
-    p20 = plot(bs[1:50, 5], -zc, lw=ls, lc="orchid2", label=L" B5", xrotation=45, xguidefontsize=12, xlabel=L"Biomass", 
-    border=:box, legend=lg, yformatter=Returns(""), alpha=ab, xlim=(-0.01, 0.11))
-    plot!(bs[1:50, 9], -zc, lw=ls, lc="darkkhaki", label=L" B9", alpha=ab)
-    plot!(bs[1:50, 13], -zc, lw=ls, lc="turquoise1", linestyle=:dash, label=L" B13", alpha=ab_ext)
+    p20 = plot(bs[1:50, 5], -zc, lw=ls, lc=bc[5], label=" B5", xrotation=45, xguidefontsize=12, xlabel=L"Biomass", 
+    border=:box, legend=lg, yformatter=Returns(""), alpha=ab, legendfontsize=lfs)
+    plot!(bs[1:50, 9], -zc, lw=ls, lc=bc[9], label=" B9", alpha=ab, legendfontsize=lfs)
+    plot!(bs[1:50, 13], -zc, lw=ls, lc=bc[13], linestyle=:dash, label=" B13", alpha=ab_ext, legendfontsize=lfs)
     
     winter = plot(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,
     fg_legend = :transparent,
     layout = (1,10),
-    size=(1500,450),
+    size=(1600,900),
+    plot_xaxis="Depth (m)"
     # xlabel = "R*",
     # plot_title="Winter", 
     # plot_titlefontsize = 20,
@@ -426,7 +434,8 @@ function plot_rstar_13B5D(rstar_w, rstar_s, Dw, Ds, bw, bs, ds, N)
     summer = plot(p11,p12,p13,p14,p15,p16,p17,p18,p19,p20,
     fg_legend = :transparent,
     layout = (1,10),
-    size=(1500,450),
+    size=(1600,900),
+    plot_xaxis="Depth (m)"
     # xlabel = "R*",
     # plot_title="Summer", 
     # plot_titlefontsize = 20,
@@ -436,20 +445,20 @@ function plot_rstar_13B5D(rstar_w, rstar_s, Dw, Ds, bw, bs, ds, N)
     combined = plot(winter, summer, 
         fg_legend = :transparent,
         layout = (2,1),
-        size=(1500,900),
-        plot_xaxis="Depth (m)"
+        size=(1600,900),
+        # plot_xaxis="Depth (m)"
         # xlabel = "R*",
         # plot_title="Winter", 
         # titlefontsize=tfs, titlelocation=:center, 
     )
 
-    savefig(combined,"/home/lee/Dropbox/Development/NPZBD_1D/results/plots/rstar/rstarB_13B5D.png")
+    savefig(combined,"/home/lee/Dropbox/Development/NPZBD_1D/results/plots/rstar/rsB/rsB_$(fsaven).png")
     
     return combined
 
 end
 
-function plot_rstar_7B4D(rstar_w, rstar_s, Dw, Ds, Bw, Bs, ds)
+function plot_rstar_7B4D(fsaven, rstar_w, rstar_s, Dw, Ds, Bw, Bs)
     # B1 eats D1 (POM)  |  B2 & B7 eat D2  |  B3 & B6 eat D3  |  B4 & B5 eat D4
 
     H = 500
@@ -458,65 +467,62 @@ function plot_rstar_7B4D(rstar_w, rstar_s, Dw, Ds, Bw, Bs, ds)
     lg=:bottomright
     tfs=22
     tl=:right
-    ab=1.0
-    ab_ext=0.3
-    ls=5
 
     #--------------------------------------------------------------------------------------------
     # Winter
     #--------------------------------------------------------------------------------------------
-    p1 = plot(rstar_w[1][1:50], -zc, lw=ls, lc="red3", label=L" B1", ylabel="Depth (m)", xrotation=45, xlabel="", 
+    p1 = plot(rstar_w[1][1:50], -zc, lw=ls, lc=bc[1], label="", ylabel="Depth (m)", xrotation=45, xlabel="", 
     border=:box, legend=lg, xscale=:log10, title="D1", title_loc=tl, titlefontsize=tfs)
-    plot!(Dw[1:50, 1], -zc, lw=ls, lc="blue3", linestyle=:dot, label=L" D1", alpha=ab)
+    plot!(Dw[1:50, 1], -zc, lw=ls, lc=dc[1], linestyle=:dot, label=" D1", alpha=ab, legendfontsize=lfs)
 
-    p2 = plot(Bw[1:50, 1], -zc, lw=ls, lc="cyan3", label=L" B1", xrotation=45, xguidefontsize=12, xlabel="", 
-    border=:box, legend=lg, yformatter=Returns(""), alpha=ab, xscale=:log10)
+    p2 = plot(Bw[1:50, 1], -zc, lw=ls, lc=bc[1], label=" B1", xrotation=45, xguidefontsize=12, xlabel="", 
+    border=:box, legend=lg, yformatter=Returns(""), alpha=ab, xscale=:log10, legendfontsize=lfs)
 
-    p3 = plot(rstar_w[6][1:50], -zc, lw=ls, lc="magenta2", label="", xrotation=45, xguidefontsize=12, xlabel="", 
+    p3 = plot(rstar_w[3][1:50], -zc, lw=ls, lc=bc[3], label="", xrotation=45, xguidefontsize=12, xlabel="", 
     border=:box, legend=lg, xscale=:log10, yformatter=Returns(""), title="D3", title_loc=tl, titlefontsize=tfs)
-    # plot!(rstar_w[3][1:50], -zc, lw=ls, lc="darkorange",  label="")
-    plot!(Dw[1:50, 3], -zc, lw=ls, lc="black", linestyle=:dot, alpha=ab, label=L" D3")
+    # plot!(rstar_w[6][1:50], -zc, lw=ls, lc=bc[6],  label="")
+    plot!(Dw[1:50, 3], -zc, lw=ls, lc=dc[3], linestyle=:dot, alpha=ab, label=" D3", legendfontsize=lfs)
 
-    p4 = plot(Bw[1:50, 3], -zc, lw=ls, lc="darkorange", label=L" B3", xrotation=45, xguidefontsize=12, xlabel="", 
-    border=:box, legend=lg, yformatter=Returns(""), linestyle=:dash, alpha=ab_ext)
-    plot!(Bw[1:50, 6], -zc, lw=ls, lc="magenta2",  label=L" B6", alpha=ab)
+    p4 = plot(Bw[1:50, 3], -zc, lw=ls, lc=bc[3], label=" B3", xrotation=45, xguidefontsize=12, xlabel="", 
+    border=:box, legend=lg, yformatter=Returns(""), alpha=ab, legendfontsize=lfs)
+    plot!(Bw[1:50, 6], -zc, lw=ls, lc=bc[6],  label=" B6", linestyle=:dash, alpha=ab_ext, legendfontsize=lfs)
 
-    p5 = plot(rstar_w[5][1:50], -zc, lw=ls, lc="lightcyan4", label="", xrotation=45, xguidefontsize=12, xlabel="", 
+    p5 = plot(rstar_w[5][1:50], -zc, lw=ls, lc=bc[5], label="", xrotation=45, xguidefontsize=12, xlabel="", 
     border=:box, legend=lg, xscale=:log10, yformatter=Returns(""), title="D4", title_loc=tl, titlefontsize=tfs)
-    # plot!(rstar_w[4][1:50], -zc, lw=ls, lc="gold4", label="")
-    plot!(Dw[1:50, 4], -zc, lw=ls, lc="purple", linestyle=:dot, alpha=ab, label=L" D4")
+    # plot!(rstar_w[4][1:50], -zc, lw=ls, lc=bc[4], label="")
+    plot!(Dw[1:50, 4], -zc, lw=ls, lc=dc[4], linestyle=:dot, alpha=ab, label=" D4", legendfontsize=lfs)
 
-    p6 = plot(Bw[1:50, 4], -zc, lw=ls, lc="gold4", label=L" B4", xrotation=45, xguidefontsize=12, xlabel="", 
-    border=:box, legend=lg, yformatter=Returns(""), linestyle=:dash, alpha=ab_ext)
-    plot!(Bw[1:50, 5], -zc, lw=ls, lc="lightcyan4", label=L" B5", alpha=ab)
+    p6 = plot(Bw[1:50, 4], -zc, lw=ls, lc=bc[4], label=" B4", xrotation=45, xguidefontsize=12, xlabel="", 
+    border=:box, legend=lg, yformatter=Returns(""), linestyle=:dash, alpha=ab_ext, legendfontsize=lfs)
+    plot!(Bw[1:50, 5], -zc, lw=ls, lc=bc[5], label=" B5", alpha=ab, legendfontsize=lfs)
 
     #--------------------------------------------------------------------------------------------
     # Summer
     #--------------------------------------------------------------------------------------------
-    p7 = plot(rstar_s[1][1:50], -zc, lw=ls, lc="red3", label=L" B1", ylabel="Depth (m)", 
+    p7 = plot(rstar_s[1][1:50], -zc, lw=ls, lc=bc[1], label="", ylabel="Depth (m)", 
     xrotation=45, xguidefontsize=12, xlabel=L"R*", border=:box, legend=lg, xscale=:log10)
-    plot!(Ds[1:50, 1], -zc, lw=ls, lc="blue3", linestyle=:dot,label=L" D1", alpha=ab)
+    plot!(Ds[1:50, 1], -zc, lw=ls, lc=dc[1], linestyle=:dot,label=" D1", alpha=ab, legendfontsize=lfs)
 
-    p8 = plot(Bs[1:50, 1], -zc, lw=ls, lc="cyan3", label=L" B1", xrotation=45, xguidefontsize=12, 
-    border=:box, legend=lg, yformatter=Returns(""), alpha=ab, xscale=:log10, xlabel=L"Biomass")
+    p8 = plot(Bs[1:50, 1], -zc, lw=ls, lc=bc[1], label=" B1", xrotation=45, xguidefontsize=12, 
+    border=:box, legend=lg, yformatter=Returns(""), alpha=ab, xscale=:log10, xlabel=L"Biomass", legendfontsize=lfs)
 
-    p9 = plot(rstar_s[6][1:50], -zc, lw=ls, lc="magenta2", label="", xrotation=45, xguidefontsize=12, 
+    p9 = plot(rstar_s[6][1:50], -zc, lw=ls, lc=bc[6], label="", xrotation=45, xguidefontsize=12, 
     xlabel=L"R*", border=:box, legend=lg, xscale=:log10, yformatter=Returns(""), alpha=ab)
-    # plot!(rstar_s[3][1:50], -zc, lw=ls, lc="darkorange", label="")
-    plot!(Ds[1:50, 3], -zc, lw=ls, lc="black", linestyle=:dot, alpha=ab, label=L" D3")
+    # plot!(rstar_s[3][1:50], -zc, lw=ls, lc=bc[3], label="")
+    plot!(Ds[1:50, 3], -zc, lw=ls, lc=dc[3], linestyle=:dot, alpha=ab, label=" D3", legendfontsize=lfs)
 
-    p10 = plot(Bs[1:50, 3], -zc, lw=ls, lc="darkorange", label=L" B3", xrotation=45, xguidefontsize=12, 
-    xlabel=L"Biomass", border=:box, legend=lg, yformatter=Returns(""), linestyle=:dash, alpha=ab_ext)
-    plot!(Bs[1:50, 6], -zc, lw=ls, lc="magenta2", label=L" B6", alpha=ab)
+    p10 = plot(Bs[1:50, 3], -zc, lw=ls, lc=bc[3], label=" B3", xrotation=45, xguidefontsize=12, 
+    xlabel=L"Biomass", border=:box, legend=lg, yformatter=Returns(""), linestyle=:dash, alpha=ab_ext, legendfontsize=lfs)
+    plot!(Bs[1:50, 6], -zc, lw=ls, lc=bc[6], label=" B6", alpha=ab, legendfontsize=lfs)
 
-    p11 = plot(rstar_s[4][1:50], -zc, lw=ls, lc="gold4", label="", xrotation=45, xguidefontsize=12, xlabel=L"R*", 
+    p11 = plot(rstar_s[4][1:50], -zc, lw=ls, lc=bc[4], label="", xrotation=45, xguidefontsize=12, xlabel=L"R*", 
     border=:box, legend=lg, xscale=:log10, yformatter=Returns(""))
-    # plot!(rstar_s[5][1:50], -zc, lw=ls, lc="lightcyan4", label="")
-    plot!(Ds[1:50, 4], -zc, lw=ls, lc="purple", linestyle=:dot, alpha=0.6, label=L" D4")
+    # plot!(rstar_s[5][1:50], -zc, lw=ls, lc=bc[5], label="")
+    plot!(Ds[1:50, 4], -zc, lw=ls, lc=dc[4], linestyle=:dot, alpha=0.6, label=" D4", legendfontsize=lfs)
 
-    p12 = plot(Bs[1:50, 4], -zc, lw=ls, lc="gold4", label=L" B4", xrotation=45, xguidefontsize=12, xlabel=L"Biomass", 
-    border=:box, legend=lg, yformatter=Returns(""))
-    plot!(Bs[1:50, 5], -zc, lw=ls, lc="lightcyan4", label=L" B5", linestyle=:dash, alpha=ab_ext)
+    p12 = plot(Bs[1:50, 4], -zc, lw=ls, lc=bc[4], label=" B4", xrotation=45, xguidefontsize=12, xlabel=L"Biomass", 
+    border=:box, legend=lg, yformatter=Returns(""), legendfontsize=lfs)
+    plot!(Bs[1:50, 5], -zc, lw=ls, lc=bc[5], label=" B5", linestyle=:dash, alpha=ab_ext, legendfontsize=lfs)
     
     
     combined = plot(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12,
@@ -525,15 +531,15 @@ function plot_rstar_7B4D(rstar_w, rstar_s, Dw, Ds, Bw, Bs, ds)
         size=(900,700),
     )
 
-    savefig(combined, "/home/lee/Dropbox/Development/NPZBD_1D/results/plots/rstar/rstarB_7B4D.png")
+    savefig(combined, "/home/lee/Dropbox/Development/NPZBD_1D/results/plots/rstar/rsB/rsB_$(fsaven).png")
 
 end
 
-function plot_rstar_2B2D(rstar_w, rstar_s, Dw, Ds, Bw, Bs, ds, np)
+function plot_rstar_2B2D(fsaven, rstar_w, rstar_s, Dw, Ds, Bw, Bs)
     # B1 eats D1 (POM)  |  B2 eats D2 (DOM)  
     # zc = get_zc(ds, 500)
     H = 500
-    dz = ds["dz"][:]
+    dz = 10
     zc = [dz/2:dz:(H-dz/2)]
     lg=:bottomright
     tfs=12
@@ -541,164 +547,166 @@ function plot_rstar_2B2D(rstar_w, rstar_s, Dw, Ds, Bw, Bs, ds, np)
     #--------------------------------------------------------------------------------------------
     # Winter
     #--------------------------------------------------------------------------------------------
-    p1 = plot(rstar_w[1][1:50], -zc, lw=4, lc="red3", ylabel="Depth (m)", label="", xrotation=45, 
-    xguidefontsize=12, xlabel=L"R*", border=:box, legend=lg, xscale=:log10, alpha=0.7)
-    plot!(Dw[1:50, 1], -zc, lw=3, lc="blue3", linestyle=:dot, alpha=0.7, label=L" D1")
+    p1 = plot(rstar_w[1][1:50], -zc, lw=ls, lc=bc[1], ylabel="Depth (m)", label="", xrotation=45, 
+    xguidefontsize=12, xlabel="", border=:box, legend=lg, xscale=:log10, alpha=ab, legendfontsize=lfs)
+    plot!(Dw[1:50, 1], -zc, lw=ls, lc=dc[1], linestyle=:dot, label=" D1", alpha=ab, legendfontsize=lfs)
 
-    p2 = plot(rstar_w[2][1:50], -zc, lw=4, lc="darkorange", label="",xrotation=45, 
-    xguidefontsize=12, xlabel=L"R*", border=:box, legend=lg, xscale=:log10, yformatter=Returns(""), alpha=0.7)
-    plot!(Dw[1:50, 2], -zc, lw=3, lc="black", linestyle=:dot, alpha=0.7, label=" D2")
+    p2 = plot(Bw[1:50, 1], -zc, lw=ls, lc=bc[1], label=" B1", xrotation=45, xguidefontsize=12, xlabel="", 
+    border=:box, legend=lg, yformatter=Returns(""), alpha=ab, legendfontsize=lfs)
 
-    p3 = plot(Bw[1:50, 1], -zc, lw=4, lc="red3", ylabel="", label=" B1",xrotation=45, 
-    xguidefontsize=12, xlabel=L"Biomass", border=:box, legend=lg, yformatter=Returns(""), alpha=0.7)
-    plot!(Bw[1:50, 2], -zc, lw=4, lc="darkorange", ylabel="", label=" B2", xrotation=45, 
-    xguidefontsize=12, border=:box, legend=lg, alpha=0.7)
+    p3 = plot(rstar_w[2][1:50], -zc, lw=ls, lc=bc[2], label="",xrotation=45, 
+    xguidefontsize=12, xlabel="", border=:box, legend=lg, xscale=:log10, yformatter=Returns(""), alpha=ab)
+    plot!(Dw[1:50, 2], -zc, lw=ls, lc=dc[2], linestyle=:dot, alpha=ab, label=" D2", legendfontsize=lfs)
+
+    p4 = plot(Bw[1:50, 2], -zc, lw=ls, lc=bc[2], ylabel="", label=" B2",xrotation=45, 
+    xguidefontsize=12, xlabel="", border=:box, legend=lg, yformatter=Returns(""), alpha=ab, legendfontsize=lfs)
+
 
     #--------------------------------------------------------------------------------------------
     # Summer
     #--------------------------------------------------------------------------------------------
-    p4 = plot(rstar_s[1][1:50], -zc, lw=4, lc="red3", ylabel="Depth (m)", label="", xrotation=45, 
-    xguidefontsize=12, xlabel=L"R*", border=:box, legend=lg, xscale=:log10, alpha=0.7)
-    plot!(Ds[1:50, 1], -zc, lw=3, lc="blue3", linestyle=:dot, alpha=0.7, label=L" D1")
+    p5 = plot(rstar_s[1][1:50], -zc, lw=ls, lc=bc[1], ylabel="Depth (m)", label="", xrotation=45, 
+    xguidefontsize=12, xlabel=L"R*", border=:box, legend=lg, xscale=:log10, alpha=ab)
+    plot!(Ds[1:50, 1], -zc, lw=ls, lc=dc[1], linestyle=:dot, alpha=ab, label=" D1", legendfontsize=lfs)
 
-    p5 = plot(rstar_s[2][1:50], -zc, lw=4, lc="darkorange", label="",xrotation=45, 
-    xguidefontsize=12, xlabel=L"R*", border=:box, legend=lg, xscale=:log10, yformatter=Returns(""), alpha=0.7)
-    plot!(Ds[1:50, 2], -zc, lw=3, lc="black", linestyle=:dot, alpha=0.7, label=" D2")
+    p6 = plot(Bs[1:50, 1], -zc, lw=ls, lc=bc[1], label=" B1", xrotation=45, xguidefontsize=12, 
+    border=:box, legend=lg, yformatter=Returns(""), xlabel=L"Biomass", alpha=ab, legendfontsize=lfs)
 
-    p6 = plot(Bs[1:50, 1], -zc, lw=4, lc="red3", ylabel="", label=" B1",xrotation=45, 
-    xguidefontsize=12, xlabel=L"Biomass", border=:box, legend=lg, yformatter=Returns(""), alpha=0.7)
-    plot!(Bs[1:50, 2], -zc, lw=4, lc="darkorange", ylabel="", label=" B2", xrotation=45, 
-    xguidefontsize=12, border=:box, legend=lg, alpha=0.7)
+    p7 = plot(rstar_s[2][1:50], -zc, lw=ls, lc=bc[2], label="",xrotation=45, 
+    xguidefontsize=12, xlabel=L"R*", border=:box, legend=lg, xscale=:log10, yformatter=Returns(""), alpha=ab)
+    plot!(Ds[1:50, 2], -zc, lw=ls, lc=dc[2], linestyle=:dot, alpha=ab, label=" D2", legendfontsize=lfs)
 
-    combined = plot(p1, p2, p3, p4, p5, p6,
+    p8 = plot(Bs[1:50, 2], -zc, lw=ls, lc=bc[2], ylabel="", label=" B2",xrotation=45, 
+    xguidefontsize=12, xlabel=L"Biomass", border=:box, legend=lg, yformatter=Returns(""), alpha=ab, legendfontsize=lfs)
+
+    combined = plot(p1, p2, p3, p4, p5, p6, p7, p8,
         fg_legend = :transparent,
         fontfamily="Computer Modern",
-        layout = (2,3),
+        layout = (2,4),
         size=(600,500),
     )
 
-    savefig(combined, "/home/lee/Dropbox/Development/NPZBD_1D/results/plots/rstar/rstarB_$(np)P2B2D.png")
+    savefig(combined, "/home/lee/Dropbox/Development/NPZBD_1D/results/plots/rstar/rsB/rsB_$(fsaven).png")
 
 end
 
-function plot_rstar_P(rstar_w, rstar_s, Pw, Ps, Nw, Ns, ds, np)
+function plot_rstar_P(fsaven, rstar_w, rstar_s, Pw, Ps, Nw, Ns, np)
 
     H = 200
     dz = 10
     zc = [dz/2:dz:(H-dz/2)]
     lg=:bottomright
     tfs=12
-    al=0.7
-    al_ext=0.3
-    linw=5
+    lfs=9
+
 
     if np == 1
-        p1 = plot(rstar_w[1][1:20], -zc, lw=linw, lc="olivedrab3", label="", ylabel="Depth (m)", xrotation=45, 
-        xguidefontsize=12, xlabel="", border=:box, legend=lg, xscale=:log10, title="", alpha=al)
-        plot!(Nw[1:20, 1], -zc, lw=linw, lc="blue3", linestyle=:dot, label=L" N", legend=:bottom)
+        p1 = plot(rstar_w[1][1:20], -zc, lw=ls, lc=pc[1], label="", ylabel="Depth (m)", xrotation=45, 
+        xguidefontsize=12, xlabel="", border=:box, legend=lg, xscale=:log10, title="", alpha=ab)
+        plot!(Nw[1:20, 1], -zc, lw=ls, lc=nc[1], linestyle=:dot, label="", legend=:bottom)
 
-        p2 = plot(Pw[1:20, 1], -zc, lw=linw, lc="olivedrab3", label=L" P1", ylabel="", xrotation=45, 
-        xguidefontsize=12, xlabel="", border=:box, legend=lg, title="", titlefontsize=tfs, yformatter=Returns(""), xlims=(-0.01, 0.6))
+        p2 = plot(Pw[1:20, 1], -zc, lw=ls, lc=pc[1], label="", ylabel="", xrotation=45, 
+        xguidefontsize=12, xlabel="", border=:box, legend=lg, title="", titlefontsize=tfs, yformatter=Returns(""), alpha=ab)
 
-        p3 = plot(rstar_s[1][1:20], -zc, lw=linw, lc="olivedrab3", label="", ylabel="Depth (m)", xrotation=45, 
-        xguidefontsize=12, xlabel=L"R*", border=:box, legend=lg, xscale=:log10, title="", alpha=al)
-        plot!(Ns[1:20, 1], -zc, lw=linw, lc="blue3", linestyle=:dot,label=L" N", legend=:bottom)
+        p3 = plot(rstar_s[1][1:20], -zc, lw=ls, lc=pc[1], label="", ylabel="Depth (m)", xrotation=45, 
+        xguidefontsize=12, xlabel=L"R*", border=:box, legend=lg, xscale=:log10, title="", alpha=ab)
+        plot!(Ns[1:20, 1], -zc, lw=ls, lc=nc[1], linestyle=:dot,label=" N", legend=:bottom, legendfontsize=lfs, alpha=ab)
 
-        p4 = plot(Ps[1:20, 1], -zc, lw=linw, lc="olivedrab3", label=L" P1", ylabel="", xrotation=45, 
-        xguidefontsize=12, xlabel=L"Biomass", border=:box, legend=lg, title="", titlefontsize=tfs, yformatter=Returns(""), xlims=(-0.01, 0.6))
+        p4 = plot(Ps[1:20, 1], -zc, lw=ls, lc=pc[1], label=" P1", ylabel="", xrotation=45, xguidefontsize=12, xlabel=L"Biomass", 
+        border=:box, legend=lg, title="", titlefontsize=tfs, yformatter=Returns(""), legendfontsize=lfs, alpha=ab)
     end
     
     if np == 2
-        p1 = plot(rstar_w[1][1:20], -zc, lw=linw, lc="olivedrab3", label="", ylabel="Depth (m)", xrotation=45, 
+        p1 = plot(rstar_w[1][1:20], -zc, lw=ls, lc=pc[1], label="", ylabel="Depth (m)", xrotation=45, 
         xguidefontsize=12, xlabel="", border=:box, legend=lg, xscale=:log10, title="", titlefontsize=tfs)
-        plot!(rstar_w[2][1:20], -zc, lw=linw, lc="darkgreen",  label="")
-        plot!(Nw[1:20, 1], -zc, lw=linw, lc="blue3", linestyle=:dot, label=L" N", alpha=0.4, legend=:bottom)
+        plot!(rstar_w[2][1:20], -zc, lw=ls, lc=pc[2],  label="")
+        plot!(Nw[1:20, 1], -zc, lw=ls, lc=nc[1], linestyle=:dot, label="", alpha=ab, legend=:bottom)
 
-        p2 = plot(Pw[1:20, 1], -zc, lw=linw, lc="olivedrab3", label=L" P1", ylabel="", xrotation=45, 
-        xguidefontsize=12, xlabel="", border=:box, legend=lg, title="", titlefontsize=tfs, yformatter=Returns(""), xlims=(-0.01, 0.6))
-        plot!(Pw[1:20, 2], -zc, lw=linw, lc="darkgreen",  label=L" P2")
+        p2 = plot(Pw[1:20, 1], -zc, lw=ls, lc=pc[1], label="", ylabel="", xrotation=45, alpha=ab, 
+        xguidefontsize=12, xlabel="", border=:box, legend=lg, title="", titlefontsize=tfs, yformatter=Returns(""))
+        plot!(Pw[1:20, 2], -zc, lw=ls, lc=pc[2],  label="", alpha=ab)
 
-        p3 = plot(rstar_s[1][1:20], -zc, lw=linw, lc="olivedrab3", label="", ylabel="Depth (m)", xrotation=45, 
+        p3 = plot(rstar_s[1][1:20], -zc, lw=ls, lc=pc[1], label="", ylabel="Depth (m)", xrotation=45, alpha=ab, 
         xguidefontsize=12, xlabel=L"R*", border=:box, legend=lg, xscale=:log10, title="", titlefontsize=tfs)
-        plot!(rstar_s[2][1:20], -zc, lw=linw, lc="darkgreen",  label="")
-        plot!(Ns[1:20, 1], -zc, lw=linw, lc="blue3", linestyle=:dot,label=L" N", alpha=0.4, legend=:bottom)
+        plot!(rstar_s[2][1:20], -zc, lw=ls, lc=pc[2], alpha=ab,  label="")
+        plot!(Ns[1:20, 1], -zc, lw=ls, lc=nc[1], linestyle=:dot,label=" N", alpha=ab, legend=:bottom, legendfontsize=lfs)
 
-        p4 = plot(Ps[1:20, 1], -zc, lw=linw, lc="olivedrab3", label=L" P1", ylabel="", xrotation=45, 
-        xguidefontsize=12, xlabel=L"Biomass", border=:box, legend=lg, title="", titlefontsize=tfs, yformatter=Returns(""), xlims=(-0.01, 0.6))
-        plot!(Ps[1:20, 2], -zc, lw=linw, lc="darkgreen",  label=L" P2")
+        p4 = plot(Ps[1:20, 1], -zc, lw=ls, lc=pc[1], label=" P1", ylabel="", xrotation=45, xguidefontsize=12, xlabel=L"Biomass", 
+        border=:box, legend=lg, title="", titlefontsize=tfs, yformatter=Returns(""), alpha=ab, legendfontsize=lfs)
+        plot!(Ps[1:20, 2], -zc, lw=ls, lc=pc[2],  label=" P2", alpha=ab, legendfontsize=lfs)
     end 
 
     if np == 4
-        p1 = plot(rstar_w[2][1:20], -zc, lw=linw, lc="darkgreen", label="", ylabel="Depth (m)", xrotation=45, 
+        p1 = plot(rstar_w[2][1:20], -zc, lw=ls, lc=pc[2], label="", ylabel="Depth (m)", xrotation=45, alpha=ab, 
         xguidefontsize=12, xlabel="", border=:box, legend=lg, xscale=:log10)
-        # plot!(rstar_w[1][1:20], -zc, lw=linw, lc="olivedrab",  label="")
-        # plot!(rstar_w[3][1:20], -zc, lw=linw, lc="red4",  label="")
-        plot!(rstar_w[4][1:20], -zc, lw=linw, lc="cyan4",  label="")
-        plot!(Nw[1:20, 1], -zc, lw=linw, lc="blue3", linestyle=:dot, label=L" N", alpha=al, legend=:bottom)
+        # plot!(rstar_w[1][1:20], -zc, lw=ls, lc=pc[1], alpha=ab,  label="")
+        # plot!(rstar_w[3][1:20], -zc, lw=ls, lc=pc[3], alpha=ab,  label="")
+        plot!(rstar_w[4][1:20], -zc, lw=ls, lc=pc[4], alpha=ab,  label="")
+        plot!(Nw[1:20, 1], -zc, lw=ls, lc=nc[1], linestyle=:dot, alpha=ab, label="", legend=:bottom)
 
-        p2 = plot(Pw[1:20, 1], -zc, lw=linw, lc="olivedrab3", label=L" P1", ylabel="", xrotation=45, 
-        xguidefontsize=12, xlabel="", border=:box, legend=lg, yformatter=Returns(""), linestyle=:dash, alpha=al_ext)
-        plot!(Pw[1:20, 2], -zc, lw=linw, lc="darkgreen",  label=L" P2")
-        plot!(Pw[1:20, 3], -zc, lw=linw, lc="red4",  label=L" P3", linestyle=:dash, alpha=al_ext)
-        plot!(Pw[1:20, 4], -zc, lw=linw, lc="cyan4",  label=L" P4")
+        p2 = plot(Pw[1:20, 1], -zc, lw=ls, lc=pc[1], label="", ylabel="", xrotation=45, 
+        xguidefontsize=12, xlabel="", border=:box, legend=lg, yformatter=Returns(""), linestyle=:dash, alpha=ab_ext)
+        plot!(Pw[1:20, 2], -zc, lw=ls, lc=pc[2], alpha=ab,  label="")
+        plot!(Pw[1:20, 3], -zc, lw=ls, lc=pc[3], label="", linestyle=:dash, alpha=ab_ext)
+        plot!(Pw[1:20, 4], -zc, lw=ls, lc=pc[4], alpha=ab,  label="")
 
-        p3 = plot(rstar_s[1][1:20], -zc, lw=linw, lc="olivedrab3", label="", ylabel="Depth (m)", xrotation=45, 
+        p3 = plot(rstar_s[1][1:20], -zc, lw=ls, lc=pc[1], label="", ylabel="Depth (m)", xrotation=45, alpha=ab, 
         xguidefontsize=12, xlabel=L"R*", border=:box, legend=lg, xscale=:log10, title="", titlefontsize=tfs)
-        # plot!(rstar_s[2][1:20], -zc, lw=linw, lc="darkgreen",  label="")
-        plot!(rstar_s[3][1:20], -zc, lw=linw, lc="red4",  label="")
-        # plot!(rstar_s[4][1:20], -zc, lw=linw, lc="cyan4",  label="")
-        plot!(Ns[1:20, 1], -zc, lw=linw, lc="blue3", linestyle=:dot,label=L" N", alpha=0.4, legend=:bottom)
+        # plot!(rstar_s[2][1:20], -zc, lw=ls, lc=pc[2],  label="")
+        plot!(rstar_s[3][1:20], -zc, lw=ls, lc=pc[3], alpha=ab, label="")
+        # plot!(rstar_s[4][1:20], -zc, lw=ls, lc=pc[4],  label="")
+        plot!(Ns[1:20, 1], -zc, lw=ls, lc=nc[1], linestyle=:dot,label=" N", legend=:bottom, alpha=ab, legendfontsize=lfs)
 
-        p4 = plot(Ps[1:20, 1], -zc, lw=linw, lc="olivedrab3", label=L" P1", ylabel="", xrotation=45, 
-        xguidefontsize=12, xlabel=L"Biomass", border=:box, legend=lg, title="", titlefontsize=tfs, yformatter=Returns(""), xlims=(-0.01, 0.6))
-        plot!(Ps[1:20, 2], -zc, lw=linw, lc="darkgreen",  label=L" P2", linestyle=:dash, alpha=al_ext)
-        plot!(Ps[1:20, 3], -zc, lw=linw, lc="red4",  label=L" P3")
-        plot!(Ps[1:20, 4], -zc, lw=linw, lc="cyan4",  label=L" P4", linestyle=:dash, alpha=al_ext) 
+        p4 = plot(Ps[1:20, 1], -zc, lw=ls, lc=pc[1], label=" P1", ylabel="", xrotation=45, alpha=ab, 
+        xguidefontsize=12, xlabel=L"Biomass", border=:box, legend=lg, title="", titlefontsize=tfs, yformatter=Returns(""), legendfontsize=lfs)
+        plot!(Ps[1:20, 2], -zc, lw=ls, lc=pc[2],  label=" P2", linestyle=:dash, alpha=ab_ext, legendfontsize=lfs)
+        plot!(Ps[1:20, 3], -zc, lw=ls, lc=pc[3],  label=" P3", alpha=ab, legendfontsize=lfs)
+        plot!(Ps[1:20, 4], -zc, lw=ls, lc=pc[4],  label=" P4", linestyle=:dash, alpha=ab_ext, legendfontsize=lfs) 
     end
 
     if np == 8
-        p1 = plot(rstar_w[2][1:20], -zc, lw=linw, lc="darkgreen", label="", ylabel="Depth (m)", xrotation=45, 
-        xguidefontsize=12, xlabel="", border=:box, legend=lg, xscale=:log10, alpha=al)
-        # plot!(rstar_w[1][1:20], -zc, lw=linw, lc="dolivedrab",  label="", alpha=al)
-        # plot!(rstar_w[3][1:20], -zc, lw=linw, lc="red4",  label="", alpha=al)
-        # plot!(rstar_w[4][1:20], -zc, lw=linw, lc="cyan4",  label="", alpha=al)
-        # plot!(rstar_w[5][1:20], -zc, lw=linw, lc="purple",  label="", alpha=al)
-        plot!(rstar_w[6][1:20], -zc, lw=linw, lc="black",  label="", alpha=al)
-        # plot!(rstar_w[7][1:20], -zc, lw=linw, lc="hotpink2",  label="", alpha=al)
-        # plot!(rstar_w[8][1:20], -zc, lw=linw, lc="wheat2",  label="", alpha=al)
-        plot!(Nw[1:20, 1], -zc, lw=linw, lc="blue3", linestyle=:dot, label=L" N", legend=:bottom)
+        p1 = plot(rstar_w[2][1:20], -zc, lw=ls, lc=pc[2], label="", ylabel="Depth (m)", xrotation=45, 
+        xguidefontsize=12, xlabel="", border=:box, legend=lg, xscale=:log10, alpha=ab)
+        # plot!(rstar_w[1][1:20], -zc, lw=ls, lc=pc[1],  label="", alpha=ab)
+        # plot!(rstar_w[3][1:20], -zc, lw=ls, lc=pc[3],  label="", alpha=ab)
+        # plot!(rstar_w[4][1:20], -zc, lw=ls, lc=pc[4],  label="", alpha=ab)
+        # plot!(rstar_w[5][1:20], -zc, lw=ls, lc=pc[5],  label="", alpha=ab)
+        plot!(rstar_w[6][1:20], -zc, lw=ls, lc=pc[6],  label="", alpha=ab)
+        # plot!(rstar_w[7][1:20], -zc, lw=ls, lc=pc[7],  label="", alpha=ab)
+        # plot!(rstar_w[8][1:20], -zc, lw=ls, lc=pc[8],  label="", alpha=ab)
+        plot!(Nw[1:20, 1], -zc, lw=ls, lc=nc[1], linestyle=:dot, label="", alpha=ab, legend=:bottom)
 
-        p2 = plot(Pw[1:20, 1], -zc, lw=linw, lc="olivedrab3", label=L" P1", ylabel="", xrotation=45, 
-        xguidefontsize=12, xlabel="", border=:box, legend=lg, linestyle=:dash, alpha=al_ext,  yformatter=Returns(""), xlims=(-0.01, 0.15))
-        plot!(Pw[1:20, 2], -zc, lw=linw, lc="darkgreen", label=L" P2")
-        plot!(Pw[1:20, 3], -zc, lw=linw, lc="red4", linestyle=:dash, alpha=al_ext,  label=L" P3")
-        plot!(Pw[1:20, 4], -zc, lw=linw, lc="cyan4", linestyle=:dash, alpha=al_ext,   label=L" P4")
-        plot!(Pw[1:20, 5], -zc, lw=linw, lc="purple", linestyle=:dash, alpha=al_ext,   label=L" P5")
-        plot!(Pw[1:20, 6], -zc, lw=linw, lc="black",  label=L" P6")
-        plot!(Pw[1:20, 7], -zc, lw=linw, lc="hotpink2", linestyle=:dash, alpha=al_ext,   label=L" P7")
-        plot!(Pw[1:20, 8], -zc, lw=linw, lc="wheat2", linestyle=:dash, alpha=al_ext,   label=L" P8")
+        p2 = plot(Pw[1:20, 1], -zc, lw=ls, lc=pc[1], label="", ylabel="", xrotation=45, 
+        xguidefontsize=12, xlabel="", border=:box, legend=lg, linestyle=:dash, alpha=ab_ext,  yformatter=Returns(""), xlims=(-0.01, 0.15))
+        plot!(Pw[1:20, 2], -zc, lw=ls, lc=pc[2], alpha=ab, label="")
+        plot!(Pw[1:20, 3], -zc, lw=ls, lc=pc[3], linestyle=:dash, alpha=ab_ext, label="")
+        plot!(Pw[1:20, 4], -zc, lw=ls, lc=pc[4], linestyle=:dash, alpha=ab_ext, label="")
+        plot!(Pw[1:20, 5], -zc, lw=ls, lc=pc[5], linestyle=:dash, alpha=ab_ext, label="")
+        plot!(Pw[1:20, 6], -zc, lw=ls, lc=pc[6], alpha=ab,  label="")
+        plot!(Pw[1:20, 7], -zc, lw=ls, lc=pc[7], linestyle=:dash, alpha=ab_ext, label="")
+        plot!(Pw[1:20, 8], -zc, lw=ls, lc=pc[8], linestyle=:dash, alpha=ab_ext, label="")
 
-        p3 = plot(rstar_s[4][1:20], -zc, lw=linw, lc="cyan4", label="", ylabel="Depth (m)", xrotation=45, 
-        xguidefontsize=12, xlabel=L"R*", border=:box, legend=lg, xscale=:log10, alpha=al)
-        # plot!(rstar_s[1][1:20], -zc, lw=linw, lc="olivedrab3",  label="", alpha=al)
-        # plot!(rstar_s[2][1:20], -zc, lw=linw, lc="darkgreen",  label="", alpha=al)
-        # plot!(rstar_s[3][1:20], -zc, lw=linw, lc="red4",  label="", alpha=al)
-        # plot!(rstar_s[4][1:20], -zc, lw=linw, lc="cyan4",  label="", alpha=al)
-        plot!(rstar_s[5][1:20], -zc, lw=linw, lc="purple",  label="", alpha=al)
-        # plot!(rstar_s[6][1:20], -zc, lw=linw, lc="black",  label="", alpha=al)
-        # plot!(rstar_s[7][1:20], -zc, lw=linw, lc="hotpink2",  label="", alpha=al)
-        # plot!(rstar_s[8][1:20], -zc, lw=linw, lc="wheat2",  label="", alpha=al)
-        plot!(Ns[1:20, 1], -zc, lw=linw, lc="blue3", linestyle=:dot,label=L" N", legend=:bottom)
+        p3 = plot(rstar_s[4][1:20], -zc, lw=ls, lc=pc[4], label="", ylabel="Depth (m)", xrotation=45, 
+        xguidefontsize=12, xlabel=L"R*", border=:box, legend=lg, xscale=:log10, alpha=ab)
+        # plot!(rstar_s[1][1:20], -zc, lw=ls, lc=pc[1],  label="", alpha=ab)
+        # plot!(rstar_s[2][1:20], -zc, lw=ls, lc=pc[2],  label="", alpha=ab)
+        # plot!(rstar_s[3][1:20], -zc, lw=ls, lc=pc[3],  label="", alpha=ab)
+        # plot!(rstar_s[4][1:20], -zc, lw=ls, lc=pc[4],  label="", alpha=ab)
+        plot!(rstar_s[5][1:20], -zc, lw=ls, lc=pc[5],  label="", alpha=ab)
+        # plot!(rstar_s[6][1:20], -zc, lw=ls, lc=pc[6],  label="", alpha=ab)
+        # plot!(rstar_s[7][1:20], -zc, lw=ls, lc=pc[7],  label="", alpha=ab)
+        # plot!(rstar_s[8][1:20], -zc, lw=ls, lc=pc[8],  label="", alpha=ab)
+        plot!(Ns[1:20, 1], -zc, lw=ls, lc=nc[1], linestyle=:dot,label=" N", legend=:bottom, alpha=ab, legendfontsize=lfs)
 
-        p4 = plot(Ps[1:20, 1], -zc, lw=linw, lc="olivedrab3", label=L" P1", ylabel="", xrotation=45, 
-        xguidefontsize=12, xlabel=L"Biomass", border=:box, legend=lg, yformatter=Returns(""), linestyle=:dash, alpha=al_ext)
-        plot!(Ps[1:20, 2], -zc, lw=linw, lc="darkgreen",  label=L" P2", linestyle=:dash, alpha=al_ext)
-        plot!(Ps[1:20, 3], -zc, lw=linw, lc="red4",  label=L" P3", linestyle=:dash, alpha=al_ext)
-        plot!(Ps[1:20, 4], -zc, lw=linw, lc="cyan4",  label=L" P4") 
-        plot!(Ps[1:20, 5], -zc, lw=linw, lc="purple",  label=L" P5")
-        plot!(Ps[1:20, 6], -zc, lw=linw, lc="black",  label=L" P6", linestyle=:dash, alpha=al_ext)
-        plot!(Ps[1:20, 7], -zc, lw=linw, lc="hotpink2",  label=L" P7", linestyle=:dash, alpha=al_ext) 
-        plot!(Ps[1:20, 8], -zc, lw=linw, lc="wheat2",  label=L" P8", linestyle=:dash, alpha=al_ext) 
+        p4 = plot(Ps[1:20, 1], -zc, lw=ls, lc=pc[1], label=" P1", ylabel="", xrotation=45, xguidefontsize=12, xlabel=L"Biomass", 
+        border=:box, legend=lg, yformatter=Returns(""), linestyle=:dash, alpha=ab_ext, legendfontsize=lfs)
+        plot!(Ps[1:20, 2], -zc, lw=ls, lc=pc[2],  label=" P2", linestyle=:dash, alpha=ab_ext, legendfontsize=lfs)
+        plot!(Ps[1:20, 3], -zc, lw=ls, lc=pc[3],  label=" P3", linestyle=:dash, alpha=ab_ext, legendfontsize=lfs)
+        plot!(Ps[1:20, 4], -zc, lw=ls, lc=pc[4],  label=" P4", legendfontsize=lfs, alpha=ab ) 
+        plot!(Ps[1:20, 5], -zc, lw=ls, lc=pc[5],  label=" P5", legendfontsize=lfs, alpha=ab)
+        plot!(Ps[1:20, 6], -zc, lw=ls, lc=pc[6],  label=" P6", linestyle=:dash, alpha=ab_ext, legendfontsize=lfs)
+        plot!(Ps[1:20, 7], -zc, lw=ls, lc=pc[7],  label=" P7", linestyle=:dash, alpha=ab_ext, legendfontsize=lfs) 
+        plot!(Ps[1:20, 8], -zc, lw=ls, lc=pc[8],  label=" P8", linestyle=:dash, alpha=ab_ext, legendfontsize=lfs) 
 
     end
     
@@ -710,7 +718,7 @@ function plot_rstar_P(rstar_w, rstar_s, Pw, Ps, Nw, Ns, ds, np)
     plot_title=L"R* P_N"
     )
 
-    savefig(combined,"/home/lee/Dropbox/Development/NPZBD_1D/results/plots/rstar/rstarP_1N$(np)P.png")
+    savefig(combined,"/home/lee/Dropbox/Development/NPZBD_1D/results/plots/rstar/rsP/rsP_$(fsaven).png")
 
 end
 
@@ -767,7 +775,7 @@ function check_for_negatives(RS)
 
     for i in eachindex(RS)
         RS[i] = ifelse(RS[i] < 0, NaN, RS[i])
-        RS[i] = ifelse(RS[i] > 5, NaN, RS[i])
+        RS[i] = ifelse(RS[i] > 15, NaN, RS[i])
     end
 
     return RS
@@ -789,8 +797,20 @@ end
 # -----------------------------------------------------------------------
 # 1N 8P 6Z 13B 5D
 # -----------------------------------------------------------------------
-# winter = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/Wi100y_230915_22:19_8P6Z13B5D.nc")
-# summer = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/Su100y_230916_11:25_8P6Z13B5D.nc")
+# - ws[1] = 6.0 
+# win_p = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Wi100y_230915_00:03_8P6Z13B5D_ep.nc"
+# sum_p = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Su100y_230915_17:36_8P6Z13B5D_ep.nc"
+
+# - ws[1] = 10.0 
+# win_p = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Wi100y_230915_22:19_8P6Z13B5D_ep.nc"
+# sum_p = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Su100y_230916_11:25_8P6Z13B5D_ep.nc"
+
+# winter = NCDataset(win_p)
+# summer = NCDataset(sum_p)
+# rgx = match(r"(/[A-Z][a-z])(?=\d)", win_p)
+# wp = replace(win_p, rgx[1] => "/WiSu")
+# fsaven = replace(wp, "_ep.nc" => "", "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/" => "")
+
 # CMd = display(winter["CM"][:])
 # GrMd = display(winter["GrM"][:])
 
@@ -814,47 +834,61 @@ end
 # Pwe = extinct(Pww, 8)
 # Pse = extinct(Pss, 8)
 
-# plot_rstar_13B5D(rstarB_w, rstarB_s, Dw, Ds, Bwe, Bse, winter, 13)
-# plot_rstar_P(rstarP_w, rstarP_s, Pwe, Pse, Nw, Ns, winter, 8)
+# plot_rstar_13B5D(fsaven, rstarB_w, rstarB_s, Dw, Ds, Bwe, Bse)
+# plot_rstar_P(fsaven, rstarP_w, rstarP_s, Pwe, Pse, Nw, Ns, 8)
 
 # # -----------------------------------------------------------------------
 # # 1N 4P 3Z 7B 4D
 # # -----------------------------------------------------------------------
-winter = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Wi100y_230827_13:45_4P3Z7B4D_ep.nc")
-summer = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Su100y_230827_17:10_4P3Z7B4D_ep.nc")
-CMd = display(winter["CM"][:])
-GrMd = display(winter["GrM"][:])
+# win_p = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Wi100y_230827_13:45_4P3Z7B4D_ep.nc"
+# sum_p = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Su100y_230827_17:10_4P3Z7B4D_ep.nc"
 
-# Get endpoints and set all biomass values below cut-off (10^-6) equal to cut-off
-Nw, Pw, Zw, Bw, Dw = get_endpoints(winter, ["n", "p", "z", "b", "d"])
-Ns, Ps, Zs, Bs, Ds = get_endpoints(summer, ["n", "p", "z", "b", "d"])
+# rgx = match(r"(/[A-Z][a-z])(?=\d)", win_p)
+# wp = replace(win_p, rgx[1] => "/WiSu")
+# fsaven = replace(wp, "_ep.nc" => "", "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/" => "")
 
-Bww = cut_off(Bw, 7)
-Bss = cut_off(Bs, 7)
-Pww = cut_off(Pw, 4)
-Pss = cut_off(Ps, 4)
+# winter = NCDataset(win_p)
+# summer = NCDataset(sum_p)
+# CMd = display(winter["CM"][:])
+# GrMd = display(winter["GrM"][:])
 
-# Calculate Rstar B
-rstarB_ijw = get_rstar_B(Bww, Zw, winter, 7, 3, "Win")
-rstarB_ijs = get_rstar_B(Bss, Zs, summer, 7, 3, "Sum")
-rstarP_w = get_rstar_P(Pww, Zw, winter, 4, 3, "Win")
-rstarP_s = get_rstar_P(Pss, Zs, summer, 4, 3, "Sum")
+# # Get endpoints and set all biomass values below cut-off (10^-6) equal to cut-off
+# Nw, Pw, Zw, Bw, Dw = get_endpoints(winter, ["n", "p", "z", "b", "d"])
+# Ns, Ps, Zs, Bs, Ds = get_endpoints(summer, ["n", "p", "z", "b", "d"])
 
-Bwe = extinct(Bww, 7)
-Bse = extinct(Bss, 7)
-Pwe = extinct(Pww, 4)
-Pse = extinct(Pss, 4)
+# Bww = cut_off(Bw, 7)
+# Bss = cut_off(Bs, 7)
+# Pww = cut_off(Pw, 4)
+# Pss = cut_off(Ps, 4)
 
-plot_rstar_7B4D(rstarB_ijw, rstarB_ijs, Dw, Ds, Bwe, Bse, winter)
-plot_rstar_P(rstarP_w, rstarP_s, Pwe, Pse, Nw, Ns, winter,  4)
-println("done")
+# # Calculate Rstar B
+# rstarB_ijw = get_rstar_B(Bww, Zw, winter, 7, 3, "Win")
+# rstarB_ijs = get_rstar_B(Bss, Zs, summer, 7, 3, "Sum")
+# rstarP_w = get_rstar_P(Pww, Zw, winter, 4, 3, "Win")
+# rstarP_s = get_rstar_P(Pss, Zs, summer, 4, 3, "Sum")
+
+# Bwe = extinct(Bww, 7)
+# Bse = extinct(Bss, 7)
+# Pwe = extinct(Pww, 4)
+# Pse = extinct(Pss, 4)
+
+# plot_rstar_7B4D(fsaven, rstarB_ijw, rstarB_ijs, Dw, Ds, Bwe, Bse)
+# plot_rstar_P(fsaven, rstarP_w, rstarP_s, Pwe, Pse, Nw, Ns, 4)
+# println("done")
 
 
 # # -----------------------------------------------------------------------
 # # 1N 2P 2Z 2B 2D
 # # -----------------------------------------------------------------------
-# winter = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/out_100y_20230905_2005.nc")
-# summer = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/out_100y_20230905_2301.nc")
+# win_p = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Wi100y_230905_20:05_2P2Z2B2D_ep.nc"
+# sum_p = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Su100y_230905_23:01_2P2Z2B2D_ep.nc"
+
+# rgx = match(r"(/[A-Z][a-z])(?=\d)", win_p)
+# wp = replace(win_p, rgx[1] => "/WiSu")
+# fsaven = replace(wp, "_ep.nc" => "", "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/" => "")
+
+# winter = NCDataset(win_p)
+# summer = NCDataset(sum_p)
 # CMd = display(winter["CM"][:])
 # GrMd = display(winter["GrM"][:])
 
@@ -871,8 +905,8 @@ println("done")
 # # Calculate Rstar 
 # rstarB_ijw = get_rstar_B(Bww, Zw, winter, 2, 2, "Win")
 # rstarB_ijs = get_rstar_B(Bss, Zs, summer, 2, 2, "Sum")
-# rstarP_w = get_rstar_P(Pww, Zw, winter, 2, "Win")
-# rstarP_s = get_rstar_P(Pss, Zs, summer, 2, "Sum")
+# rstarP_w = get_rstar_P(Pww, Zw, winter, 2, 2, "Win")
+# rstarP_s = get_rstar_P(Pss, Zs, summer, 2, 2, "Sum")
 
 # # set low biomass to zero
 # Bwe = extinct(Bww, 2)
@@ -882,114 +916,51 @@ println("done")
 
 
 # # Plot
-# plot_rstar_2B2D(rstarB_ijw, rstarB_ijs, Dw, Ds, Bwe, Bse, winter, 2)
-# plot_rstar_P(rstarP_w, rstarP_s, Pwe, Pse, Nw, Ns, winter,  2)
+# plot_rstar_2B2D(fsaven, rstarB_ijw, rstarB_ijs, Dw, Ds, Bwe, Bse)
+# plot_rstar_P(fsaven, rstarP_w, rstarP_s, Pwe, Pse, Nw, Ns, 2)
 # println("done")
 
 
 # # -----------------------------------------------------------------------
 # # 1N 1P 3Z 2B 2D
 # # -----------------------------------------------------------------------
-# winter = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/out_100y_20230906_1351.nc")
-# summer = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/out_100y_20230906_1413.nc")
-# CMd = display(winter["CM"][:])
-# GrMd = display(winter["GrM"][:])
+win_p = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Wi100y_230906_13:51_1P3Z2B2D_ep.nc"
+sum_p = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Su100y_230906_14:13_1P3Z2B2D_ep.nc"
 
-# # Get endpoints
-# Nw, Pw, Zw, Bw, Dw = get_endpoints(winter, ["n", "p", "z", "b", "d"])
-# Ns, Ps, Zs, Bs, Ds = get_endpoints(summer, ["n", "p", "z", "b", "d"])
+rgx = match(r"(/[A-Z][a-z])(?=\d)", win_p)
+wp = replace(win_p, rgx[1] => "/WiSu")
+fsaven = replace(wp, "_ep.nc" => "", "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/" => "")
 
-# # set all biomass values below cut-off (10^-6) equal to cut-off
-# Bww = cut_off(Bw, 2)
-# Bss = cut_off(Bs, 2)
-# Pww = cut_off(Pw, 1)
-# Pss = cut_off(Ps, 1)
+winter = NCDataset(win_p)
+summer = NCDataset(sum_p)
+CMd = display(winter["CM"][:])
+GrMd = display(winter["GrM"][:])
 
-# # Calculate Rstar 
-# rstarB_ijw = get_rstar_B(Bww, Zw, winter, 2, 3, "Win")
-# rstarB_ijs = get_rstar_B(Bss, Zs, summer, 2, 3, "Sum")
-# rstarPw = get_rstar_P(Pww, Zw, winter, 1, "Win")
-# rstarPs = get_rstar_P(Pss, Zs, summer, 1, "Sum")
+# Get endpoints
+Nw, Pw, Zw, Bw, Dw = get_endpoints(winter, ["n", "p", "z", "b", "d"])
+Ns, Ps, Zs, Bs, Ds = get_endpoints(summer, ["n", "p", "z", "b", "d"])
 
-# Bwe = extinct(Bww, 2)
-# Bse = extinct(Bss, 2)
-# Pwe = extinct(Pww, 1)
-# Pse = extinct(Pss, 1)
+# set all biomass values below cut-off (10^-6) equal to cut-off
+Bww = cut_off(Bw, 2)
+Bss = cut_off(Bs, 2)
+Pww = cut_off(Pw, 1)
+Pss = cut_off(Ps, 1)
 
-# # Plot
-# plot_rstar_2B2D(rstarB_ijw, rstarB_ijs, Dw, Ds, Bwe, Bse, winter, 1)
-# plot_rstar_P(rstarP_w, rstarP_s, Pwe, Pse, Nw, Ns, winter,  1)
-# println("done")
+# Calculate Rstar 
+rstarBw = get_rstar_B(Bww, Zw, winter, 2, 3, "Win")
+rstarBs = get_rstar_B(Bss, Zs, summer, 2, 3, "Sum")
+rstarPw = get_rstar_P(Pww, Zw, winter, 1, 3, "Win")
+rstarPs = get_rstar_P(Pss, Zs, summer, 1, 3, "Sum")
 
+Bwe = extinct(Bww, 2)
+Bse = extinct(Bss, 2)
+Pwe = extinct(Pww, 1)
+Pse = extinct(Pss, 1)
 
-
-# function get_rstar_B(B, Z, ds)
-    
-#     mort_b = b_mortality(B, ds)
-#     grz_b = b_grazing(B, Z, ds)
-#     loss_b = b_loss(mort_b, grz_b)
-#     RstarB_ij = Rstar(loss_b, ds)
-
-#     return RstarB_ij
-
-# end
-
-# function b_mortality(B, ds)
-
-#     mort_b = Any[]
-#     for i in range(1, 7)
-#         push!(mort_b, (ds["m_lb"][i] .+ ds["m_qb"][i] .* B[:,i]))
-#     end
-
-#     return mort_b
-
-# end
+# Plot
+plot_rstar_2B2D(fsaven, rstarBw, rstarBs, Dw, Ds, Bwe, Bse)
+plot_rstar_P(fsaven, rstarPw, rstarPs, Pwe, Pse, Nw, Ns, 1)
+println("done")
 
 
-# function b_grazing(B, Z, ds)
 
-#     GrM = ds["GrM"][:]
-#     grazing = Any[]
-#     g_max = 1.0
-#     K_g = ds["K_g"][3]
-#     K_g_POM = ds["K_g"][2]
-
-#     prey_POM = GrM[2,5]' .*B[:,1]
-#     gb_POM = g_max .* prey_POM ./ (prey_POM .+ K_g_POM)
-#     grz_POM = gb_POM .* Z[:,2] .* GrM[2,5]'  .* B[:,1] ./ prey_POM
-#     push!(grazing, grz_POM)
-
-#     prey = GrM[3,6:end]' .*B[:,2:end]
-#     for i in range(1, 6)
-#         gb_i = g_max .* prey[:,i] ./ (prey[:,i] .+ K_g)
-#         grz_i = gb_i .* Z[:,3] .* GrM[3,i+5]' ./ prey[:,i]
-#         push!(grazing, grz_i)
-#     end
-
-#     return grazing
-
-# end
-
-# function b_loss(mortality, grazing)
-
-#     loss = Any[]
-#     for i in range(1, 7)
-#         push!(loss, mortality[i] .+ grazing[i])
-#     end
-
-#     return loss
-# end
-
-# function Rstar(loss, ds)
-
-#     II, JJ = get_nonzero_axes(ds["CM"][:])
-#     vmax_ij = ds["vmax_ij"][:]
-#     Km_ij = ds["Km_ij"][:]
-
-#     RS = Any[]
-#     for j = axes(II, 1)
-#         push!(RS, Km_ij[II[j],JJ[j]] .* loss[j] ./ (vmax_ij[II[j],JJ[j]] .- loss[j]))
-#     end
-
-#     return RS
-# end

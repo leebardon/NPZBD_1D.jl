@@ -318,6 +318,10 @@ function save_endpoints(n, p, z, b, d, o, prms, season)
     w[:] = prms.wd
     w.attrib["units"] = "sinking rate"
 
+    w = defVar(f, "ws_POM", Float64, ())
+    w[:] = prms.ws_POM
+    w.attrib["units"] = "sinking rate of POM in m/day"
+
     w = defVar(f, "temp_fun", Float64, ("ndepth",))
     w[:] = prms.temp_fun
     w.attrib["units"] = "temp mod to metabolic rate"
@@ -331,6 +335,10 @@ function save_endpoints(n, p, z, b, d, o, prms, season)
     w = defVar(f, "umax_i", Float64, ("np",))
     w[:] = prms.umax_i
     w.attrib["units"] = "m3/mmol/d; max growth rate of p"
+
+    w = defVar(f, "Fg_p", Float64, ("np",))
+    w[:,:] = prms.Fg_p
+    w.attrib["units"] = "per p; fraction proteome assigned to growth"
 
     w = defVar(f, "umax_ij", Float64, ("nn", "np"))
     w[:,:] = prms.umax_ij
@@ -359,6 +367,10 @@ function save_endpoints(n, p, z, b, d, o, prms, season)
     w = defVar(f, "vmax_i", Float64, ("nd",))
     w[:,:] = prms.vmax_i
     w.attrib["units"] = "per d; max uptake rate"
+
+    w = defVar(f, "Fg_b", Float64, ("nb",))
+    w[:,:] = prms.Fg_b
+    w.attrib["units"] = "per b; fraction proteome devoted to growth"
     
     w = defVar(f, "vmax_ij", Float64, ("nd", "nb"))
     w[:,:] = prms.vmax_ij
