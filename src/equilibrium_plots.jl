@@ -65,8 +65,7 @@ end
 function plot_equilib(yr1, yr2, group)
 
     H = 890
-    dz = 10
-    zc = [dz/2:dz:(H-dz/2)]
+    zc = get_zc(H)
     n = get_size([yr1])
     bcols, dcols, pcols, ncols, zcols, ab, ab_ext, ls, lfs, lg = get_plot_vars()
     tfs=9
@@ -99,7 +98,7 @@ function plot_equilib(yr1, yr2, group)
     end
 
     p3 = plot(pct_chg[:, 1], -zc, grid=false, lw=ls, lc=cols[1], labelfontsize=lfs, titlefontsize=tfs, xlabel=L" \% ", 
-    title="% Change", alpha=al, yformatter=Returns(""), label=" $(group)1", legend=lg, xrotation=45, xlims=(-5, 5))
+    title="% Change", alpha=al, yformatter=Returns(""), label=" $(group)1", legend=lg, xrotation=45)
     for i in 2:n[1]
         plot!(pct_chg[:, i], -zc, lw=ls, lc=cols[i], label=" $(group)$(i)", labelfontsize=lfs, alpha=al)
     end
@@ -147,5 +146,5 @@ function equilibrium_test(fsaven, season_num)
 end
 
 
-# fsaven = "results/outfiles/Su100y_230923_19:36_8P6Z13B5D.nc"
-# equilibrium_test(fsaven, 2)
+# fsaven = "results/outfiles/Wi100y_230915_22:19_8P6Z13B5D.nc"
+# equilibrium_test(fsaven, 1)

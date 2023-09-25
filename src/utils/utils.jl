@@ -295,6 +295,17 @@ function get_endpoints(vars, ds=nothing)
     return endpoints
 end
 
+
+function get_zc(H)
+
+    dz = 10
+    zc = [dz/2 : dz : H - dz/2;] 
+
+    return zc
+
+end
+
+
 function set_extinct_to_zero(ds)
 
     dss = copy(ds)

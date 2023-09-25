@@ -1,110 +1,111 @@
 using NCDatasets
-using Plots, ColorSchemes
-using DataFrames, CSV
+using Plots, ColorSchemes, LaTeXStrings
+using DataFrames
 using SparseArrays, LinearAlgebra
-using LaTeXStrings
+
+include("utils/utils.jl")
+include("utils/save_utils.jl")
 
 
-function calc_growthB(B, D, ds, season)
+function growth_curves(fsaven, season)
+
+    Rx = collect(0.1:0.22:21)[1:89]
+
+    # competitor_pairs = arr
+
+    growthB = calc_growthB(B, Rx, ds)
+
+end
+
+
+function calc_growthB(B, Rx, ds)
 
     II, JJ = get_nonzero_axes(ds["CM"][:])
     vmax = ds["vmax_ij"][:]
     Km = ds["Km_ij"][:]
     y = ds["y_ij"][:]
-    temp_fun = get_temp_mod(season)
 
-    R = collect(0.1:0.22:21)[1:89]
     growth = ones(length(B[:,1]), length(B[1,:]))
-    # growth = Any[]
 
     for j = axes(II, 1)
-        # uptake = (vmax[II[j],JJ[j]] .*  D[:,II[j]]) ./ (D[:,II[j]] .+ Km[II[j],JJ[j]])
-        growth[:,j] = y[II[j],JJ[j]] .* (vmax[II[j],JJ[j]] .*  R) ./ (R .+ Km[II[j],JJ[j]])
-        # yield = y[II[j],JJ[j]]
-        # push!(growth, uptake .* yield)
+        growth[:,j] = y[II[j],JJ[j]] .* (vmax[II[j],JJ[j]] .*  Rx) ./ (Rx .+ Km[II[j],JJ[j]])
     end
 
-    return growth, R
+    return growth
 
 end
 
-function plot_growth_over_D(growth, R, biomass, D, lb, R_str)
 
+function plot_growth_curves(growth, biomass, Rx, R, lbl, _run, f_str, loc, lims, cols, type="B")
+
+    a_in=0.6
     depth = 400
     dz = Int(depth/10)
     zc = get_zc(depth)
-    l = @layout [a{0.9h} b{0.3w}]
+    l = @layout [a{0.5h} b{0.3w} ; 
+                c{0.5h} d{0.3w}]
+    ls=5
 
-    n = size(biomass)
-    p1 = plot(R, growth[1], lw=4, lc="olivedrab3", label=lb[1], ylabel="Growth Rate", xrotation=45, 
-    xlabel=L" D (mmol/m^3)", border=:box, title="Growth vs. $R_str")
-    # cmp = cgrad(:coolwarm, categorical = true)
-    plot!(R, growth[2], lw=4, lc="red4", label=lb[2])
-    # for i = 2:n
-    #     plot!(R, growth[i], lw=4, palette=cmp, label=lb[i])
-    # end
+    if type == "P"
 
-    p2 = plot(biomass[1][1:dz], -zc, lw=4, lc="olivedrab3", label=lb[1], xrotation=45, xlabel=L"mmol/m^3", ylabel="Depth (m)", title="OM Conc.")
-    plot!(biomass[2][1:dz], -zc, lw=4, lc="red4", label=lb[2])
-    # for j = 2:n
-        # plot!(biomass[j][1:dz], -zc, lw=4, palette=cmp, label=lb[j])
-    # end
-    plot!(D[1:dz], -zc, lw=4, lc="purple4", ls=:dot, label="$R_str")
+        
+    
+    else
+        p1 = plot(Rx, growth[1], lw=ls, lc=cols[1], xrotation=45, 
+            xlabel="", ylabel="Growth Rate", border=:box, title="Growth Rate on$(lbl[3])", label="")
+            plot!(Rx, growth[2], lw=ls, lc=cols[2], label="")
+            plot!(Rx, [growth[1], growth[2]],
+                frame=:box,
+                alpha=a_in,
+                grid=false,
+                tickfontsize=5,
+                lw=ls, ylabel="", xrotation=45, 
+                lc=[cols[1] cols[2]],
+                xlabel="", title="", label="", xlim=lims[1], ylim=lims[2],
+                inset=bbox(loc[1],loc[2],loc[3],loc[4], :bottom, :right),
+                subplot=2
+            )
 
-    f = plot(p1, p2,
-    fg_legend = :transparent,
-    size=(500,350),
-    layout = l,
-    )
+        p2 = plot(biomass[1][1:dz], -zc, lw=ls, lc=cols[1], label=lbl[1], xrotation=45, xlabel="", ylabel="Depth (m)", title="OM Conc.",frame=:box)
+            plot!(biomass[2][1:dz], -zc, lw=ls, lc=cols[2], label=lbl[2])
+            plot!(R[1][1:dz], -zc, lw=ls, lc=cols[3], ls=:dot, label=lbl[3])
 
-    # savefig(f)
+        p3 = plot(Rx, growth[3], lw=ls, lc=cols[1], ylabel="Growth Rate", xrotation=45, 
+            xlabel=L" mmol/m^3", border=:box, title="", label="")
+            plot!(Rx, growth[4], lw=ls, lc=cols[2], label="")
+            plot!(Rx, [growth[3], growth[4]],
+                frame=:box,
+                grid=false,
+                tickfontsize=5,
+                alpha=a_in,
+                lw=ls, ylabel="", xrotation=45, 
+                lc=[cols[1] cols[2]],
+                xlabel="", title="", label="", xlim=lims[3], ylim=lims[4],
+                inset=bbox(loc[5],loc[6],loc[7],loc[8], :bottom, :right),
+                subplot=2
+            )
+
+        p4 = plot(biomass[3][1:dz], -zc, lw=ls, lc=cols[1], label=lbl[1], xrotation=45, xlabel=L"mmol/m^3", ylabel="Depth (m)", title="",frame=:box)
+            plot!(biomass[4][1:dz], -zc, lw=ls, lc=cols[2], label=lbl[2])
+            plot!(R[2][1:dz], -zc, lw=ls, lc=cols[3], ls=:dot, label=lbl[3])
+    
+
+        f = plot(p1, p2, p3, p4, 
+        fg_legend = :transparent,
+        size=(600,700),
+        layout = l,
+        )
+
+    end
+
+    savefig(f, "/home/lee/Dropbox/Development/NPZBD_1D/results/plots/growth/$(_run)/$(f_str).png")
 
     return f
 
 end
 
-function get_zc(depth)
-
-    zc = [10/2:10:(depth-10/2)]
-
-    return zc
-
-end
-
-
-
-function get_endpoints(ds, vars)
-
-    out = Vector{Any}()
-
-    for v in vars
-        append!(out, [ds["$v"][:,:,end]])
-    end
-
-    return out[1], out[2], out[3], out[4], out[5]
-
-end
-
-function get_nonzero_axes(M)
-
-    Cs = sparse(M)
-    (II, JJ, _) = findnz(Cs) 
-    
-    return II, JJ
-
-end 
-
-function get_temp_mod(season)
-    #fit to SPOT data (approx 20 to 4, approx 16 to 4)
-    if season == "Win"
-        temp_mod = CSV.read("/home/lee/Dropbox/Development/NPZBD_1D/data/temp_mod/win_temp_mod.csv", DataFrame)
-    else
-        temp_mod = CSV.read("/home/lee/Dropbox/Development/NPZBD_1D/data/temp_mod/sum_temp_mod.csv", DataFrame)
-    end
-
-    return Matrix(temp_mod)
-end
-
+fsaven = "results/outfiles/Wi100y_230923_17:23_8P6Z13B5D.nc"
+growth_curves(fsaven, 1)
 
 winter = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Wi100y_230827_13:45_4P3Z7B4D_ep.nc")
 summer = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Su100y_230827_17:10_4P3Z7B4D_ep.nc")

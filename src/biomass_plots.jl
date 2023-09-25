@@ -10,8 +10,7 @@
 function plot_biomasses(fsaven, season_num)
 
     H = 890
-    dz = 10
-    zc = [dz/2:dz:(H-dz/2)]
+    zc = get_zc(H)
 
     ds = NCDataset(fsaven)
     filename = replace(fsaven, ".nc" => "", "results/outfiles/" => "")

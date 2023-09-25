@@ -1,10 +1,10 @@
-# using NCDatasets
-# using Plots, ColorSchemes, LaTeXStrings
-# using DataFrames
-# using SparseArrays, LinearAlgebra
+using NCDatasets
+using Plots, ColorSchemes, LaTeXStrings
+using DataFrames
+using SparseArrays, LinearAlgebra
 
-# winter = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/out_100y_20230827_1345.nc")
-# summer = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/out_100y_20230827_1710.nc")
+winter = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/out_100y_20230827_1345.nc")
+summer = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/out_100y_20230827_1710.nc")
 
 
 function rstar_analysis(P, Z, B, ds)
