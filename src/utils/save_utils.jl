@@ -13,17 +13,30 @@ function set_savefiles(launch_time, season, years, np, nz, nb, nd)
 end
 
 
-function define_dims(ds, prms, nrec1)
+function check_subfolder_exists(filename, parent_folder)
 
-    vars = Dict("nb" => prms.nb, "nd" => prms.nd, "nrec" => nrec1)
+    rgx = r"_[^_]+$"
+    sub_folder = match(rgx, filename)
 
-    for (k, v) in x
-        defDim(ds, k, v)
-    end
+    isdir(parent_folder * sub_folder.match) ? 
+        folder = parent_folder * sub_folder.match : folder = mkdir(parent_folder * sub_folder.match)
 
-    return ds
+    return folder
 
 end
+
+
+# function define_dims(ds, prms, nrec1)
+
+#     vars = Dict("nb" => prms.nb, "nd" => prms.nd, "nrec" => nrec1)
+
+#     for (k, v) in x
+#         defDim(ds, k, v)
+#     end
+
+#     return ds
+
+# end
 
 
 function save_full_run(p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, season_num)
@@ -215,7 +228,6 @@ function save_full_run(p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, seaso
     close(f)
 
 end
-
 
 
 function save_endpoints(n, p, z, b, d, o, prms, season)

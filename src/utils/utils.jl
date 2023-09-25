@@ -7,7 +7,7 @@ function message(v::String, nd::Int64=0, nb::Int64=0, nn::Int64=0, np::Int64=0, 
         "START" => "\n -------------------------------- STARTING PROGRAM ----------------------------------- \n",
         "ST1" => ["Start New Run", "Use Saved Params", "Use Prescribed Model"],
         "ST2" => "\nStart new run, load saved params or run prescribed model?",
-        "TM1" => ["1 year (tt=366)", "10 years (tt=3660)", "30 years (tt=10980)", "100 years (tt=36600)"],
+        "TM1" => ["2 years (tt=732)", "10 years (tt=3660)", "30 years (tt=10980)", "100 years (tt=36600)"],
         "TM2" => "Select Simulation Runtime:",
         "DN" => "\nEnter number of detritus pools (nd): ",
         "BN" => "Enter number of bacteria populations (nb): ",
@@ -277,12 +277,12 @@ function update_tracking_arrs(track_n, track_p, track_z, track_b, track_d, track
 
 end
 
-#TODO fix so it works with both endpoint saving methods
-function get_endpoints(vars, ds=NaN)
+
+function get_endpoints(vars, ds=nothing)
 
     endpoints = Vector{Any}()
 
-    if ds != NaN
+    if ds !== nothing
         for v in vars
             append!(endpoints, [ds["$v"][:,:,end]])
         end
@@ -316,7 +316,7 @@ function get_plot_vars()
     dcols = ["blue3", "black", "maroon", "coral", "orange3"]
     pcols = ["olivedrab3", "darkgreen","red4", "cyan4", "gold3", "black", "hotpink2", "wheat2" ]
     ncols = ["blue2"]
-    zcols = ["black"]
+    zcols = ["black", "slategray4", "deeppink3", "sienna", "mediumpurple3", "darkseagreen"]
     ab = 0.8
     ab_ext = 0.8
     ls = 4

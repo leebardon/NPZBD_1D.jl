@@ -4,6 +4,7 @@
 # using SparseArrays, LinearAlgebra
 
 # include("utils/utils.jl")
+# include("utils/save_utils.jl")
 
 #------------------------------------------------------------------------------
 #                            TEST FOR EQUILIBRIUM
@@ -92,22 +93,23 @@ function plot_equilib(yr1, yr2, group)
     end
 
     p2 = plot(year2[:,1,end], -zc, grid=false, lw=ls, lc=cols[1], title="Final Year", label="", xrotation=45, 
-    titlefontsize=tfs, xlabel=L" mm/m^3", alpha=al, yformatter=Returns(""),)
+    titlefontsize=tfs, xlabel=L" mm/m^3", alpha=al, yformatter=Returns(""))
     for i in 2:n[1]
         plot!(year2[:,i,end], -zc, lw=ls, lc=cols[i], alpha=al, label="")
     end
 
     p3 = plot(pct_chg[:, 1], -zc, grid=false, lw=ls, lc=cols[1], labelfontsize=lfs, titlefontsize=tfs, xlabel=L" \% ", 
-    title="% Change", alpha=al, yformatter=Returns(""), label=" $(group)1", legend=lg, xrotation=45)
+    title="% Change", alpha=al, yformatter=Returns(""), label=" $(group)1", legend=lg, xrotation=45, xlims=(-5, 5))
     for i in 2:n[1]
         plot!(pct_chg[:, i], -zc, lw=ls, lc=cols[i], label=" $(group)$(i)", labelfontsize=lfs, alpha=al)
     end
 
     f = plot(p1, p2, p3,
     layout = [1 1 1],
+    border=:box,
     fg_legend = :transparent,
     size=(600,450),
-    plot_title = "Equilibrium State for $(group)",
+    # plot_title = "$(group))",
     )
 
     return f
@@ -116,25 +118,34 @@ function plot_equilib(yr1, yr2, group)
 end
 
 
-function equilibrium_test(fsaven, years)
+function equilibrium_test(fsaven, season_num)
 
     ds = NCDataset(fsaven)
-    file = replace(fsaven, ".nc" => "", "results/outfiles/" => "")
+    parent_folder = "results/plots/equilib/"
+    filename = replace(fsaven, ".nc" => "", "results/outfiles/" => "")
+    dir = check_subfolder_exists(filename, parent_folder)
+    season_num == 1 ? season = "Winter" : season = "Summer"
 
-    if years > 1
-        final_2_years = final2(ds, ["p", "z", "b", "d", "n"])
+    final_2_years = final2(ds, ["p", "z", "b", "d"])
+    final_yr1 = final2_yr1(final_2_years)
+    final_yr2 = final2_yr2(final_2_years)
+    groups = ["P", "Z", "B", "D"]
 
-        final_yr1 = final2_yr1(final_2_years)
-        final_yr2 = final2_yr2(final_2_years)
+    p1 = plot_equilib(final_yr1[1], final_yr2[1], groups[1])
+    p2 = plot_equilib(final_yr1[2], final_yr2[2], groups[2])
+    p3 = plot_equilib(final_yr1[3], final_yr2[3], groups[3])
+    p4 = plot_equilib(final_yr1[4], final_yr2[4], groups[4])
 
-        groups = ["P", "Z", "B", "D", "N"]
+    f = plot(p1, p2, p3, p4,
+    layout = [1 1 ; 1 1],
+    size=(1200,900),
+    plot_title = "Equilib. States ($(season))",
+    plot_titlefontsize = 24
+    )
 
-        for i in range(length(color_strs))
-            g = groups[i]
-            p = plot_equilib(final_yr1[i], final_yr2[i], g)
-            savefig(p, "results/plots/$(file)_$(g).png")
-        end
-    else
-    end
-
+    savefig(f, "$(dir)/$(filename).png")
 end
+
+
+# fsaven = "results/outfiles/Su100y_230923_19:36_8P6Z13B5D.nc"
+# equilibrium_test(fsaven, 2)

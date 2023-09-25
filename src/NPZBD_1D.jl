@@ -39,9 +39,9 @@
 
         simulation_time = request(message("TM2"), RadioMenu(message("TM1")))
         if simulation_time == 1
-            years = 1
-            tt = 366
-            nrec = 7320
+            years = 2
+            tt = 732
+            nrec = 14640
         elseif simulation_time == 2
             years = 10
             tt = 3660
@@ -265,8 +265,8 @@
     
         save_matrices(CM, CMp, GrM, nd, nb, nn, np, nz)
         plot_biomasses(fsaven, season)
-        equilibrium_test(fsaven, years)
-        # rstar_analysis(fsaven, season)
+        equilibrium_test(fsaven)
+        # RstarB_ij, RstarP = rstar_analysis(fsaven, season)
 
 
         save_prm == 1 ? save_params(params) : exit()
