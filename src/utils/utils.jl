@@ -1,5 +1,5 @@
 
-using DataFrames, NCDatasets, JLD
+using DataFrames, NCDatasets, JLD, Printf
 
 function message(v::String, nd::Int64=0, nb::Int64=0, nn::Int64=0, np::Int64=0, nz::Int64=0, fsaven::String="")
 
@@ -234,6 +234,7 @@ function print_info(prms)
 
 end
 
+
 function set_logger(launch_time)
 
     loginfo = string(Dates.format(launch_time, "yyyymmdd_HHMM"), ".log")
@@ -242,17 +243,6 @@ function set_logger(launch_time)
     return logger
 
 end
-
-
-# function set_savefiles(launch_time, season, years, np, nz, nb, nd)
-
-#     season == 1 ? season_str = "Wi" : season_str = "Su"
-#     fsave = "results/outfiles/$(season_str)$(years)y"
-#     fsaven = string(fsave, "_", Dates.format(launch_time, "yymmdd_HH:MM"), "_$(np)P$(nz)Z$(nb)B$(nd)D.nc")
-
-#     return fsaven
-
-# end
 
 
 function activate_logger(loginfo)
@@ -287,31 +277,68 @@ function update_tracking_arrs(track_n, track_p, track_z, track_b, track_d, track
 
 end
 
-
-function get_endpoints(ds, vars)
+#TODO fix so it works with both endpoint saving methods
+function get_endpoints(vars, ds=NaN)
 
     endpoints = Vector{Any}()
 
-    for v in vars
-        append!(endpoints, [ds["$v"][:,:,end]])
+    if ds != NaN
+        for v in vars
+            append!(endpoints, [ds["$v"][:,:,end]])
+        end
+    else
+        for v in vars
+            append!(endpoints, [v[:,:,end]])
+        end
     end
 
     return endpoints
 end
 
-function get_endpoints_save(vars)
+function set_extinct_to_zero(ds)
 
-    endpoints = Vector{Any}()
+    dss = copy(ds)
+    ex = 10^-6
+    dss .= ifelse.(dss .<= ex, 0.0, dss)
 
-    for v in vars
-        append!(endpoints, [v[:,:,end]])
-    end
+    return dss
 
-    return endpoints
+end
+
+#------------------------------------------------------------------------
+#                             PLOT UTILS 
+#------------------------------------------------------------------------
+
+function get_plot_vars()
+
+    bcols = ["cyan3", "darkorange", "indigo", "coral4", "lightcyan4", "magenta2", "thistle", "seagreen4",
+    "darkkhaki", "purple", "crimson",  "yellow3", "navajowhite4"]
+    dcols = ["blue3", "black", "maroon", "coral", "orange3"]
+    pcols = ["olivedrab3", "darkgreen","red4", "cyan4", "gold3", "black", "hotpink2", "wheat2" ]
+    ncols = ["blue2"]
+    zcols = ["black"]
+    ab = 0.8
+    ab_ext = 0.8
+    ls = 4
+    lfs = 9
+    lg = :bottomright
+    
+    return bcols, dcols, pcols, ncols, zcols, ab, ab_ext, ls, lfs, lg
+
 end
 
 
+function get_size(arr)
 
+    out = Vector{Int}()
+    
+    for a in arr
+        append!(out, size(a, 2))
+    end
+
+    return out
+
+end
 
 
 # BELOW WAS INSERTED INTO FUNCTIONS TO TRACE NAN AND INF WEIRDNESS - CAUSED BY USING UNDEF TO 

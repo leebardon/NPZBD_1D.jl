@@ -225,7 +225,7 @@ function save_endpoints(n, p, z, b, d, o, prms, season)
     path = joinpath(outdir, ep_path) 
     println("\nSaving endpoints to: ", path)
 
-    ep = get_endpoints_save([n, p, z, b, d, o])
+    ep = get_endpoints([n, p, z, b, d, o])
     n, p, z, b, d, o = ep[1], ep[2], ep[3], ep[4], ep[5], ep[6]
 
     f = NCDataset(path, "c") 

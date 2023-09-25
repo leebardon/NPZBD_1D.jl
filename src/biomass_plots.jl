@@ -1,16 +1,18 @@
 
-using NCDatasets
-using Plots, Colors, LaTeXStrings
-using DataFrames
+# using NCDatasets
+# using Plots, Colors, LaTeXStrings
+# using DataFrames
+
+# include("utils/utils.jl")
 
 
 function plot_biomasses(fsaven, season_num)
 
     ds = NCDataset(fsaven)
-    # file = replace(fsaven, ".nc" => "", "results/outfiles/" => "")
-    file = replace(fsaven, ".nc" => "", "results/outfiles/endpoints/" => "")
+    file = replace(fsaven, ".nc" => "", "results/outfiles/" => "")
+    # file = replace(fsaven, ".nc" => "", "results/outfiles/endpoints/" => "")
     season_num == 1 ? season = "Winter" : season = "Summer"
-    ep = get_endpoints(ds, ["n", "p", "z", "b", "d"])
+    ep = get_endpoints(["n", "p", "z", "b", "d"], ds)
     n, p, z, b, d = ep[1], ep[2], ep[3], ep[4], ep[5]
 
     H = 890
@@ -24,6 +26,7 @@ function plot_biomasses(fsaven, season_num)
     savefig(f2,"results/plots/bmass_individual/$(file).png")
 
 end
+
 
 function plot_stacked(p, b, z, d, n, zc)
 
@@ -99,7 +102,6 @@ function plot_individual(b, d, z, p, zc, season)
         end
     end
 
-
     f2 = plot(p1, p2, p3, p4,
             layout = [1 1 1 1],
             fg_legend = :transparent,
@@ -119,54 +121,59 @@ function growth_plots()
 end
 
 
+function equilib_plots()
+
+
+end
+
 
 # ----------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------
 
-function get_size(arr)
+# function get_size(arr)
 
-    out = Vector{Int}()
+#     out = Vector{Int}()
     
-    for a in arr
-        append!(out, size(a, 2))
-    end
+#     for a in arr
+#         append!(out, size(a, 2))
+#     end
 
-    return out
+#     return out
 
-end
-
-
-function get_endpoints(ds, vars)
-
-    out = Vector{Any}()
-
-    for v in vars
-        append!(out, [ds["$v"][:,:,end]])
-    end
-
-    return out
-
-end
+# end
 
 
-function get_plots_vars()
+# function get_endpoints(ds, vars)
 
-    bc= ["cyan3", "darkorange", "indigo", "coral4", "lightcyan4", "magenta2", "orange4", "seagreen4",
-    "darkkhaki", "purple", "crimson",  "azure4", "turquoise1"]
-    dc= ["blue3", "black", "maroon", "navy", "brown4"]
-    pc = ["olivedrab3", "darkgreen","red4", "cyan4", "purple", "black", "hotpink2", "wheat2" ]
-    nc = ["blue2"]
-    ab=0.8
-    ab_ext=0.8
-    ls=5
-    lfs=9
-    lg=:bottomright
+#     out = Vector{Any}()
+
+#     for v in vars
+#         append!(out, [ds["$v"][:,:,end]])
+#     end
+
+#     return out
+
+# end
+
+
+# function get_plots_vars()
+
+#     bc= ["cyan3", "darkorange", "indigo", "coral4", "lightcyan4", "magenta2", "orange4", "seagreen4",
+#     "darkkhaki", "purple", "crimson",  "azure4", "turquoise1"]
+#     dc= ["blue3", "black", "maroon", "navy", "brown4"]
+#     pc = ["olivedrab3", "darkgreen","red4", "cyan4", "purple", "black", "hotpink2", "wheat2" ]
+#     nc = ["blue2"]
+#     ab=0.8
+#     ab_ext=0.8
+#     ls=5
+#     lfs=9
+#     lg=:bottomright
     
-    return bc, dc, pc, nc, ab, ab_ext, ls, lfs, lg
+#     return bc, dc, pc, nc, ab, ab_ext, ls, lfs, lg
 
-end
+# end
 
-# outfile = "results/outfiles/endpoints/Su100y_230916_11:25_8P6Z13B5D_ep.nc"
+# outfile = "results/outfiles/endpoints/Su100y_230923_19:36_8P6Z13B5D_ep.nc"
 # plot_biomasses(outfile, 2)
 
 # default(show = true)

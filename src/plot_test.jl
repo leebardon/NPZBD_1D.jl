@@ -149,30 +149,6 @@ end
 # ----------------------------------------------------------------------------------
 # ----------------------------------------------------------------------------------
 
-function get_size(arr)
-
-    out = Vector{Int}()
-    
-    for a in arr
-        append!(out, size(a, 2))
-    end
-
-    return out
-
-end
-
-
-function get_endpoints(ds, vars)
-
-    out = Vector{Any}()
-
-    for v in vars
-        append!(out, [ds["$v"][:,:,end]])
-    end
-
-    return out[1], out[2], out[3], out[4], out[5], out[6]
-
-end
 
 
 # default(show = true)

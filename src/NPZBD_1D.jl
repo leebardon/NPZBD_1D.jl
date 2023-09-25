@@ -7,7 +7,7 @@
     using SparseArrays, Distributions, LinearAlgebra
     using Statistics, StatsBase, Random, StableRNGs
     using DataFrames, NCDatasets, JLD
-    using Plots, ColorSchemes, Colors
+    using Plots, ColorSchemes, Colors, LaTeXStrings
     using Distributed
 
     GlobalRNG = StableRNG(123)
@@ -18,15 +18,16 @@
     include("model.jl")
     include("params.jl")
     include("physics.jl")
-    include("utils.jl")
-    include("save_utils.jl")
     include("consumption_matrix.jl")
     include("grazing_matrix.jl")
     include("traits.jl")
     include("integrate.jl")
     include("prescribed.jl")
     include("biomass_plots.jl")
+    include("equilibrium_plots.jl")
     include("save_params.jl")
+    include("utils/utils.jl")
+    include("utils/save_utils.jl")
 
     # include("plot_test.jl")
 
@@ -264,6 +265,9 @@
     
         save_matrices(CM, CMp, GrM, nd, nb, nn, np, nz)
         plot_biomasses(fsaven, season)
+        equilibrium_test(fsaven, years)
+        # rstar_analysis(fsaven, season)
+
 
         save_prm == 1 ? save_params(params) : exit()
 

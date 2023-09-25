@@ -1,10 +1,9 @@
+# using NCDatasets
+# using Plots, ColorSchemes, LaTeXStrings
+# using DataFrames
+# using SparseArrays, LinearAlgebra
 
-using NCDatasets
-using Plots, ColorSchemes, LaTeXStrings
-using DataFrames
-using SparseArrays, LinearAlgebra
-
-include("utils/utils.jl")
+# include("utils/utils.jl")
 
 #------------------------------------------------------------------------------
 #                            TEST FOR EQUILIBRIUM
@@ -31,7 +30,7 @@ function final2_yr1(ds)
         append!(final2_yr1, [ds[i][:, :, 1:7320]])
     end
 
-    return final2_yr1[1], final2_yr1[2], final2_yr1[3], final2_yr1[4]
+    return [final2_yr1[1], final2_yr1[2], final2_yr1[3], final2_yr1[4]]
 
 end
 
@@ -44,7 +43,7 @@ function final2_yr2(ds)
         append!(final2_yr2, [ds[j][:, :, end-7320:end]])
     end
 
-    return final2_yr2[1], final2_yr2[2], final2_yr2[3], final2_yr2[4]
+    return [final2_yr2[1], final2_yr2[2], final2_yr2[3], final2_yr2[4]]
 
 end
 
@@ -70,7 +69,7 @@ function plot_equilib(yr1, yr2, group)
     n = get_size([yr1])
     bcols, dcols, pcols, ncols, zcols, ab, ab_ext, ls, lfs, lg = get_plot_vars()
     tfs=9
-    al=0.5
+    al=0.8
 
     if group == "P"
         cols = pcols
@@ -111,29 +110,31 @@ function plot_equilib(yr1, yr2, group)
     plot_title = "Equilibrium State for $(group)",
     )
 
-    savefig(f, "test.png")
+    return f
+
 
 end
 
 
-# function rstar_plots(fsaven, season)
+function equilibrium_test(fsaven, years)
 
-#     ds = NCDataset(fsaven)
-#     file = replace(fsaven, ".nc" => "", "results/outfiles/endpoints/" => "")
-#     season_num == 1 ? season = "Winter" : season = "Summer"
-#     ep = get_endpoints(["n", "p", "z", "b", "d"], ds)
-#     n, p, z, b, d = ep[1], ep[2], ep[3], ep[4], ep[5]
+    ds = NCDataset(fsaven)
+    file = replace(fsaven, ".nc" => "", "results/outfiles/" => "")
 
-# end
+    if years > 1
+        final_2_years = final2(ds, ["p", "z", "b", "d", "n"])
 
+        final_yr1 = final2_yr1(final_2_years)
+        final_yr2 = final2_yr2(final_2_years)
 
-winter = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/Wi100y_230923_17:23_8P6Z13B5D.nc")
-summer = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/Su100y_230923_19:36_8P6Z13B5D.nc")
+        groups = ["P", "Z", "B", "D", "N"]
 
-final2_w = final2(winter, ["p", "z", "b", "d" ])
-final2_s = final2(summer, ["p", "z", "b", "d" ])
+        for i in range(length(color_strs))
+            g = groups[i]
+            p = plot_equilib(final_yr1[i], final_yr2[i], g)
+            savefig(p, "results/plots/$(file)_$(g).png")
+        end
+    else
+    end
 
-pw_yr1, zw_yr1, bw_yr1, dw_yr1 = final2_yr1(final2_w)
-pw_yr2, zw_yr2, bw_yr2, dw_yr2 = final2_yr2(final2_w)
-
-plot_equilib(pw_yr1, pw_yr2, "P")
+end

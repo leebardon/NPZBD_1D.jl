@@ -7,6 +7,12 @@ winter = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/out_
 summer = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/out_100y_20230827_1710.nc")
 
 
+function rstar_analysis()
+
+
+end 
+
+
 function get_rstar_B(B, Z, ds)
     
     mort_b = b_mortality(B, ds)

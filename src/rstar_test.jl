@@ -815,8 +815,8 @@ end
 # GrMd = display(winter["GrM"][:])
 
 # # Get endpoints and set all biomass values below cut-off (10^-6) equal to cut-off
-# Nw, Pw, Zw, Bw, Dw = get_endpoints(winter, ["n", "p", "z", "b", "d"])
-# Ns, Ps, Zs, Bs, Ds = get_endpoints(summer, ["n", "p", "z", "b", "d"])
+# Nw, Pw, Zw, Bw, Dw = get_endpoints(["n", "p", "z", "b", "d"], winter)
+# Ns, Ps, Zs, Bs, Ds = get_endpoints(["n", "p", "z", "b", "d"], summer)
 
 # Bww = cut_off(Bw, 13)
 # Bss = cut_off(Bs, 13)
@@ -853,8 +853,8 @@ end
 # GrMd = display(winter["GrM"][:])
 
 # # Get endpoints and set all biomass values below cut-off (10^-6) equal to cut-off
-# Nw, Pw, Zw, Bw, Dw = get_endpoints(winter, ["n", "p", "z", "b", "d"])
-# Ns, Ps, Zs, Bs, Ds = get_endpoints(summer, ["n", "p", "z", "b", "d"])
+# Nw, Pw, Zw, Bw, Dw = get_endpoints(["n", "p", "z", "b", "d"], winter)
+# Ns, Ps, Zs, Bs, Ds = get_endpoints(["n", "p", "z", "b", "d"], summer)
 
 # Bww = cut_off(Bw, 7)
 # Bss = cut_off(Bs, 7)
@@ -893,8 +893,8 @@ end
 # GrMd = display(winter["GrM"][:])
 
 # # Get endpoints 
-# Nw, Pw, Zw, Bw, Dw = get_endpoints(winter, ["n", "p", "z", "b", "d"])
-# Ns, Ps, Zs, Bs, Ds = get_endpoints(summer, ["n", "p", "z", "b", "d"])
+# Nw, Pw, Zw, Bw, Dw = get_endpoints(["n", "p", "z", "b", "d"], winter)
+# Ns, Ps, Zs, Bs, Ds = get_endpoints(["n", "p", "z", "b", "d"], summer)
 
 # # set all biomass values below cut-off (10^-6) equal to cut-off
 # Bww = cut_off(Bw, 2)
@@ -937,8 +937,8 @@ CMd = display(winter["CM"][:])
 GrMd = display(winter["GrM"][:])
 
 # Get endpoints
-Nw, Pw, Zw, Bw, Dw = get_endpoints(winter, ["n", "p", "z", "b", "d"])
-Ns, Ps, Zs, Bs, Ds = get_endpoints(summer, ["n", "p", "z", "b", "d"])
+Nw, Pw, Zw, Bw, Dw = get_endpoints(["n", "p", "z", "b", "d"], winter)
+Ns, Ps, Zs, Bs, Ds = get_endpoints(["n", "p", "z", "b", "d"], summer)
 
 # set all biomass values below cut-off (10^-6) equal to cut-off
 Bww = cut_off(Bw, 2)
