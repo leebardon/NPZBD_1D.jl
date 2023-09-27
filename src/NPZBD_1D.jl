@@ -23,9 +23,9 @@
     include("traits.jl")
     include("integrate.jl")
     include("prescribed.jl")
-    include("biomass_plots.jl")
-    include("equilibrium_plots.jl")
-    include("save_params.jl")
+    include("plotting/biomass_plots.jl")
+    include("plotting/equilibrium_plots.jl")
+    include("utils/save_params.jl")
     include("utils/utils.jl")
     include("utils/save_utils.jl")
 

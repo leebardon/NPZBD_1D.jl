@@ -1,18 +1,22 @@
 using NCDatasets
 using Plots, ColorSchemes, LaTeXStrings
-using DataFrames
+using DataFrames, CSV
 using SparseArrays, LinearAlgebra
 
-winter = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/out_100y_20230827_1345.nc")
-summer = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/out_100y_20230827_1710.nc")
+include("utils/utils.jl")
 
+# winter = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/out_100y_20230827_1345.nc")
+# summer = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/out_100y_20230827_1710.nc")
 
-function rstar_analysis(P, Z, B, ds)
+function rstar_analysis(ds, season=nothing)
 
-    RstarB_ij = get_rstar_B(B, Z, ds, nb, nz, season)
-    RstarP = get_rstar_P(P, Z, ds, np, nz, season)
+    N, P, Z, B, D = get_endpoints(["n", "p", "z", "b", "d"], ds1)
+    np = get_size([P])[1]
 
-    return RstarB_ij, RstarP
+    rs1 = get_rstar_B(B, Z, np, ds, season)
+    # RstarP = get_rstar_P(P, Z, ds, season)
+
+    return rs1, rs2
 
 end 
 
@@ -21,164 +25,78 @@ end
 #-----------------------------------------------------------------------------------
 #                                     RSTAR B 
 #-----------------------------------------------------------------------------------
-function get_rstar_B(B, Z, ds, nb, nz, season=NaN)
+function get_rstar_B(B, Z, np, ds, season=nothing)
+
+    nb, nz = get_size([B])[1], get_size([Z])[1]
     
-    mort_b = b_mortality(B, ds)
-    grz_b = b_grazing(B, Z, ds)
-    loss_b = b_loss(mort_b, grz_b)
-    RstarB_ij = Rstar(loss_b, ds, season)
+    mort_b = b_mortality(B, ds, nb)
+    grz_b = b_grazing(B, Z, np, nb, nz, ds)
+    loss_b = b_loss(mort_b, grz_b, nb)
+    RstarB_ij = RstarB(loss_b, ds, season)
 
     return RstarB_ij
 
 end
 
 
-function b_mortality(B, ds)
+function b_mortality(B, ds, nb)
 
-    n = get_size([B])
-
-    mort_b = Any[]
-    for i in range(1, n)
-        push!(mort_b, (ds["m_lb"][i] .+ ds["m_qb"][i] .* B[:,i]))
+    ngrid = length(B[:,1])
+    mort_b = zeros(Float64, ngrid, nb) 
+    for i in range(1, nb)
+        mort_b[:, i] += (ds["m_lb"][i] .+ ds["m_qb"][i] .* B[:,i])
     end
 
     return mort_b
 
 end
 
-# function get_prey(GrM, B)
-#     B_dom = B[:,2:end]
-#     GrM_dom = GrM[4:end,10:end]
 
-#     for (i, row) in enumerate(eachrow(GrM_dom))
-#         for (j, col) in enumerate(eachcol(GrM_dom))
-#             if GrM_dom[i, j] > 0
-#                 prey = GrM[i, j] .* B[:,j]
-#             end
-#         end
-#     end
-# end
+function b_grazing(B, Z, np, nb, nz, ds)
 
-function b_grazing(B, Z, ds)
-    #NOTE this all needs to be generalized / scaled !! 
     GrM = ds["GrM"][:]
-    grazing = Any[]
     g_max = 1.0
     K_g = 1.0
+    ngrid = length(B[:,1])
 
-    nb = get_size([B])
-    nz = get_size([Z])
-
-    #------- for 1N 8P 6Z 13B 5D
-    if nb == 13
-        # NOTE length(B[:,1]) = prms.ngrid
-        grazing_zi = zeros(Float64, length(B[:,1]), nb) 
-        np = 8
-        for z in range(1, nz)
-            if sum(GrM[z,np+1:end]) > 0 
-                prey = GrM[z,np+1:end]' .*B[:,1:end]
-                g = g_max .* prey ./ (prey .+ K_g)
-                grazing_zi += (g .* Z[:,z] .* GrM[z,np+1:end]') ./ prey
-                grazing_zi = replace!(grazing_zi, NaN => 0.0)
-                push!(grazing, grazing_zi)
-            end   
-        end
-        return sum(grazing)
+    grazing = Any[]
+    grazing_zi = zeros(Float64, ngrid, nb) 
+    for z in range(1, nz)
+        if sum(GrM[z,np+1:end]) > 0 
+            prey = GrM[z,np+1:end]' .*B[:,1:end]
+            g = g_max .* prey ./ (prey .+ K_g)
+            grazing_zi += (g .* Z[:,z] .* GrM[z,np+1:end]') ./ prey
+            grazing_zi = replace!(grazing_zi, NaN => 0.0)
+            push!(grazing, grazing_zi)
+        end   
     end
-
-    #------- for 1N 4P 3Z 7B 4D
-    if nb==7
-        np=4
-        prey_POM = GrM[2,5]' .* B[:,1]
-        gb_POM = g_max .* prey_POM ./ (prey_POM .+ K_g)
-        grz_POM = (gb_POM .* Z[:,2] .* GrM[2,5]' ./ prey_POM) 
-        push!(grazing, grz_POM)
-
-        prey = GrM[3,6:end]' .* B[:,2:end]
-        for i in range(1, nb-1)
-            gb_i = g_max .* prey[:,i] ./ (prey[:,i] .+ K_g)
-            grz_i = (gb_i .* Z[:,3] .* GrM[3,i+(np+1)]' ./ prey[:,i]) 
-
-            if any(isnan.(grz_i)) 
-                return true
-            end
-
-            push!(grazing, grz_i)
-        end
-    
-        return grazing
-    
-    else
-
-        #----- for 1N 2P 2Z 2B 2D
-        if nz == 2
-            K_g = ds["K_g"][2]
-            prey = GrM[2,3:end]' .*B[:,1:end]
-
-            for i in range(1, nb)
-                gb_i = g_max .* prey[:,i] ./ (prey[:,i] .+ K_g)
-                grz_i = (gb_i .* Z[:,2] .* GrM[2,i+2]' ./ prey[:,i])
-                push!(grazing, grz_i)
-            end
-
-        #----- for 1N 1P 3Z 2B 2D
-        elseif nz == 3
-            K_g = [ds["K_g"][2], ds["K_g"][3]]
-            prey = 1.0 .*B[:,1:2]
-
-            for i in range(1, nb)
-                gb_i = g_max .* prey[:,i] ./ (prey[:,i] .+ K_g[i])
-                grz_i = (gb_i .* Z[:,i+1] .* 1.0 ./ prey[:,i]) 
-                push!(grazing, grz_i)
-            end
-        else
-        end
-    end
-
-    return grazing
-
+    return sum(grazing)
 end
 
 
-function b_loss(mortality, grazing)
+function b_loss(mortality, grazing, nb)
 
-    nb = get_size([B])
-
-    if nb == 13
-        loss = zeros(Float64, 89, nb)
-        for i in range(1, nb)
-            loss[:, i] = mortality[i] .+ grazing[:, i]
-        end
-    else
-        loss = Any[]
-        for i in range(1, nb)
-            push!(loss, mortality[i] .+ grazing[i])
-        end
+    loss = zeros(Float64, 89, nb)
+    for i in range(1, nb)
+        loss[:, i] = mortality[:, i] .+ grazing[:, i]
     end
+
     return loss
 end
 
 
 function RstarB(loss, ds, season)
 
-    season != NaN ? temp_mod = get_temp_mod(season) : temp_mod = ds["temp_fun"][:]
+    season !== nothing ? temp_mod = get_temp_mod(season) : temp_mod = ds["temp_fun"][:]
 
     vmax_ij = ds["vmax_ij"][:]
     Km_ij = ds["Km_ij"][:]
     yield = ds["y_ij"][:]
-    temp_mod = get_temp_mod(season)
     II, JJ = get_nonzero_axes(ds["CM"][:])
     RS = Any[]
 
-    nb = get_size([B])
-    if nb == 13
-        for j = axes(II, 1)
-            push!(RS, Km_ij[II[j],JJ[j]] .* loss[:, j] ./ (yield[II[j],JJ[j]] .* vmax_ij[II[j],JJ[j]] .* temp_mod .- loss[:, j]))
-        end
-    else
-        for j = axes(II, 1)
-            push!(RS, Km_ij[II[j],JJ[j]] .* loss[j] ./ (yield[II[j],JJ[j]] .* vmax_ij[II[j],JJ[j]] .* temp_mod .- loss[j]))
-        end
+    for j = axes(II, 1)
+        push!(RS, Km_ij[II[j],JJ[j]] .* loss[:, j] ./ (yield[II[j],JJ[j]] .* vmax_ij[II[j],JJ[j]] .* temp_mod .- loss[:, j]))
     end
 
     for i in range(1, length(RS))
@@ -190,6 +108,16 @@ function RstarB(loss, ds, season)
 end
 
 
+function get_temp_mod(season)
+    #fit to SPOT data (approx 20 to 4, approx 16 to 4)
+    if season == "Win"
+        temp_mod = CSV.read("/home/lee/Dropbox/Development/NPZBD_1D/data/temp_mod/win_temp_mod.csv", DataFrame)
+    else
+        temp_mod = CSV.read("/home/lee/Dropbox/Development/NPZBD_1D/data/temp_mod/sum_temp_mod.csv", DataFrame)
+    end
+
+    return Matrix(temp_mod)
+end
 
 #-----------------------------------------------------------------------------------
 #                                     RSTAR P 
@@ -326,4 +254,9 @@ end
 # nw, pw, zw, bw, dw = get_endpoints(winter, ["n", "p", "z", "b", "d"])
 # ns, ps, zs, bs, ds = get_endpoints(summer, ["n", "p", "z", "b", "d"])
 
-# rs = get_rstar_B(bw, zw, winter)
+
+ds1 = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Wi100y_230923_17:23_8P6Z13B5D_ep.nc")
+ds2 = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Wi100y_230905_20:05_2P2Z2B2D_ep.nc")
+
+# rs1_new, rs1_old = rstar_analysis(ds1, ds1)
+rs2_new, rs2_old = rstar_analysis(ds2, ds2, "Win")

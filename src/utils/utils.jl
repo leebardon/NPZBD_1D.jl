@@ -122,66 +122,6 @@ function save_matrices(M1, M2, M3, nd, nb, nn, np, nz)
 end
 
 
-function test_vals(arr)
-
-    e_msg = "\n Nan or inf found in timestep "
-    w_msg = "\n Weird values found in timestep "
-    check = run_checks(arr)
-
-    return check, arr, e_msg, w_msg
-
-end
-
-
-function run_checks(vals)
-
-    for x in vals
-        if nan_or_inf(x)
-            return "e"
-        elseif big_or_small(x)
-            return "w"
-        end
-    end
-
-end
-
-
-function nan_or_inf(x)
-
-    if typeof(x) == Float64 || typeof(x) == Int64
-        if isnan(x) || !isfinite(x)
-            return true
-        end
-    else
-        if any(isnan.(x)) || any(isinf.(x))
-            return true
-        end
-    end
-
-    return false
-
-end
-
-
-function big_or_small(x)
-
-    if typeof(x) == Float64 || typeof(x) == Int64
-        if x > 1e10 || x < -1e10 
-            return true
-        end
-    else
-        for i in x
-            if i > 1e10 || i < -1e10
-                return true
-            end
-        end
-    end
-
-    return false
-
-end
-
-
 function get_matrix(Mtype, nd, nb, nn, np, nz) 
     
     if Mtype == "CM"
@@ -316,6 +256,18 @@ function set_extinct_to_zero(ds)
 
 end
 
+
+function check_for_negatives(RS)
+
+    for i in eachindex(RS)
+        RS[i] = ifelse(RS[i] < 0, NaN, RS[i])
+        RS[i] = ifelse(RS[i] > 15, NaN, RS[i])
+    end
+
+    return RS
+
+end
+
 #------------------------------------------------------------------------
 #                             PLOT UTILS 
 #------------------------------------------------------------------------
@@ -351,10 +303,76 @@ function get_size(arr)
 
 end
 
+function get_nonzero_axes(Mat)
+
+    Cs = sparse(Mat)
+    (II, JJ, _) = findnz(Cs) 
+    
+    return II, JJ
+
+end 
 
 # BELOW WAS INSERTED INTO FUNCTIONS TO TRACE NAN AND INF WEIRDNESS - CAUSED BY USING UNDEF TO 
 # INITIALISE EMPTY ARRS TO BE LATER USED DURING INTEGRATION
 
+# function test_vals(arr)
+
+#     e_msg = "\n Nan or inf found in timestep "
+#     w_msg = "\n Weird values found in timestep "
+#     check = run_checks(arr)
+
+#     return check, arr, e_msg, w_msg
+
+# end
+
+
+# function run_checks(vals)
+
+#     for x in vals
+#         if nan_or_inf(x)
+#             return "e"
+#         elseif big_or_small(x)
+#             return "w"
+#         end
+#     end
+
+# end
+
+
+# function nan_or_inf(x)
+
+#     if typeof(x) == Float64 || typeof(x) == Int64
+#         if isnan(x) || !isfinite(x)
+#             return true
+#         end
+#     else
+#         if any(isnan.(x)) || any(isinf.(x))
+#             return true
+#         end
+#     end
+
+#     return false
+
+# end
+
+
+# function big_or_small(x)
+
+#     if typeof(x) == Float64 || typeof(x) == Int64
+#         if x > 1e10 || x < -1e10 
+#             return true
+#         end
+#     else
+#         for i in x
+#             if i > 1e10 || i < -1e10
+#                 return true
+#             end
+#         end
+#     end
+
+#     return false
+
+# end
 
 # check, data, e_msg, w_msg = test_vals([dNdt, dPdt, dZdt, dBdt, dDdt])
 # if check=="e"
