@@ -13,10 +13,10 @@ function rstar_analysis(ds, season=nothing)
     N, P, Z, B, D = get_endpoints(["n", "p", "z", "b", "d"], ds1)
     np = get_size([P])[1]
 
-    rs1 = get_rstar_B(B, Z, np, ds, season)
-    # RstarP = get_rstar_P(P, Z, ds, season)
+    rstar_b = get_rstar(B, P, Z, ds, season)
+    rstar_P = get_rstar(B, P, Z, ds, season)
 
-    return rs1, rs2
+    return rstar_b, rstar_p
 
 end 
 
@@ -25,29 +25,40 @@ end
 #-----------------------------------------------------------------------------------
 #                                     RSTAR B 
 #-----------------------------------------------------------------------------------
-function get_rstar_B(B, Z, np, ds, season=nothing)
+function get_rstar(B, P, Z, ds, season=nothing)
 
-    nb, nz = get_size([B])[1], get_size([Z])[1]
+    nb = get_size([B])[1]
+    nz = get_size([Z])[1]
+    np = get_size([P])[1]
     
-    mort_b = b_mortality(B, ds, nb)
-    grz_b = b_grazing(B, Z, np, nb, nz, ds)
-    loss_b = b_loss(mort_b, grz_b, nb)
-    RstarB_ij = RstarB(loss_b, ds, season)
+    mort_b, mort_p = mortality(B, ds, nb, "B"), mortality(P, ds, np, "P")
+    grz_b, grz_p = b_grazing(B, Z, np, nb, nz, ds), p_grazing(P, Z, ds, np, nz)
+    loss_b, loss_p = loss(B, mort_b, grz_b, nb), loss(P, mort_p, grz_p, np)
+    rstar_b, rstar_p = RstarB(loss_b, ds, season), RstarP(loss_p, ds, np)
 
-    return RstarB_ij
+    return rstar_b, rstar_p
 
 end
 
 
-function b_mortality(B, ds, nb)
+function mortality(Biomass, ds, n, group)
 
-    ngrid = length(B[:,1])
-    mort_b = zeros(Float64, ngrid, nb) 
-    for i in range(1, nb)
-        mort_b[:, i] += (ds["m_lb"][i] .+ ds["m_qb"][i] .* B[:,i])
+    ngrid = length(Biomass[:,1])
+    mort = zeros(Float64, ngrid, n) 
+
+    if group == "B"
+        for i in range(1, n)
+            mort[:, i] += (ds["m_lb"][i] .+ ds["m_qb"][i] .* Biomass[:,i])
+        end
+    elseif group == "P"
+        m_lp = ones(n) * 1e-1  
+        m_qp = ones(n) * 0.1 
+        for i in range(1, n)
+            mort[:, i] += (m_lp[i] .+ m_qp[i] .* Biomass[:,i])
+        end
     end
 
-    return mort_b
+    return mort
 
 end
 
@@ -70,15 +81,19 @@ function b_grazing(B, Z, np, nb, nz, ds)
             push!(grazing, grazing_zi)
         end   
     end
+
     return sum(grazing)
+
 end
 
 
-function b_loss(mortality, grazing, nb)
+function loss(Biomass, mortality, grazing, n)
 
-    loss = zeros(Float64, 89, nb)
-    for i in range(1, nb)
-        loss[:, i] = mortality[:, i] .+ grazing[:, i]
+    ngrid = length(Biomass[:,1])
+    loss = zeros(Float64, ngrid, n)
+
+    for i in range(1, n)
+        loss[:,i] = mortality[:,i] .+ grazing[:,i]
     end
 
     return loss
@@ -122,30 +137,30 @@ end
 #-----------------------------------------------------------------------------------
 #                                     RSTAR P 
 #-----------------------------------------------------------------------------------
-function get_rstar_P(P, Z, ds, np, nz, season)
+# function get_rstar_P(P, Z, ds, np, nz, season)
     
-    mort_p = p_mortality(P, ds, np)
-    grz_p = p_grazing(P, Z, ds, np, nz)
-    loss_p = p_loss(mort_p, grz_p, np)
-    RstarP = RstarP(loss_p, ds, np, season)
+#     mort_p = p_mortality(P, ds, np)
+#     grz_p = p_grazing(P, Z, ds, np, nz)
+#     loss_p = p_loss(mort_p, grz_p, np)
+#     RstarP = RstarP(loss_p, ds, np, season)
 
-    return RstarP
+#     return RstarP
 
-end
+# end
 
 
-function p_mortality(P, ds, np)
+# function p_mortality(P, ds, np)
 
-    m_lp = 1e-1
-    m_qp = 1e-1
-    mort_p = Any[]
-    for i in range(1, np)
-        push!(mort_p, (m_lp .+ m_qp .* P[:,i]))
-    end
+#     m_lp = 1e-1
+#     m_qp = 1e-1
+#     mort_p = Any[]
+#     for i in range(1, np)
+#         push!(mort_p, (m_lp .+ m_qp .* P[:,i]))
+#     end
 
-    return mort_p
+#     return mort_p
 
-end
+# end
 
 
 function p_grazing(P, Z, ds, np, nz)
@@ -153,73 +168,52 @@ function p_grazing(P, Z, ds, np, nz)
     GrM = ds["GrM"][:]
     grazing = Any[]
     g_max = 1.0
-    K_g = ds["K_g"]
+    K_g = 1.0
 
-    if np == 8
-        grazing_zi = zeros(Float64, length(P[:,1]), np) 
-        for z in range(1, nz)
-            if sum(GrM[z,1:np]) > 0 
-                prey = GrM[z,1:np]' .* P[:,1:end]
-                g = g_max .* prey ./ (prey .+ K_g)
-                grazing_zi += (g .* Z[:,z] .* GrM[z,1:np]') ./ prey
-                grazing_zi = replace!(grazing_zi, NaN => 0.0)
-                push!(grazing, grazing_zi)
-            end   
-        end
-
-        return sum(grazing)
-    
-    else
-
-        prey = GrM[1,1:np]' .*P[:,:]
-        for i in range(1, np)
-            gp_i = g_max .* prey[:,i] ./ (prey[:,i] .+ K_g)
-            grz_i = (gp_i .* Z[:,1] .* GrM[1,i]') ./ prey[:,i]
-            push!(grazing, grz_i)
-        end
-
-        return grazing
-
-    end 
-
-end
-
-
-function p_loss(mortality, grazing, np)
-
-    if np == 8
-        loss = zeros(Float64, 89, np)
-        for i in range(1, np)
-            loss[:, i] = mortality[i] .+ grazing[:, i]
-        end
-    else
-        loss = Any[]
-        for i in range(1, np)
-            push!(loss, mortality[i] .+ grazing[i])
-        end
+    grazing_zi = zeros(Float64, length(P[:,1]), np) 
+    for z in range(1, nz)
+        if sum(GrM[z,1:np]) > 0 
+            prey = GrM[z,1:np]' .* P[:,1:end]
+            g = g_max .* prey ./ (prey .+ K_g)
+            grazing_zi += (g .* Z[:,z] .* GrM[z,1:np]') ./ prey
+            grazing_zi = replace!(grazing_zi, NaN => 0.0)
+            push!(grazing, grazing_zi)
+        end   
     end
 
-    return loss
+        return sum(grazing)
 
 end
 
 
-function RstarP(loss, ds, np, season=NaN)
+# function p_loss(mortality, grazing, np)
 
-    season != NaN ? temp_mod = get_temp_mod(season) : temp_mod = ds["temp_fun"][:]
+#     if np == 8
+#         loss = zeros(Float64, 89, np)
+#         for i in range(1, np)
+#             loss[:, i] = mortality[i] .+ grazing[:, i]
+#         end
+#     else
+#         loss = Any[]
+#         for i in range(1, np)
+#             push!(loss, mortality[i] .+ grazing[i])
+#         end
+#     end
+
+#     return loss
+
+# end
+
+
+function RstarP(loss, ds, np, season=nothing)
+
+    season !== nothing ? temp_mod = get_temp_mod(season) : temp_mod = ds["temp_fun"][:]
     umax_ij = ds["umax_ij"][:]
     Kp_ij = ds["Kp_ij"][:]
-    temp_mod = get_temp_mod(season)
+    
     RS = Any[]
-
-    if np == 8
-        for i in range(1, np)
-            push!(RS, Kp_ij[i] .* loss[:, i] ./ (umax_ij[i] .* temp_mod .- loss[:, i]))
-        end
-    else
-        for i in range(1, np)
-            push!(RS, (Kp_ij[i] .* loss[i]) ./ (umax_ij[i] .* temp_mod .- loss[i]))
-        end
+    for i in range(1, np)
+        push!(RS, Kp_ij[i] .* loss[:, i] ./ (umax_ij[i] .* temp_mod .- loss[:, i]))
     end
 
     for i in range(1, length(RS))
@@ -259,4 +253,4 @@ ds1 = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoin
 ds2 = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Wi100y_230905_20:05_2P2Z2B2D_ep.nc")
 
 # rs1_new, rs1_old = rstar_analysis(ds1, ds1)
-rs2_new, rs2_old = rstar_analysis(ds2, ds2, "Win")
+rsp, rsb = rstar_analysis(ds1)
