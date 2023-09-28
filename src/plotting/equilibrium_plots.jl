@@ -10,6 +10,35 @@
 #                            TEST FOR EQUILIBRIUM
 #------------------------------------------------------------------------------
 
+function equilibrium_test(fsaven, season_num)
+
+    ds = NCDataset(fsaven)
+    parent_folder = "results/plots/equilib/"
+    filename = replace(fsaven, ".nc" => "", "results/outfiles/" => "")
+    dir = check_subfolder_exists(filename, parent_folder)
+    season_num == 1 ? season = "Winter" : season = "Summer"
+
+    final_2_years = final2(ds, ["p", "z", "b", "d"])
+    final_yr1 = final2_yr1(final_2_years)
+    final_yr2 = final2_yr2(final_2_years)
+    groups = ["P", "Z", "B", "D"]
+
+    p1 = plot_equilib(final_yr1[1], final_yr2[1], groups[1])
+    p2 = plot_equilib(final_yr1[2], final_yr2[2], groups[2])
+    p3 = plot_equilib(final_yr1[3], final_yr2[3], groups[3])
+    p4 = plot_equilib(final_yr1[4], final_yr2[4], groups[4])
+
+    f = plot(p1, p2, p3, p4,
+    layout = [1 1 ; 1 1],
+    size=(1200,900),
+    plot_title = "Equilib. States ($(season))",
+    plot_titlefontsize = 24
+    )
+
+    savefig(f, "$(dir)/$(filename).png")
+end
+
+
 function final2(ds, vars)
 
     final_2yrs = Vector{Any}()
@@ -108,41 +137,11 @@ function plot_equilib(yr1, yr2, group)
     border=:box,
     fg_legend = :transparent,
     size=(600,450),
-    # plot_title = "$(group))",
     )
 
     return f
 
 
-end
-
-
-function equilibrium_test(fsaven, season_num)
-
-    ds = NCDataset(fsaven)
-    parent_folder = "results/plots/equilib/"
-    filename = replace(fsaven, ".nc" => "", "results/outfiles/" => "")
-    dir = check_subfolder_exists(filename, parent_folder)
-    season_num == 1 ? season = "Winter" : season = "Summer"
-
-    final_2_years = final2(ds, ["p", "z", "b", "d"])
-    final_yr1 = final2_yr1(final_2_years)
-    final_yr2 = final2_yr2(final_2_years)
-    groups = ["P", "Z", "B", "D"]
-
-    p1 = plot_equilib(final_yr1[1], final_yr2[1], groups[1])
-    p2 = plot_equilib(final_yr1[2], final_yr2[2], groups[2])
-    p3 = plot_equilib(final_yr1[3], final_yr2[3], groups[3])
-    p4 = plot_equilib(final_yr1[4], final_yr2[4], groups[4])
-
-    f = plot(p1, p2, p3, p4,
-    layout = [1 1 ; 1 1],
-    size=(1200,900),
-    plot_title = "Equilib. States ($(season))",
-    plot_titlefontsize = 24
-    )
-
-    savefig(f, "$(dir)/$(filename).png")
 end
 
 

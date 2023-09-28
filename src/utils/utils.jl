@@ -260,11 +260,31 @@ end
 function check_for_negatives(RS)
 
     for i in eachindex(RS)
-        RS[i] = ifelse(RS[i] < 0, NaN, RS[i])
-        RS[i] = ifelse(RS[i] > 15, NaN, RS[i])
+        for j in eachindex(RS[i])
+            RS[i][j] = ifelse(RS[i][j] < 0 || RS[i][j] > 15, NaN, RS[i][j])
+        end
     end
 
     return RS
+
+end
+
+
+function get_temp_mod(ds)
+    
+    try
+        temp_mod = ds["temp_fun"][:]
+        return temp_mod
+    catch
+        rgx = r"(?<=/)([A-Za-z][A-Za-z])(?=\d)"
+        season = match(rgx, fsaven)
+        if season[1] == "Wi"
+            temp_mod = CSV.read("/home/lee/Dropbox/Development/NPZBD_1D/data/temp_mod/win_temp_mod.csv", DataFrame)
+        else
+            temp_mod = CSV.read("/home/lee/Dropbox/Development/NPZBD_1D/data/temp_mod/sum_temp_mod.csv", DataFrame)
+        end
+        return Matrix(temp_mod)
+    end
 
 end
 

@@ -23,8 +23,10 @@
     include("traits.jl")
     include("integrate.jl")
     include("prescribed.jl")
+    include("rstar.jl")
     include("plotting/biomass_plots.jl")
     include("plotting/equilibrium_plots.jl")
+    include("plotting/rstar_plots.jl")
     include("utils/save_params.jl")
     include("utils/utils.jl")
     include("utils/save_utils.jl")
@@ -91,7 +93,7 @@
 
         end
 
-        fsaven = set_savefiles(now(), season, years, np, nz, nb, nd)   
+        global fsaven = set_savefiles(now(), season, years, np, nz, nb, nd)   
         
         
     #------------------------------------------------------------------------------------------------------------#
