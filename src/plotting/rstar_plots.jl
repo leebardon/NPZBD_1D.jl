@@ -12,15 +12,15 @@ function plot_rstar(rstar_b, rstar_p, fsaven)
 
     ds = NCDataset(fsaven)
     N, P, Z, B, D = get_endpoints(["n", "p", "z", "b", "d"], ds)
-    BD_competitors = group_BD_competitors(sparse(ds["CM"][:]), get_size([D])[1])
+    BD_competitors = group_competitors(sparse(ds["CM"][:]), get_size([D])[1])
 
-    f = plot_rstar_b(fsaven, rstar_b, B, D, BD_competitors, ds)
-
+    plot_rstar_b(fsaven, rstar_b, B, D, BD_competitors, ds)
+    plot_rstar_p(fsaven, rstar_p, P, N, ds)
 
 end
 
 
-function group_BD_competitors(Cs, nd)
+function group_competitors(Cs, n)
 
     competitors = Any[]
     for (i, row) in enumerate(eachrow(Cs))
@@ -31,7 +31,7 @@ function group_BD_competitors(Cs, nd)
         end
     end
 
-    return get_competitor_dict(competitors, nd) 
+    return get_competitor_dict(competitors, n) 
 
 end
 
@@ -51,92 +51,130 @@ function get_competitor_dict(competitors, nd)
 
 end
 
-#d = Dict(name => Any[] for name in collect(1:1:nd))
-
-# using IterTools
-# for i in groupby(x -> x[1], comp)
-#     push!(out, i)
-# end
 
 function plot_rstar_b(fsaven, rstar, B, D, competitors, ds)
 
+    H = 500
+    zc = get_zc(H)
     nb = get_size([B])[1]
     nd = get_size([D])[1]
 
-    H = 500
-    dz = 10
-    zc = [dz/2:dz:(H-dz/2)]
+    parent_folder = "results/plots/rstar/"
+    filename = replace(fsaven, ".nc" => "", "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/" => "")
+    dir = check_subfolder_exists(filename, parent_folder)
+
     bcols, dcols, pcols, ncols, zcols, ab, ab_ext, ls, lfs, lg = get_plot_vars()
     tl=:right
-    tfs=22
+    tfs=12
+    lfs=6
+    xtfs=6
 
-    p1 = plot(rstar[1][1:50], -zc, lw=ls, lc=bcols[1], label=" B1", ylabel="Depth (m)", xrotation=45, xguidefontsize=12, 
-    xlabel="", border=:box, legend=lg, xscale=:log10, title="D1", title_loc=tl, titlefontsize=tfs, legendfontsize=lfs)
-    plot!(Dw[1:50, 1], -zc, lw=ls, lc=dcols[1], linestyle=:dot,label=" D1", alpha=ab, legendfontsize=lfs)
+    fig1 = Array{Plots.Plot, 1}(undef, nd);
+    for d in 1:nd
+        for (k, v) in competitors
+            if k == d 
+                b_di = v
+                if d == 1
+                    fig1[d] = plot(D[1:50, d], -zc, lw=ls, lc=dcols[d], linestyle=:dot, label=" D$d", alpha=ab, legendfontsize=lfs,
+                    ylabel="Depth (m)", xlabel="", xrotation=45, title = "R*", titlefontsize=tfs, grid=false, border=:box, legend=lg, 
+                    xtickfontsize=xtfs, xscale=:log10)
+                else
+                    fig1[d] = plot(D[1:50, d], -zc, lw=ls, lc=dcols[d], linestyle=:dot, label=" D$d", alpha=ab, legendfontsize=lfs,
+                    ylabel="", xlabel="", xrotation=45, title="R*", titlefontsize=tfs, grid=false, border=:box, legend=lg,
+                    yformatter=Returns(""), xtickfontsize=xtfs, xscale=:log10)
+                end
+                for b in b_di[1:end]
+                    plot!(rstar[b][1:50], -zc, lw=ls, label=" B$b", lc=bcols[b], alpha=ab)
+                end
+            end
+        end
+    end
 
-    p2 = plot(bw[1:50, 1], -zc, lw=ls, lc=bcols[1], label=" B1", xrotation=45, xguidefontsize=12, xlabel="", 
-    border=:box, legend=lg, yformatter=Returns(""), alpha=ab, xscale=:log10, legendfontsize=lfs)
-
-    # p3 = plot(rstar[2][1:50], -zc, lw=ls, lc=bcols[2], label="", xrotation=45, xguidefontsize=12, xlabel="", 
-    # border=:box, legend=lg, xscale=:log10, title="D2", title_loc=tl, yformatter=Returns(""), titlefontsize=tfs)
-    p3 = plot(rstar[6][1:50], -zc, lw=ls, lc=bcols[6], label="", xrotation=45, xguidefontsize=12, xlabel="", 
-    border=:box, legend=lg, xscale=:log10, title="D2", title_loc=tl, yformatter=Returns(""), titlefontsize=tfs)
-    plot!(rstar[10][1:50], -zc, lw=ls, lc=bcols[10],  label="")
-    plot!(Dw[1:50, 2], -zc, lw=ls, lc=dcols[2], linestyle=:dot, alpha=ab, label=" D2", legendfontsize=lfs)
-
-    p4 = plot(bw[1:50, 2], -zc, lw=ls, lc=bcols[2], label=" B2", linestyle=:dash, xrotation=45, xguidefontsize=12, xlabel="", 
-    border=:box, legend=lg, yformatter=Returns(""), alpha=ab_ext, legendfontsize=lfs)
-    plot!(bw[1:50, 6], -zc, lw=ls, lc=bcols[6],  label=" B6", alpha=ab, legendfontsize=lfs)
-    plot!(bw[1:50, 10], -zc, lw=ls, lc=bcols[10],  label=" B10", alpha=ab, legendfontsize=lfs)
-
-    p5 = plot(rstar[3][1:50], -zc, lw=ls, lc=bcols[3], label="", xrotation=45, xguidefontsize=12, xlabel="", 
-    border=:box, legend=lg, xscale=:log10, title="D3", title_loc=tl, yformatter=Returns(""), titlefontsize=tfs)
-    # plot!(rstar[7][1:50], -zc, lw=ls, lc=bcols[7], label="")
-    plot!(rstar[11][1:50], -zc, lw=ls, lc=bcols[11], label="")
-    plot!(Dw[1:50, 3], -zc, lw=ls, lc=dcols[3], linestyle=:dot, alpha=ab, label=" D3", legendfontsize=lfs)
-
-    p6 = plot(bw[1:50, 3], -zc, lw=ls, lc=bcols[3], label=" B3", xrotation=45, xguidefontsize=12, xlabel="", 
-    border=:box, legend=lg, yformatter=Returns(""), alpha=ab,legendfontsize=lfs)
-    plot!(bw[1:50, 7], -zc, lw=ls, lc=bcols[7], label=" B7", linestyle=:dash, alpha=ab_ext, legendfontsize=lfs)
-    plot!(bw[1:50, 11], -zc, lw=ls, lc=bcols[11], label=" B11", alpha=ab, legendfontsize=lfs)
-
-    p7 = plot(rstar[8][1:50], -zc, lw=ls, lc=bcols[8], label="", xrotation=45, xguidefontsize=12, xlabel="", 
-    border=:box, legend=lg, xscale=:log10, title="D4", title_loc=tl, yformatter=Returns(""), titlefontsize=tfs)
-    # p7 = plot(rstar[4][1:50], -zc, lw=ls, lc="coral4", label="", xrotation=45, xguidefontsize=12, xlabel="", 
-    # border=:box, legend=lg, xscale=:log10, title="D4", title_loc=tl, yformatter=Returns(""), titlefontsize=tfs, xlim=(0.001, 0.02))
-    # plot!(rstar[8][1:50], -zc, lw=ls, lc=bcols[8], label="")
-    # plot!(rstar[12][1:50], -zc, lw=ls, lc="azure4", label="")
-    plot!(Dw[1:50, 4], -zc, lw=ls, lc=dcols[4], linestyle=:dot, alpha=0.6, label=" D4", legendfontsize=lfs)
-
-    p8 = plot(bw[1:50, 4], -zc, lw=ls, lc=bcols[4], linestyle=:dash, label=" B4", xrotation=45, xguidefontsize=12, xlabel="", 
-    border=:box, legend=lg, yformatter=Returns(""), alpha=ab_ext,  legendfontsize=lfs)
-    plot!(bw[1:50, 8], -zc, lw=ls, lc=bcols[8], label=" B8", alpha=ab, legendfontsize=lfs)
-    plot!(bw[1:50, 12], -zc, lw=ls, lc=bcols[12], linestyle=:dash, label=" B12", alpha=ab_ext, legendfontsize=lfs)
-
-    p9 = plot(rstar[5][1:50], -zc, lw=ls, lc=bcols[5], label="", xrotation=45, xguidefontsize=12, xlabel="", 
-    border=:box, legend=lg, xscale=:log10, title="D5", title_loc=tl, yformatter=Returns(""), titlefontsize=tfs)
-    plot!(rstar[9][1:50], -zc, lw=ls, lc=bcols[9], label="")
-    # plot!(rstar[13][1:50], -zc, lw=ls, lc="turquoise1", label="")
-    plot!(Dw[1:50, 5], -zc, lw=ls, lc=dcols[5], linestyle=:dot, alpha=0.6, label=" D5", legendfontsize=lfs)
-
-    p10 = plot(bw[1:50, 5], -zc, lw=ls, lc=bcols[5], label=" B5", xrotation=45, xguidefontsize=12, xlabel="", 
-    border=:box, legend=lg, yformatter=Returns(""), alpha=ab, legendfontsize=lfs)
-    plot!(bw[1:50, 9], -zc, lw=ls, lc=bcols[9], label=" B9", alpha=ab, legendfontsize=lfs)
-    plot!(bw[1:50, 13], -zc, lw=ls, lc=bcols[13], label=" B13", linestyle=:dash, alpha=ab_ext, legendfontsize=lfs)
+    fig2 = Array{Plots.Plot, 1}(undef, nd);
+    for d in 1:nd
+        for (k, v) in competitors
+            if k == d 
+                b_di = v
+                if d == 1
+                    fig2[d] = plot(B[1:50, b_di[1]], -zc, lw=ls, lc=bcols[b_di[1]], label=" B$(b_di[1])", alpha=ab, legendfontsize=lfs,
+                    ylabel="Depth (m)", xlabel="", title="Biomass", titlefontsize=tfs, xrotation=45, grid=false, border=:box, legend=lg,
+                    xtickfontsize=xtfs)
+                else
+                    fig2[d] = plot(B[1:50, b_di[1]], -zc, lw=ls, lc=bcols[b_di[1]], label=" B$(b_di[1])", alpha=ab, legendfontsize=lfs,
+                    ylabel="", xlabel="", title="Biomass", titlefontsize=tfs, xrotation=45, grid=false, border=:box, legend=lg,
+                    yformatter=Returns(""), xtickfontsize=xtfs)
+                end
+                if length(b_di) > 1
+                    for b in b_di[2:end]
+                        plot!(B[1:50, b], -zc, lw=ls, label=" B$b", lc=bcols[b], alpha=ab)
+                    end
+                end
+            end
+        end
+    end
     
-    winter = plot(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,
+    f = plot(fig1..., fig2...,
     fg_legend = :transparent,
-    layout = (1,10),
-    size=(1600,900),
-    plot_xaxis="Depth (m)"
-    # xlabel = "R*",
-    # plot_title="Winter", 
-    # plot_titlefontsize = 20,
-    # titlefontsize=tfs, titlelocation=:center, 
+    layout = (2,nd),
     )
 
-    savefig(f,"/home/lee/Dropbox/Development/NPZBD_1D/results/plots/rstar/rsB/rsB_$(fsaven).png")
-    
-    return f
+    savefig(f, "$(dir)/rsBD_$(filename).png")
+
+end
+
+function plot_rstar_p(fsaven, rstar, P, N, ds)
+
+    #NOTE needs to be merged with plot_rstar_b if we want to use more N's
+    H = 200
+    zc = get_zc(H)
+    nn = get_size([N])[1]
+    np = get_size([P])[1]
+
+    parent_folder = "results/plots/rstar/"
+    filename = replace(fsaven, ".nc" => "", "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/" => "")
+    dir = check_subfolder_exists(filename, parent_folder)
+
+    bcols, dcols, pcols, ncols, zcols, ab, ab_ext, ls, lfs, lg = get_plot_vars()
+    tl=:right
+    tfs=12
+    lfs=8
+    xtfs=8
+
+    fig1 = Array{Plots.Plot, 1}(undef, nn);
+    for n in 1:nn
+        if n == 1
+            fig1[n] = plot(N[1:20, n], -zc, lw=ls, lc=ncols[n], linestyle=:dot, label=" N$n", alpha=ab, legendfontsize=lfs,
+            ylabel="Depth (m)", xlabel="", xrotation=45, title = "R*", titlefontsize=tfs, grid=false, border=:box, legend=lg, 
+            xtickfontsize=xtfs, xscale=:log10)
+        elseif n > 1
+            fig1[n] = plot(N[1:20, d], -zc, lw=ls, lc=ncols[n], linestyle=:dot, label=" N$n", alpha=ab, legendfontsize=lfs,
+            ylabel="", xlabel="", xrotation=45, title="R*", titlefontsize=tfs, grid=false, border=:box, legend=lg,
+            yformatter=Returns(""), xtickfontsize=xtfs, xscale=:log10)
+        else
+        end
+
+        for p in 1:np
+            plot!(rstar[p][1:20], -zc, lw=ls, label=" P$p", lc=pcols[p], alpha=ab)
+        end 
+    end
+
+    fig2 = Array{Plots.Plot, 1}(undef, nn);
+    for p in 1:np
+        if p == 1
+            fig2[1] = plot(P[1:20, 1], -zc, lw=ls, lc=pcols[1], label=" P1", alpha=ab, legendfontsize=lfs,
+            ylabel="", xlabel="", xrotation=45, title = "Biomass", titlefontsize=tfs, grid=false, border=:box, legend=lg, 
+            xtickfontsize=xtfs, yformatter=Returns(""))
+        else
+            plot!(P[1:20, p], -zc, lw=ls, label=" P$p", lc=pcols[p], alpha=ab)
+        end
+    end
+
+    f = plot(fig1..., fig2...,
+    fg_legend = :transparent,
+    layout = (nn,2),
+    size=(600,400),
+    )
+
+    savefig(f, "$(dir)/rsPN_$(filename).png")
 
 end

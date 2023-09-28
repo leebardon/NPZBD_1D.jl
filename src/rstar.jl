@@ -4,6 +4,7 @@ using DataFrames, CSV
 using SparseArrays, LinearAlgebra
 
 include("utils/utils.jl")
+include("utils/save_utils.jl")
 include("plotting/rstar_plots.jl")
 
 
@@ -167,7 +168,7 @@ function RstarP(loss, ds, np)
 end
 
 
-fsaven = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Wi100y_230923_17:23_8P6Z13B5D_ep.nc"
+fsaven = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/Wi100y_230923_17:23_8P6Z13B5D.nc"
 # global fsaven = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Wi100y_230905_20:05_2P2Z2B2D_ep.nc"
 rstar_b, rstar_p = rstar_analysis(fsaven)
 plot_rstar(rstar_b, rstar_p, fsaven)

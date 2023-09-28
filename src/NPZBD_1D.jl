@@ -66,6 +66,7 @@
     #------------------------------------------------------------------------------------------------------------#
     #   COLLECT USER INPUT
     #------------------------------------------------------------------------------------------------------------#
+    #TODO set up so that fundamental 'run type' can be 'equilibrium/steady state' or 'perturbed (with nutrient pulses)'
         run_type = request(message("ST2"), RadioMenu(message("ST1")))
 
         if run_type == 1 
@@ -267,9 +268,8 @@
     
         save_matrices(CM, CMp, GrM, nd, nb, nn, np, nz)
         plot_biomasses(fsaven, season)
-        equilibrium_test(fsaven)
-        # RstarB_ij, RstarP = rstar_analysis(fsaven, season)
-
+        equilibrium_test(fsaven, season)
+        rstar_b, rstar_p = rstar_analysis(fsaven)
 
         save_prm == 1 ? save_params(params) : exit()
 
