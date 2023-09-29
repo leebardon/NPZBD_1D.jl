@@ -10,7 +10,7 @@ set_zero_subnormals(true)
 
 
 #TODO add a sinking (dsink) to remove some detritus or it wont equilibriate 
-function run_NPZBD(prms, season, pulse=false)
+function run_NPZBD(prms, season)
 
     trec = prms.nt÷prms.nrec # frequency of recording
     start_time = now()
@@ -56,20 +56,16 @@ function run_NPZBD(prms, season, pulse=false)
         
         end 
 
-        if pulse == true
+        if prms.pulse != 1
             if season == 1
-                # winter, pulse to top 80m every 10 days
+                # winter, pulse every 10 days
                 if t % 1000 == 0
-                    pulse = nutrient_pulse(pulse)
-                    dtemp[1:8, :] .+= pulse     
-                    ntemp[1:8, :] .+= pulse            
+                    ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)       
                 end
             else
-                # summer, pulse to top 80m every 30 days
+                # summer, pulse every 30 days
                 if t % 3000 == 0
-                    pulse = nutrient_pulse(pulse)
-                    dtemp[1:8, :] .+= pulse     
-                    ntemp[1:8, :] .+= pulse        
+                    ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)         
                 end
             end
         end 

@@ -135,6 +135,10 @@ function save_full_run(p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, seaso
     w[:] = prms.dz
     w.attrib["units"] = "m; box height"
 
+    w = defVar(f, "pulse", Int, ())
+    w[:] = prms.pulse
+    w.attrib["nutrient_pulse"] = "1: no pulse, 2: N,D redistributed by mean, 3: N,D redistributed by weighted mean"
+
     w = defVar(f, "kappa_z", Float64, ("ndepth1",))
     w[:] = prms.kappa_z
     w.attrib["units"] = "vertical water velocity"
@@ -321,6 +325,10 @@ function save_endpoints(n, p, z, b, d, o, prms, season)
     w = defVar(f, "dz", Int, ())
     w[:] = prms.dz
     w.attrib["units"] = "m; box height"
+
+    w = defVar(f, "pulse", Int, ())
+    w[:] = prms.pulse
+    w.attrib["nutrient_pulse"] = "1: no pulse, 2: N,D redistributed by mean, 3: N,D redistributed by weighted mean"
 
     w = defVar(f, "kappa_z", Float64, ("ndepth1",))
     w[:] = prms.kappa_z

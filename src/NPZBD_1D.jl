@@ -6,7 +6,7 @@
     using Dates, Printf, Parameters
     using SparseArrays, Distributions, LinearAlgebra
     using Statistics, StatsBase, Random, StableRNGs
-    using DataFrames, NCDatasets, JLD
+    using DataFrames, NCDatasets, JLD, CSV
     using Plots, ColorSchemes, Colors, LaTeXStrings
     using Distributed
 
@@ -24,6 +24,7 @@
     include("integrate.jl")
     include("prescribed.jl")
     include("rstar.jl")
+    include("nutrient_pulse.jl")
     include("plotting/biomass_plots.jl")
     include("plotting/equilibrium_plots.jl")
     include("plotting/rstar_plots.jl")
@@ -70,7 +71,7 @@
         run_type = request(message("ST2"), RadioMenu(message("ST1")))
 
         if run_type == 1 
-            nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, umax_i, season = user_select()
+            nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, umax_i, season, pulse = user_select()
             CM = get_matrix("CM", nd, nb, nn, np, nz)
             GrM = get_matrix("GrM", nd, nb, nn, np, nz)
             CMp = get_matrix("CMp", nd, nb, nn, np, nz)
@@ -87,7 +88,7 @@
             exit()
 
         elseif run_type == 3
-            nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, umax_i, season = user_select(3)
+            nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, umax_i, season, pulse = user_select(3)
             CM = get_prescribed_params("CM") 
             GrM = get_prescribed_params("GrM") 
             CMp = get_matrix("CMp", nd, nb, nn, np, nz)
@@ -175,7 +176,7 @@
     #------------------------------------------------------------------------------------------------------------#
         # Distribution of OM from mortality to detritus pools
         if supply_weight == 1 
-            prob_generate_d = [0.25, 0.25, 0.25, 0.25]
+            prob_generate_d = get_prescribed_params("supply_weight") 
             # for larger pool nums, narrow range of lability for POM and larger range for DOM
         elseif supply_weight == 2
             prob_generate_d = ones(nd) * (1/nd)
@@ -201,7 +202,7 @@
     #------------------------------------------------------------------------------------------------------------#
 
         # VERTICAL MIXING 
-            season == 1 ? mlz = 30 : mlz = 15 # mixed layer lengthscale
+            season == 1 ? mlz = 25 : mlz = 15 # mixed layer lengthscale
             kappazmin = 1e-4              # min mixing coeff -value for most of the deep ocean (higher at top and bottom)
             kappazmax = 1e-2              # max mixing coeff -value at top of mixed layer (and bottom boundary mixed layer)
             kappa_z = (kappazmax .* exp.(-zf/mlz) .+ kappazmin .+ kappazmax .* exp.((zf .- H) / 100.)) .* 3600 .* 24 
@@ -258,7 +259,7 @@
                     tt, dt, nt, nrec, H, dz, np, nb, nz, nn, nd, pIC, bIC, zIC, nIC, dIC, oIC, 
                     umax_i, umax_ij, Kp_i, Kp_ij, m_lp, m_qp, light, temp_fun, K_I, CMp, Fg_p,
                     vmax_i, vmax_ij, Km_i, Km_ij, y_ij, m_lb, m_qb, prob_generate_d, CM, Fg_b,
-                    g_max, K_g, γ, m_lz, m_qz, GrM, pen, kappa_z, wd, ngrid, ws_POM,
+                    g_max, K_g, γ, m_lz, m_qz, GrM, pen, kappa_z, wd, ngrid, pulse, ws_POM,
                     e_o, yo_ij, koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, fsaven
                 )
 
@@ -269,7 +270,7 @@
         save_matrices(CM, CMp, GrM, nd, nb, nn, np, nz)
         plot_biomasses(fsaven, season)
         equilibrium_test(fsaven, season)
-        rstar_b, rstar_p = rstar_analysis(fsaven)
+        rstar_analysis(fsaven)
 
         save_prm == 1 ? save_params(params) : exit()
 

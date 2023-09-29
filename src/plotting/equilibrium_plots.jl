@@ -16,7 +16,7 @@ function equilibrium_test(fsaven, season_num)
     parent_folder = "results/plots/equilib/"
     filename = replace(fsaven, ".nc" => "", "results/outfiles/" => "")
     dir = check_subfolder_exists(filename, parent_folder)
-    
+
     season_num == 1 ? season = "Winter" : season = "Summer"
 
     final_2_years = final2(ds, ["p", "z", "b", "d"])
@@ -31,7 +31,7 @@ function equilibrium_test(fsaven, season_num)
 
     f = plot(p1, p2, p3, p4,
     layout = [1 1 ; 1 1],
-    size=(1200,900),
+    size=(1000,700),
     plot_title = "Equilib. States ($(season))",
     plot_titlefontsize = 24
     )

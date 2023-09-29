@@ -1,11 +1,11 @@
-using NCDatasets
-using Plots, ColorSchemes, LaTeXStrings
-using DataFrames, CSV
-using SparseArrays, LinearAlgebra
+# using NCDatasets
+# using Plots, ColorSchemes, LaTeXStrings
+# using DataFrames, CSV
+# using SparseArrays, LinearAlgebra
 
-include("utils/utils.jl")
-include("utils/save_utils.jl")
-include("plotting/rstar_plots.jl")
+# include("utils/utils.jl")
+# include("utils/save_utils.jl")
+# include("plotting/rstar_plots.jl")
 
 
 function rstar_analysis(fsaven)
@@ -17,7 +17,7 @@ function rstar_analysis(fsaven)
 
     rstar_b, rstar_p = get_rstar(B, P, Z, ds)
 
-    return rstar_b, rstar_p
+    plot_rstar(rstar_b, rstar_p, fsaven)
 
 end 
 
@@ -168,7 +168,6 @@ function RstarP(loss, ds, np)
 end
 
 
-fsaven = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/Wi100y_230923_17:23_8P6Z13B5D.nc"
-# global fsaven = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Wi100y_230905_20:05_2P2Z2B2D_ep.nc"
-rstar_b, rstar_p = rstar_analysis(fsaven)
-plot_rstar(rstar_b, rstar_p, fsaven)
+# fsaven = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/Su100y_230827_17:10_4P3Z7B4D.nc"
+# rstar_analysis(fsaven)
+

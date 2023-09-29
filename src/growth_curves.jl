@@ -1,10 +1,10 @@
-using NCDatasets
-using Plots, ColorSchemes, LaTeXStrings
-using DataFrames
-using SparseArrays, LinearAlgebra
+# using NCDatasets
+# using Plots, ColorSchemes, LaTeXStrings
+# using DataFrames
+# using SparseArrays, LinearAlgebra
 
-include("utils/utils.jl")
-include("utils/save_utils.jl")
+# include("utils/utils.jl")
+# include("utils/save_utils.jl")
 
 
 function growth_curves(fsaven, season)
@@ -104,15 +104,15 @@ function plot_growth_curves(growth, biomass, Rx, R, lbl, _run, f_str, loc, lims,
 
 end
 
-fsaven = "results/outfiles/Wi100y_230923_17:23_8P6Z13B5D.nc"
-growth_curves(fsaven, 1)
+# fsaven = "results/outfiles/Wi100y_230923_17:23_8P6Z13B5D.nc"
+# growth_curves(fsaven, 1)
 
-winter = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Wi100y_230827_13:45_4P3Z7B4D_ep.nc")
-summer = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Su100y_230827_17:10_4P3Z7B4D_ep.nc")
+# winter = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Wi100y_230827_13:45_4P3Z7B4D_ep.nc")
+# summer = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Su100y_230827_17:10_4P3Z7B4D_ep.nc")
 
-# Get endpoints 
-Nw, Pw, Zw, Bw, Dw = get_endpoints(winter, ["n", "p", "z", "b", "d"])
-Ns, Ps, Zs, Bs, Ds = get_endpoints(summer, ["n", "p", "z", "b", "d"])
+# # Get endpoints 
+# Nw, Pw, Zw, Bw, Dw = get_endpoints(winter, ["n", "p", "z", "b", "d"])
+# Ns, Ps, Zs, Bs, Ds = get_endpoints(summer, ["n", "p", "z", "b", "d"])
 
-growthB, R = calc_growthB(Bw, Dw, winter, "Win")
-plot_growth_over_D([growthB[:, 3], growthB[:, 6]], R, [Bw[:,3], Bw[:,6]], Dw[:,3], [" B3", " B6"], " D3")
+# growthB, R = calc_growthB(Bw, Dw, winter, "Win")
+# plot_growth_over_D([growthB[:, 3], growthB[:, 6]], R, [Bw[:,3], Bw[:,6]], Dw[:,3], [" B3", " B6"], " D3")

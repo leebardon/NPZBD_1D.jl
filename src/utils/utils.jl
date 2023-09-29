@@ -9,6 +9,8 @@ function message(v::String, nd::Int64=0, nb::Int64=0, nn::Int64=0, np::Int64=0, 
         "ST2" => "\nStart new run, load saved params or run prescribed model?",
         "TM1" => ["2 years (tt=732)", "10 years (tt=3660)", "30 years (tt=10980)", "100 years (tt=36600)"],
         "TM2" => "Select Simulation Runtime:",
+        "P1" => ["None (steady state)", "Redistributed Mean", "Redistributed Weighted Mean"],
+        "P2" => "\nSelect nutrient pulsing regime: ",
         "DN" => "\nEnter number of detritus pools (nd): ",
         "BN" => "Enter number of bacteria populations (nb): ",
         "PN" => "Enter number of phyto populations (np): ",
@@ -51,6 +53,8 @@ end
 
 function user_select(run_type=0)
 
+    pulse = request(message("P2"), RadioMenu(message("P1")))
+
     println(message("DN"))
     input = readline()
     nd = parse(Int64, input) 
@@ -81,7 +85,7 @@ function user_select(run_type=0)
 
     @info("User Selections: \n SW = $supply_weight \n B yield = $y_i \n B uptake = $vmax_i \n P uptake = $umax_i \n Season == $season \n")
 
-    return nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, umax_i, season
+    return nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, umax_i, season, pulse
 
 end
 
@@ -214,6 +218,23 @@ function update_tracking_arrs(track_n, track_p, track_z, track_b, track_d, track
     @printf("Day %7.1f out of %5.0f = %4.0f%% done at %s \n", t_id, prms.tt, t_id/prms.tt*100, now())
 
     return track_n, track_p, track_z, track_b, track_d, track_o, track_time
+
+end
+
+
+function nan_or_inf(x)
+
+    if typeof(x) == Float64 || typeof(x) == Int64
+        if isnan(x) || !isfinite(x)
+            return true
+        end
+    else
+        if any(isnan.(x)) || any(isinf.(x))
+            return true
+        end
+    end
+
+    return false
 
 end
 
@@ -355,23 +376,6 @@ end
 #             return "w"
 #         end
 #     end
-
-# end
-
-
-# function nan_or_inf(x)
-
-#     if typeof(x) == Float64 || typeof(x) == Int64
-#         if isnan(x) || !isfinite(x)
-#             return true
-#         end
-#     else
-#         if any(isnan.(x)) || any(isinf.(x))
-#             return true
-#         end
-#     end
-
-#     return false
 
 # end
 
