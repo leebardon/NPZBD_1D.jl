@@ -344,6 +344,7 @@ function get_size(arr)
 
 end
 
+
 function get_nonzero_axes(Mat)
 
     Cs = sparse(Mat)
@@ -352,6 +353,39 @@ function get_nonzero_axes(Mat)
     return II, JJ
 
 end 
+
+
+function group_competitors(Cs, n)
+
+    competitors = Any[]
+    for (i, row) in enumerate(eachrow(Cs))
+        for (j, col) in enumerate(eachcol(Cs))
+            if Cs[i, j] > 0
+                push!(competitors, [i, j])
+            end
+        end
+    end
+
+    return get_competitor_dict(competitors, n) 
+
+end
+
+
+function get_competitor_dict(competitors, n)
+
+    out = Dict(name => Any[] for name in collect(1:1:n))
+    for i in competitors
+        for j in keys(out) 
+            if i[1] == j 
+                push!(out[j], i[2]) 
+            end 
+        end 
+    end
+
+    return out
+
+end
+
 
 # BELOW WAS INSERTED INTO FUNCTIONS TO TRACE NAN AND INF WEIRDNESS - CAUSED BY USING UNDEF TO 
 # INITIALISE EMPTY ARRS TO BE LATER USED DURING INTEGRATION

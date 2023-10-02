@@ -1,10 +1,10 @@
-# using NCDatasets
-# using Plots, ColorSchemes, LaTeXStrings
-# using DataFrames
-# using SparseArrays, LinearAlgebra
+using NCDatasets
+using Plots, ColorSchemes, LaTeXStrings
+using DataFrames
+using SparseArrays, LinearAlgebra, Statistics
 
-# include("/home/lee/Dropbox/Development/NPZBD_1D/src/utils/utils.jl")
-# include("/home/lee/Dropbox/Development/NPZBD_1D/src/utils/save_utils.jl")
+include("/home/lee/Dropbox/Development/NPZBD_1D/src/utils/utils.jl")
+include("/home/lee/Dropbox/Development/NPZBD_1D/src/utils/save_utils.jl")
 
 #------------------------------------------------------------------------------
 #                            TEST FOR EQUILIBRIUM
@@ -19,24 +19,40 @@ function equilibrium_test(fsaven, season_num)
 
     season_num == 1 ? season = "Winter" : season = "Summer"
 
+    f1 = equilib_depth_plots(ds, season)
+    f2 = equilib_heatmaps(ds, season)
+
+    savefig(f1, "$(dir)/$(filename)_tesy.png")
+
+end
+
+
+function equilib_heatmaps(ds, season)
+
+end
+
+
+function equilib_depth_plots(ds, season)
+
     final_2_years = final2(ds, ["p", "z", "b", "d"])
-    final_yr1 = final2_yr1(final_2_years)
-    final_yr2 = final2_yr2(final_2_years)
+    final_yr1 = mean_penultimate_year(final_2_years)
+    final_yr2 = mean_final_year(final_2_years)
     groups = ["P", "Z", "B", "D"]
 
-    p1 = plot_equilib(final_yr1[1], final_yr2[1], groups[1])
-    p2 = plot_equilib(final_yr1[2], final_yr2[2], groups[2])
-    p3 = plot_equilib(final_yr1[3], final_yr2[3], groups[3])
-    p4 = plot_equilib(final_yr1[4], final_yr2[4], groups[4])
+    p1 = plot_equilib_depth(final_yr1[1], final_yr2[1], groups[1])
+    p2 = plot_equilib_depth(final_yr1[2], final_yr2[2], groups[2])
+    p3 = plot_equilib_depth(final_yr1[3], final_yr2[3], groups[3])
+    p4 = plot_equilib_depth(final_yr1[4], final_yr2[4], groups[4])
 
-    f = plot(p1, p2, p3, p4,
+    f1 = plot(p1, p2, p3, p4,
     layout = [1 1 ; 1 1],
     size=(1000,700),
     plot_title = "Equilib. States ($(season))",
     plot_titlefontsize = 24
     )
 
-    savefig(f, "$(dir)/$(filename).png")
+    return f1
+
 end
 
 
@@ -53,12 +69,12 @@ function final2(ds, vars)
 end
 
 
-function final2_yr1(ds)
+function mean_penultimate_year(ds)
 
     final2_yr1 = Vector{Any}()
 
     for i in 1:length(["p", "z", "b", "d"])
-        append!(final2_yr1, [ds[i][:, :, 1:7320]])
+        append!(final2_yr1, [mean(ds[i][:, :, 1:7320], dims=3)])
     end
 
     return [final2_yr1[1], final2_yr1[2], final2_yr1[3], final2_yr1[4]]
@@ -66,12 +82,12 @@ function final2_yr1(ds)
 end
 
 
-function final2_yr2(ds)
+function mean_final_year(ds)
 
     final2_yr2 = Vector{Any}()
 
     for j in 1:length(["p", "z", "b", "d"])
-        append!(final2_yr2, [ds[j][:, :, end-7320:end]])
+        append!(final2_yr2, [mean(ds[j][:, :, end-7320:end], dims=3)])
     end
 
     return [final2_yr2[1], final2_yr2[2], final2_yr2[3], final2_yr2[4]]
@@ -81,8 +97,8 @@ end
 
 function get_pct_change(yr1, yr2)
 
-    year1 = set_extinct_to_zero(yr1[:,:,end])
-    year2 = set_extinct_to_zero(yr2[:,:,end])
+    year1 = set_extinct_to_zero(yr1[:,:,:])
+    year2 = set_extinct_to_zero(yr2[:,:,:])
 
     pct_chg = ((year2 .- year1)./ year1) * 100
     pct_chg .= ifelse.(isnan.(pct_chg), 0.0, pct_chg)
@@ -92,7 +108,7 @@ function get_pct_change(yr1, yr2)
 end
 
 
-function plot_equilib(yr1, yr2, group)
+function plot_equilib_depth(yr1, yr2, group)
 
     H = 890
     zc = get_zc(H)
@@ -100,6 +116,7 @@ function plot_equilib(yr1, yr2, group)
     bcols, dcols, pcols, ncols, zcols, ab, ab_ext, ls, lfs, lg = get_plot_vars()
     tfs=9
     al=0.8
+    xl=(-2.0, 2.0)
 
     if group == "P"
         cols = pcols
@@ -146,5 +163,8 @@ function plot_equilib(yr1, yr2, group)
 end
 
 
-# fsaven = "results/outfiles/Wi100y_230915_22:19_8P6Z13B5D.nc"
+# fsaven="results/outfiles/Wi100y_230928_23:10_8P6Z13B5D.nc"
 # equilibrium_test(fsaven, 1)
+# fsaven2="results/outfiles/endpoints/Su100y_230923_19:36_8P6Z13B5D_ep.nc"
+# equilibrium_test(fsaven2, 2)
+

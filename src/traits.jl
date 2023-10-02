@@ -44,7 +44,7 @@ function apply_tradeoff(nconsumers, nresources, CM, max_i, season, run_type)
     end 
 
     if nresources == 1
-        umax_ij = set_umax_ij(nresources, nconsumers, max_i, CM, Fg_p)
+        umax_ij = set_umax_ij(nresources, nconsumers, max_i, Fg_p)
         Kp_ij = set_Kp_ij(nresources, nconsumers, Fa_p, CM, umax_ij)
         return umax_ij, Kp_ij, Fg_p
     else 
@@ -67,11 +67,11 @@ function set_vmax_ij(nd, nb, vmax_i, CM, F_g)
 end 
 
 
-function set_umax_ij(nn, np, umax_i, CM, F_g)
-    # if F_g == 0.5 and F_a is 0.5, then max_ij == max_i
+function set_umax_ij(nn, np, umax_i, F_g)
+    #NOTE current only applicable to 1N runs - if running with more, rewrite like B on D
     umax_ij = zeros(nn, np)
     for i = 1:nn
-        umax_ij[i,:] = (umax_i[i] * F_g) ./ (0.5 .* CM[i,:])  
+        umax_ij[i,:] = (umax_i .* F_g) ./ 0.5 
     end
 
     return umax_ij

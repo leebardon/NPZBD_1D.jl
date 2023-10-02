@@ -20,38 +20,6 @@ function plot_rstar(rstar_b, rstar_p, fsaven)
 end
 
 
-function group_competitors(Cs, n)
-
-    competitors = Any[]
-    for (i, row) in enumerate(eachrow(Cs))
-        for (j, col) in enumerate(eachcol(Cs))
-            if Cs[i, j] > 0
-                push!(competitors, [i, j])
-            end
-        end
-    end
-
-    return get_competitor_dict(competitors, n) 
-
-end
-
-
-function get_competitor_dict(competitors, nd)
-
-    out = Dict(name => Any[] for name in collect(1:1:nd))
-    for i in competitors
-        for j in keys(out) 
-            if i[1] == j 
-                push!(out[j], i[2]) 
-            end 
-        end 
-    end
-
-    return out
-
-end
-
-
 function plot_rstar_b(fsaven, rstar, B, D, competitors, ds)
 
     H = 500
