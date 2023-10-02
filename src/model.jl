@@ -51,28 +51,31 @@ function run_NPZBD(prms, season)
         if mod(t, trec)==0
 
             track_n, track_p, track_z, track_b, track_d, track_o = update_tracking_arrs(track_n, track_p, track_z, track_b, track_d, track_o, track_time, 
-                                                                                        ntemp, ptemp, ztemp, btemp, dtemp, otemp, t, trec, prms)
+                                                                                                 ntemp, ptemp, ztemp, btemp, dtemp, otemp, t, trec, prms)
             println("Total N: ", sum(ptemp) + sum(btemp) + sum(ntemp) + sum(dtemp) + sum(ztemp))
         
         end 
 
+        # Nutrient pulsing routine (100 timesteps / 1 day)
+        pulse_start, pulse_end = 0, 100
         if prms.pulse != 1
             if season == 1
-                # winter, pulse every 10 days
-                if t % 1000 == 0
-                    ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)       
+                if t % 1000 == 0 || pulse_start > 0
+                    pulse_start += 1
+                    ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)      
+                    if pulse_start == pulse_end; pulse_start = 0; end 
                 end
             else
-                # summer, pulse every 30 days
-                if t % 3000 == 0
-                    ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)         
+                if t % 3000 == 0 || pulse_start > 0
+                    pulse_start += 1
+                    ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)  
+                    if pulse_start == pulse_end; pulse_start = 0; end        
                 end
             end
         end 
 
         #calculate bacteria uptake and v for last timepoint
         if t == prms.nt
-
             II, JJ = get_nonzero_axes(prms.CM)
             v = zeros(prms.nd, prms.nb) 
             uptake = zeros(prms.nd, prms.nb) 

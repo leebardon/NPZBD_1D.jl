@@ -3,8 +3,7 @@ function pulse_nutrients(track_n, track_d, prms, pulse_type)
 
     if pulse_type == 2
         pulsed_n, pulsed_d = redistributed_mean(track_n, track_d, prms)
-    elseif pulse_type == 3
-        pulsed_n, pulsed_d = weighted_mean(track_n, track_d, prms)
+    else
     end
 
     return pulsed_n, pulsed_d
@@ -29,22 +28,23 @@ function redistributed_mean(track_n, track_d, prms)
 end
 
 
-function weighted_mean(track_n, track_d, prms)
-    # 50% of total goes to top 200m, the rest to bottom 690m
-    pulsed_n = Array{Float64, 2}(undef, prms.ngrid, prms.nn)  
-    total_n = sum(track_n)
-    half_n = total_n/2
-    pulsed_n[1:20, :] .= half_n/20
-    pulsed_n[21:end, :] .= half_n/(prms.ngrid - 20)
+# function weighted_mean(track_n, track_d, prms)
+#NOTE - step change is too abrupt, not realistic
+#     # 50% of total goes to top 200m, the rest to bottom 690m
+#     pulsed_n = Array{Float64, 2}(undef, prms.ngrid, prms.nn)  
+#     total_n = sum(track_n)
+#     half_n = total_n/2
+#     pulsed_n[1:20, :] .= half_n/20
+#     pulsed_n[21:end, :] .= half_n/(prms.ngrid - 20)
 
-    pulsed_d = Array{Float64, 2}(undef, prms.ngrid, prms.nd)
-    for d in 1:nd
-        total_d = sum(track_d[:, d])
-        half_d = total_d/2
-        pulsed_d[1:20, d] .= half_d/20
-        pulsed_d[21:end, d] .= half_d/(prms.ngrid - 20)
-    end
+#     pulsed_d = Array{Float64, 2}(undef, prms.ngrid, prms.nd)
+#     for d in 1:nd
+#         total_d = sum(track_d[:, d])
+#         half_d = total_d/2
+#         pulsed_d[1:20, d] .= half_d/20
+#         pulsed_d[21:end, d] .= half_d/(prms.ngrid - 20)
+#     end
 
-    return pulsed_n, pulsed_d
-end
+#     return pulsed_n, pulsed_d
+# end
 
