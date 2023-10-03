@@ -37,6 +37,7 @@ function plot_rstar_b(fsaven, rstar, B, D, competitors, ds)
     lfs=6
     xtfs=6
 
+    #TODO add line to remove rstar lines where B is 0/extinct (use set_extinct_to_zero())
     fig1 = Array{Plots.Plot, 1}(undef, nd);
     for d in 1:nd
         for (k, v) in competitors

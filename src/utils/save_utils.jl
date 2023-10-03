@@ -169,6 +169,10 @@ function save_full_run(p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, seaso
     w[:] = prms.umax_i
     w.attrib["units"] = "m3/mmol/d; max growth rate of p"
 
+    w = defVar(f, "Fg_p", Float64, ("np",))
+    w[:,:] = prms.Fg_p
+    w.attrib["units"] = "per p; fraction proteome assigned to growth"
+
     w = defVar(f, "umax_ij", Float64, ("nn", "np"))
     w[:,:] = prms.umax_ij
     w.attrib["units"] = "per n; max uptake rate"
@@ -196,6 +200,10 @@ function save_full_run(p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, seaso
     w = defVar(f, "vmax_i", Float64, ("nd",))
     w[:,:] = prms.vmax_i
     w.attrib["units"] = "per d; max uptake rate"
+
+    w = defVar(f, "Fg_b", Float64, ("nb",))
+    w[:,:] = prms.Fg_b
+    w.attrib["units"] = "per b; fraction proteome assigned to growth"
     
     w = defVar(f, "vmax_ij", Float64, ("nd", "nb"))
     w[:,:] = prms.vmax_ij
