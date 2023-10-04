@@ -7,49 +7,42 @@ include("utils/utils.jl")
 include("utils/save_utils.jl")
 
 
-function copiotrophy_indexing_static(fsaven)
+function remove_extinct(biomass)
 
-    ds = NCDataset(fsaven)
-    P, B = get_endpoints(["p", "b"], ds)
+    ex = 10^-6
+    biomass .= ifelse.(biomass .<= ex, 0.0, biomass) 
 
-    try
-        Fg_p = ds["Fg_p"][:]
-        Fg_b = ds["Fg_b"][:]
-    catch
-        Fg_p =  [0.08, 0.15, 0.25, 0.45, 0.68, 0.79, 0.84, 0.91]
-        Fg_b =  [0.5, 0.15, 0.22, 0.31, 0.45, 0.53, 0.60, 0.68, 0.73, 0.79, 0.84, 0.88, 0.91]
-    end
-
-    winners = remove_extinct([P, B])
-    B_tot = sum(winners[2], dims=2)
-    B_adj = get_adjusted_biomass(winners[2], ds, get_size([B])[1], Fg_b)
-    copio_b = calc_copiotrophy_index(B_tot, B_adj)
-
-    # P_tot = sum(winners[1], dims=2)
-    # P_adj = get_adjusted_biomass(P, ds, get_size([P])[1], Fg_p)
-    # copio_p = calc_copiotrophy_index(P_tot, P_adj)
-
-    return copio_b
-end 
-
-
-
-function remove_extinct(biomasses)
-
-    for b in biomasses
-
-        ex = 10^-6
-        b .= ifelse.(b .<= ex, 0.0, b)
-        
-    end
-
-    return biomasses
+    return biomass
     
 end
 
 
+function copiotrophy_indexing(fsaven, prms=nothing)
 
-function get_adjusted_biomass(biomass, ds, n, Fg)
+    ds = NCDataset(fsaven)
+
+    Fg_p =  [0.08, 0.15, 0.25, 0.45, 0.68, 0.79, 0.84, 0.91]
+    Fg_b =  [0.5, 0.15, 0.22, 0.31, 0.45, 0.53, 0.60, 0.68, 0.73, 0.79, 0.84, 0.88, 0.91]
+
+    # prms.pulse == 1 ? get_endpoint_copio(Fg_p, Fg_b, ds) : get_copio_over_time(Fg_p, Fg_b, ds)
+    Bt, Pt = get_final_year(ds, ["b", "p"])
+    Bt_copio = get_copio_over_time(Bt, Fg_b, ds)
+
+end 
+
+
+function get_total_biomass(biomass)
+
+    total = sum(biomass, dims=2)
+    # B_adj = get_adjusted_biomass(winners[2], ds, get_size([B])[1], Fg_b)
+    # copio_b = calc_copiotrophy_index(B_tot, B_adj)
+
+    return total
+
+end 
+
+
+function get_adjusted_biomass(biomass, n, Fg)
 
     ngrid = length(biomass[:,1])
     adj_biomass = zeros(Float64, ngrid, n) 
@@ -72,45 +65,62 @@ function calc_copiotrophy_index(tot, adj)
 end
 
 
-function copio_over_time(fsaven)
+function get_copio_over_time(biomass, Fg, ds)
 
-    ds = NCDataset(fsaven)
-    B, P = get_final_2_years(ds, ["b", "p"])
+    n = get_size([biomass])[1]
+    ngrid = length(biomass[:,1,1])
+    ts_tot = 7320
 
-    try
-        Fg_p = ds["Fg_p"][:]
-        Fg_b = ds["Fg_b"][:]
-    catch
-        Fg_p =  [0.08, 0.15, 0.25, 0.45, 0.68, 0.79, 0.84, 0.91]
-        Fg_b =  [0.5, 0.15, 0.22, 0.31, 0.45, 0.53, 0.60, 0.68, 0.73, 0.79, 0.84, 0.88, 0.91]
+    winners = remove_extinct(biomass)
+    tot = total_per_ts(winners, ngrid, ts_tot)
+    adj = adj_total_per_ts(winners, n, ngrid, Fg, ts_tot)
+    
+    copio = Array{Float64, 2}(undef, ngrid, ts_tot)
+    for t in range(1, ts_tot)
+        copio[:,t] = B_adj[:,t] ./ B_tot[:,t]
     end
 
-    winners = remove_extinct([P, B])
-    B_tot_weekly = get_weekly_total(B)
-
-
+    return copio
 
 end
 
 
-function get_final_2_years(ds, vars)
+function get_final_year(ds, vars)
 
-    final_2yrs = Vector{Any}()
+    final_yr = Vector{Any}()
 
     for v in vars
-        append!(final_2yrs, [ds[v][:, :, end-14640:end]])
+        append!(final_yr, [ds[v][:, :, end-(7320-1):end]])
     end
 
-    return final_2yrs
+    return final_yr
 
 end
 
 
-function get_weekly_total(biomass)
+function total_per_ts(biomass, ngrid, ts_tot)
 
+    total = Array{Float64, 2}(undef, ngrid, ts_tot)
+    for t in range(1, ts_tot)
+        total[:,t] = get_total_biomass(biomass)
+    end
 
+    return total
 
 end
+
+
+function adj_total_per_ts(biomass, n, ngrid, Fg, ts_tot)
+
+    adj_total = Array{Float64, 2}(undef, ngrid, ts_tot)
+    for t in range(1, ts_tot)
+        adj_total[:,t] = get_adjusted_biomass(biomass, n, Fg)
+    end
+
+    return adj_total
+
+end
+
 
 fsaven = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/Wi100y_230928_20:47_8P6Z13B5D.nc"
 indx = copiotrophy_indexing(fsaven)

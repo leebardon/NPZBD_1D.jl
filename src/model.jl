@@ -61,15 +61,15 @@ function run_NPZBD(prms, season)
         if prms.pulse != 1
             if season == 1
                 if t % 1000 == 0 || pulse_start > 0
-                    pulse_start += 1
+                    pulse_type == 3 && pulse_start += 1 
                     ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)      
-                    if pulse_start == pulse_end; pulse_start = 0; end 
+                    pulse_start == pulse_end && pulse_start = 0
                 end
             else
                 if t % 3000 == 0 || pulse_start > 0
-                    pulse_start += 1
+                    pulse_type == 3 && pulse_start += 1
                     ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)  
-                    if pulse_start == pulse_end; pulse_start = 0; end        
+                    pulse_start == pulse_end && pulse_start = 0     
                 end
             end
         end 
@@ -276,17 +276,3 @@ function get_nonzero_axes(M)
 end 
 
 
-function nutrient_pulse(pulse)
-
-        #NOTE turn off and tune to R* for the phyto - but this could be useful to simulate lateral supply
-        # also consider taking sum of top 80m and add the mean - so this simulates mixing - everything will be mixed!
-        # for testing, we can work with just N only 
-    if pulse == 1
-        pulse_size = 0.1
-    else
-        pulse_size = 0.05
-    end
-
-    return pulse_size
-
-end

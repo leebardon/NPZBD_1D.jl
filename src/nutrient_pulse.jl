@@ -1,10 +1,7 @@
 
 function pulse_nutrients(track_n, track_d, prms, pulse_type)
 
-    if pulse_type == 2
-        pulsed_n, pulsed_d = redistributed_mean(track_n, track_d, prms)
-    else
-    end
+    pulsed_n, pulsed_d = redistributed_mean(track_n, track_d, prms)
 
     return pulsed_n, pulsed_d
 
@@ -18,7 +15,7 @@ function redistributed_mean(track_n, track_d, prms)
     pulsed_n .= grid_mean_n
 
     pulsed_d = Array{Float64, 2}(undef, prms.ngrid, prms.nd) 
-    for d in 1:nd
+    for d in 1:prms.nd
         grid_mean_d = mean(track_d[:, d])
         pulsed_d[:, d] .= grid_mean_d
     end
