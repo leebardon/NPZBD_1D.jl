@@ -1,10 +1,10 @@
-using NCDatasets
-using Plots, ColorSchemes, LaTeXStrings
-using DataFrames, NCDatasets
-using SparseArrays, LinearAlgebra
+# using NCDatasets
+# using Plots, ColorSchemes, LaTeXStrings
+# using DataFrames, NCDatasets
+# using SparseArrays, LinearAlgebra
 
-include("utils/utils.jl")
-include("utils/save_utils.jl")
+# include("utils/utils.jl")
+# include("utils/save_utils.jl")
 
 
 function remove_extinct(biomass)
@@ -122,5 +122,5 @@ function adj_total_per_ts(biomass, n, ngrid, Fg, ts_tot)
 end
 
 
-fsaven = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/Wi100y_230928_20:47_8P6Z13B5D.nc"
-indx = copiotrophy_indexing(fsaven)
+# fsaven = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/Wi100y_230928_20:47_8P6Z13B5D.nc"
+# indx = copiotrophy_indexing(fsaven)

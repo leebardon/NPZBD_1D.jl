@@ -148,10 +148,7 @@
 
     # -----------------------------------------------------------------------------------------------------------#
     #   ZOOPLANKTON GRAZING 
-    #------------------------------------------------------------------------------------------------------------#
-        #TODO - remove specialists vs generalists for now, per chat with emily. Have each bacteria consuming 1 D
-        #TODO - potentially look into it with more detail later?
-    
+    #------------------------------------------------------------------------------------------------------------
         g_max = ones(nz)
         K_g = ones(nz)*1.0
         γ = ones(nz)*0.3
@@ -187,9 +184,10 @@
         end
 
         # Sinking rate for POM  #NOTE could be randomly assigned range 1 t0 10
-        ws = zeros(nd)                  # sinking speed of POM (m/day) - #TODO have this be the average lability, with max growth rate for POM as 1 /day
-        mean_DOM = mean(vmax_i[2:end])
-        ws_POM = mean_DOM
+        ws = zeros(nd)                  # sinking speed of POM (m/day) 
+        mean_lability = mean(vmax_i)
+        ws_POM = mean_lability
+        # ws_POM = 8.0
         ws[1] = ws_POM 
         w = zeros(ngrid + 1)            # water vertical velocity, if there was any
         wd = transpose(repeat(ws, 1, ngrid + 1)) + repeat(w, 1, nd) # ngrid+1 x nd

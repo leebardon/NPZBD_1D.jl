@@ -73,6 +73,7 @@ function save_full_run(p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, seaso
     f.attrib["End time"] = string(tfn)
     f.attrib["Run time"] = string(tfn - tst) 
     f.attrib["Season"] = season
+    f.attrib["Pulse Type"] = prms.pulse
 
     # simulated results
     w = defVar(f,"p",Float64,("ndepth" ,"np","nrec"))

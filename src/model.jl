@@ -61,15 +61,15 @@ function run_NPZBD(prms, season)
         if prms.pulse != 1
             if season == 1
                 if t % 1000 == 0 || pulse_start > 0
-                    pulse_type == 3 && pulse_start += 1 
+                    prms.pulse == 3 ? pulse_start += 1 : nothing
                     ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)      
-                    pulse_start == pulse_end && pulse_start = 0
+                    pulse_start == pulse_end ? pulse_start = 0 : nothing
                 end
             else
                 if t % 3000 == 0 || pulse_start > 0
-                    pulse_type == 3 && pulse_start += 1
+                    prms.pulse == 3 ? pulse_start += 1 : nothing
                     ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)  
-                    pulse_start == pulse_end && pulse_start = 0     
+                    pulse_start == pulse_end ? pulse_start = 0 : nothing   
                 end
             end
         end 
