@@ -1,23 +1,32 @@
 # using NCDatasets
 # using Plots, ColorSchemes, LaTeXStrings
 # using DataFrames, CSV
-# using SparseArrays, LinearAlgebra
+# using SparseArrays, LinearAlgebra, Statistics
 
 # include("utils/utils.jl")
 # include("utils/save_utils.jl")
 # include("plotting/rstar_plots.jl")
 
 
-function rstar_analysis(fsaven)
+function rstar_analysis(fsaven, season=nothing)
 
     global fsaven
-
     ds = NCDataset(fsaven)
-    N, P, Z, B, D = get_endpoints(["n", "p", "z", "b", "d"], ds)
 
-    rstar_b, rstar_p = get_rstar(B, P, Z, ds)
+    if ds["pulse"][:] == 1
+        N, P, Z, B, D = get_endpoints(["n", "p", "z", "b", "d"], ds)
+    else
+        if season == "winter"
+            pulse_freq = 10
+            N, P, Z, B, D = get_cycle_mean(["n", "p", "z", "b", "d"], pulse_freq, ds)
+        else
+            pulse_freq = 30
+            N, P, Z, B, D = get_cycle_mean(["n", "p", "z", "b", "d"], pulse_freq, ds)
+        end
+    end
 
-    plot_rstar(rstar_b, rstar_p, fsaven)
+    rstar_b, rstar_p, rstar_z = get_rstar(B, P, Z, ds)
+    plot_rstar(rstar_b, rstar_p, rstar_z, fsaven)
 
 end 
 
@@ -41,7 +50,10 @@ function get_rstar(B, P, Z, ds)
     loss_p = loss(P, mort_p, grz_p, np)
     rstar_p = RstarP(loss_p, ds, np)
 
-    return rstar_b, rstar_p
+    loss_z = mortality(Z, ds, nz, "Z")
+    rstar_z = RstarZ(loss_z, ds, nz)
+
+    return rstar_b, rstar_p, rstar_z
 
 end
 
@@ -60,6 +72,12 @@ function mortality(Biomass, ds, n, group)
         m_qp = ones(n) * 0.1 
         for i in range(1, n)
             mort[:, i] += (m_lp[i] .+ m_qp[i] .* Biomass[:,i])
+        end
+    elseif group == "Z"
+        m_lz = ones(n) * 1e-2  
+        m_qz = ones(n) * 1.0
+        for i in range(1, n)
+            mort[:, i] += (m_lz[i] .+ m_qz[i] .* Biomass[:,i])
         end
     end
 
@@ -118,9 +136,9 @@ function RstarB(loss, ds)
         push!(RS, Km_ij[II[j],JJ[j]] .* loss[:, j] ./ (yield[II[j],JJ[j]] .* vmax_ij[II[j],JJ[j]] .* temp_mod .- loss[:, j]))
     end
 
-    RS_out = check_for_negatives(RS)
+    # RS_out = check_for_negatives(RS)
 
-    return RS_out
+    return RS
 
 end
 
@@ -168,6 +186,31 @@ function RstarP(loss, ds, np)
 end
 
 
-# fsaven = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/Su100y_230827_17:10_4P3Z7B4D.nc"
-# rstar_analysis(fsaven)
+
+#-----------------------------------------------------------------------------------
+#                                     RSTAR Z
+#-----------------------------------------------------------------------------------
+function RstarZ(loss, ds, nz)
+
+    gmax = ones(nz)*1.0
+    K_g = ones(nz)*1.0
+    yield = ones(nz)*0.3
+    temp_mod = get_temp_mod(ds)
+
+    RS = Any[]
+    for i in range(1, nz)
+        push!(RS, K_g[i] .* loss[:, i] ./ (yield[i] * gmax[i] .* temp_mod .- loss[:, i]))
+    end
+
+    # RS_out = check_for_negatives(RS)
+
+    return RS
+
+end
+
+
+
+
+# fsaven = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/Wi100y_231005_12:31_8P6Z13B5D.nc"
+# rstar_analysis(fsaven, "winter")
 

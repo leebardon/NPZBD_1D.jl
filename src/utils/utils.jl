@@ -278,6 +278,23 @@ function set_extinct_to_zero(ds)
 end
 
 
+function get_cycle_mean(vars, pulse_freq, ds)
+
+    num_days = pulse_freq * 10
+    ts = num_days * 20
+
+    cycle_mean = Vector{Any}()
+
+    for v in vars
+        append!(cycle_mean, [mean(ds["$v"][:,:,end-ts:end], dims=3)])
+    end
+
+
+    return cycle_mean
+
+end
+
+
 function check_for_negatives(RS)
 
     for i in eachindex(RS)
@@ -355,26 +372,26 @@ function get_nonzero_axes(Mat)
 end 
 
 
-function group_competitors(Cs, n)
+function group_interactions(Cs, n)
 
-    competitors = Any[]
+    interactions = Any[]
     for (i, row) in enumerate(eachrow(Cs))
         for (j, col) in enumerate(eachcol(Cs))
             if Cs[i, j] > 0
-                push!(competitors, [i, j])
+                push!(interactions, [i, j])
             end
         end
     end
 
-    return get_competitor_dict(competitors, n) 
+    return get_interaction_dict(interactions, n) 
 
 end
 
 
-function get_competitor_dict(competitors, n)
+function get_interaction_dict(interactions, n)
 
     out = Dict(name => Any[] for name in collect(1:1:n))
-    for i in competitors
+    for i in interactions
         for j in keys(out) 
             if i[1] == j 
                 push!(out[j], i[2]) 

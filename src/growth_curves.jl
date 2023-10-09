@@ -12,8 +12,6 @@ function growth_curves(fsaven)
     ds = NCDataset(fsaven)
     N, P, Z, B, D = get_endpoints(["n", "p", "z", "b", "d"], ds)
     BD_competitors = group_competitors(sparse(ds["CM"][:]), get_size([D])[1])
-    # Rx = collect(0.1:0.22:21)[1:89]
-    # Rx = collect(0.1:0.165:15)[1:89]
     Rx = collect(0.1:0.11:10)[1:89]
 
     growth_b = calc_growth_b(B, Rx, ds)
