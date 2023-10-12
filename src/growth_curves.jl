@@ -1,21 +1,23 @@
-# using NCDatasets
-# using Plots, ColorSchemes, LaTeXStrings
-# using DataFrames
-# using SparseArrays, LinearAlgebra
+using NCDatasets
+using Plots, ColorSchemes, LaTeXStrings
+using DataFrames
+using SparseArrays, LinearAlgebra
 
-# include("utils/utils.jl")
-# include("utils/save_utils.jl")
+include("utils/utils.jl")
+include("utils/save_utils.jl")
 
 
 function growth_curves(fsaven)
 
     ds = NCDataset(fsaven)
     N, P, Z, B, D = get_endpoints(["n", "p", "z", "b", "d"], ds)
-    BD_competitors = group_competitors(sparse(ds["CM"][:]), get_size([D])[1])
+    BD_competitors = group_interactions(sparse(ds["CM"][:]), get_size([D])[1])
     Rx = collect(0.1:0.11:10)[1:89]
 
     growth_b = calc_growth_b(B, Rx, ds)
     plot_monod_b(fsaven, growth_b, B, Rx, D, BD_competitors)
+
+    # growth_p = calc_growth_p(B, Rx, ds)
 
 end
 
@@ -36,6 +38,24 @@ function calc_growth_b(B, Rx, ds)
     return growth
 
 end
+
+
+function calc_growth_p(P, Rx, ds)
+
+    umax = ds["umax_ij"][:]
+    Kp = ds["Kp_ij"][:]
+
+
+    # growth = ones(length(P[:,1]), length(P[1,:]))
+
+    # for j = axes(II, 1)
+    #     growth[:,j] = y[II[j],JJ[j]] .* (vmax[II[j],JJ[j]] .*  Rx) ./ (Rx .+ Km[II[j],JJ[j]])
+    # end
+
+    # return growth
+
+end
+
 
 # function plot_monod_b(growth, B, Dx, D, lbl, f_str, loc, lims, cols, type="B")
 function plot_monod_b(fsaven, growth, B, Dx, D, competitors)
@@ -112,8 +132,8 @@ function plot_monod_b(fsaven, growth, B, Dx, D, competitors)
 end
 
 
-# fsaven = "results/outfiles/Su100y_230928_19:47_8P6Z13B5D.nc"
-# growth_curves(fsaven)
+fsaven = "results/outfiles/Wi100y_231004_23:45_8P6Z13B5D.nc"
+growth_curves(fsaven)
 
 # winter = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Wi100y_230827_13:45_4P3Z7B4D_ep.nc")
 # summer = NCDataset("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Su100y_230827_17:10_4P3Z7B4D_ep.nc")

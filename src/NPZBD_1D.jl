@@ -40,6 +40,8 @@
     #------------------------------------------------------------------------------------------------------------#
         println(message("START"))
 
+        run_type = request(message("ST2"), RadioMenu(message("ST1")))
+
         simulation_time = request(message("TM2"), RadioMenu(message("TM1")))
         if simulation_time == 1
             years = 2
@@ -53,6 +55,10 @@
             years = 30
             tt = 10980
             nrec = 219600
+        elseif simulation_time == 4
+            years = 50
+            tt = 18300
+            nrec = 366000
         else 
             years = 100
             tt = 36600
@@ -67,35 +73,27 @@
     #------------------------------------------------------------------------------------------------------------#
     #   COLLECT USER INPUT
     #------------------------------------------------------------------------------------------------------------#
-    #TODO set up so that fundamental 'run type' can be 'equilibrium/steady state' or 'perturbed (with nutrient pulses)'
-        run_type = request(message("ST2"), RadioMenu(message("ST1")))
 
         if run_type == 1 
-            nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, umax_i, season, pulse = user_select()
+            nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, umax_i, season, pulse = user_select(run_type)
             CM = get_matrix("CM", nd, nb, nn, np, nz)
             GrM = get_matrix("GrM", nd, nb, nn, np, nz)
             CMp = get_matrix("CMp", nd, nb, nn, np, nz)
 
         elseif run_type == 2
-            #NOTE saved params pathway not working correctly - matrices don't retain same order
-            options = readdir("results/saved_params/")
-            file = request(message("LVP"), RadioMenu(options))
-            params, season = load_saved_params(dt, tt, nrec, nt, fsaven, options[file])
-
-            N, P, Z, B, D, O, track_time = run_NPZBD(params, season)
-        
-            depth_plots(fsaven, season, years, run_type)
-            exit()
-
-        elseif run_type == 3
-            nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, umax_i, season, pulse = user_select(3)
+            nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, umax_i, season, pulse = user_select(run_type)
             CM = get_prescribed_params("CM") 
             GrM = get_prescribed_params("GrM") 
             CMp = get_matrix("CMp", nd, nb, nn, np, nz)
 
+        elseif run_type == 3
+            n_cont, p_cont, z_cont, b_cont, d_cont, o_cont, nn, np, nz, nb, nd, 
+            y_ij, prob_generate_d, vmax_i, vmax_ij, umax_i, umax_ij, Km_ij, Kp_ij, 
+            season, pulse, CM, GrM, CMp, Fg_b, Fg_p = get_previous_params()
+
         end
 
-        global fsaven = set_savefiles(now(), season, years, np, nz, nb, nd)   
+        global fsaven = set_savefiles(now(), season, years, np, nz, nb, nd)
         
         
     #------------------------------------------------------------------------------------------------------------#
@@ -111,21 +109,22 @@
     # -----------------------------------------------------------------------------------------------------------#
     #   HETEROTROPHIC MICROBE PARAMS
     #------------------------------------------------------------------------------------------------------------#
-        y_ij = broadcast(*, y_i, CM)
+        run_type != 3 ? y_ij = broadcast(*, y_i, CM) : nothing
         yo_ij = y_ij*10                     # PLACEHOLDER VALUE mol B/mol O2. not realistic
         num_uptakes = sum(CM, dims=1)[1, :]
         pen = 1 ./ num_uptakes
         Km_i = vmax_i./10 
 
-        println(message("MIC"))
-
-        tradeoff_b = request(message("TB2"), RadioMenu(message("T1")))  
-        if tradeoff_b == 1 
-            vmax_ij, Km_ij, Fg_b = apply_tradeoff(nb, nd, CM, vmax_i, season, run_type)
-        else
-            vmax_ij = ones(nd, nb) * vmax_i
-            Km_ij = ones(nd, nb) * Km_i
-        end
+        if run_type != 3
+            println(message("MIC"))
+            tradeoff_b = request(message("TB2"), RadioMenu(message("T1")))  
+            if tradeoff_b == 1 
+                vmax_ij, Km_ij, Fg_b = apply_tradeoff(nb, nd, CM, vmax_i, season, run_type)
+            else
+                vmax_ij = ones(nd, nb) * vmax_i
+                Km_ij = ones(nd, nb) * Km_i
+            end
+        else; end
 
 
     # -----------------------------------------------------------------------------------------------------------#
@@ -135,15 +134,17 @@
         e_o = 150/16   
         Kp_i = umax_i./10 
 
-        tradeoff_p = request(message("TP2"), RadioMenu(message("T1")))  
-        if tradeoff_p == 1 
-            umax_ij, Kp_ij, Fg_p = apply_tradeoff(np, nn, CMp, umax_i, season, run_type)
-        else
-            umax_ij = ones(nn, np) * umax_i
-            Kp_ij = ones(nn, np) * Kp_i
-        end 
+        if run_type != 3
+            tradeoff_p = request(message("TP2"), RadioMenu(message("T1")))  
+            if tradeoff_p == 1 
+                umax_ij, Kp_ij, Fg_p = apply_tradeoff(np, nn, CMp, umax_i, season, run_type)
+            else
+                umax_ij = ones(nn, np) * umax_i
+                Kp_ij = ones(nn, np) * Kp_i
+            end 
+        else; end
 
-        save_prm = request(message("SVP2"), RadioMenu(message("SVP1")))
+        # save_prm = request(message("SVP2"), RadioMenu(message("SVP1")))
 
 
     # -----------------------------------------------------------------------------------------------------------#
@@ -172,22 +173,21 @@
     #   ORGANIC MATTER
     #------------------------------------------------------------------------------------------------------------#
         # Distribution of OM from mortality to detritus pools
-        if supply_weight == 1 
-            prob_generate_d = get_prescribed_params("supply_weight") 
-            # for larger pool nums, narrow range of lability for POM and larger range for DOM
-        elseif supply_weight == 2
-            prob_generate_d = ones(nd) * (1/nd)
-        else 
-            dist = LogNormal(1.5,2)
-            x = rand(dist, nd)
-            prob_generate_d =  x / sum(x)
-        end
+        if run_type != 3
+            if supply_weight == 1 
+                prob_generate_d = get_prescribed_params("supply_weight") 
+            elseif supply_weight == 2
+                prob_generate_d = ones(nd) * (1/nd)
+            else 
+                dist = LogNormal(1.5,2)
+                x = rand(dist, nd)
+                prob_generate_d =  x / sum(x)
+            end
+        else; end
 
         # Sinking rate for POM  #NOTE could be randomly assigned range 1 t0 10
         ws = zeros(nd)                  # sinking speed of POM (m/day) 
-        mean_lability = mean(vmax_i)
-        ws_POM = mean_lability
-        # ws_POM = 8.0
+        ws_POM = 10.0
         ws[1] = ws_POM 
         w = zeros(ngrid + 1)            # water vertical velocity, if there was any
         wd = transpose(repeat(ws, 1, ngrid + 1)) + repeat(w, 1, nd) # ngrid+1 x nd
@@ -242,12 +242,22 @@
     # -----------------------------------------------------------------------------------------------------------#
     #   INITIAL CONDITIONS
     #------------------------------------------------------------------------------------------------------------#
-        nIC = ones(Float64, ngrid, nn) * 20.0
-        pIC = ones(Float64, ngrid, np) * 0.1 
-        zIC = ones(Float64, ngrid, nz) * 0.01
-        dIC = ones(Float64, ngrid, nd) * 0.01
-        bIC = ones(Float64, ngrid, nb) * 0.1 
-        oIC = ones(Float64, ngrid, 1)  * 100.0
+        
+        if run_type != 3
+            nIC = ones(Float64, ngrid, nn) * 20.0
+            pIC = ones(Float64, ngrid, np) * 0.1 
+            zIC = ones(Float64, ngrid, nz) * 0.01
+            dIC = ones(Float64, ngrid, nd) * 0.01
+            bIC = ones(Float64, ngrid, nb) * 0.1 
+            oIC = ones(Float64, ngrid, 1)  * 100.0
+        else
+            nIC = n_cont
+            pIC = p_cont
+            zIC = z_cont
+            bIC = b_cont
+            dIC = d_cont
+            oIC = o_cont
+        end
 
 
     # -----------------------------------------------------------------------------------------------------------#

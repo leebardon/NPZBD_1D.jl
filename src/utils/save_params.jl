@@ -69,38 +69,43 @@ function save_params(prms)
 
 end
 
+function load_previous_run()
 
-function load_saved_params(dt, tt, nrec, nt, fsaven, filename)
-
-    p = jldopen("results/saved_params/$(filename)", "r") do f
-                read(f, "A")
-    end
-
-    zc = [p.dz/2 : p.dz : p.H - p.dz/2;]  
-    zf = [0 : p.dz : p.H;]  
-
-    season = request(message("SE2"), RadioMenu(message("SE1")))
-    if season == 1
-        mlz = 30
-        temp = 6.5 .*exp.(-zc ./ 150) .+ 9 .*exp.(-zc ./ 500) .+ 3
-    else
-        mlz = 15
-        temp = 10 .*exp.(-zc ./ 150) .+ 9 .*exp.(-zc ./ 500) .+ 2.9
-    end  
-            
-    kappa_z = (1e-2  .* exp.(-zf/mlz) .+ 1e-2 .+ 1e-4 .* exp.((zf .- p.H) / 100.)) .* 3600 .* 24 
-    kappa_z[1], kappa_z[end] = 0, 0
-    coeffs = [0.8, -4000, 293.15, 273.15]
-    temp_fun = coeffs[1] .* exp.(coeffs[2] .*(1 ./ (temp .+ coeffs[4]) .- 1 ./ coeffs[3]))
-
-    params = Prms(
-        tt, dt, nt, nrec, p.H, p.dz, p.np, p.nb, p.nz, p.nn, p.nd, p.pIC, p.bIC, p.zIC, p.nIC, p.dIC, p.oIC, 
-        p.umax_i, p.umax_ij, p.Kp_i, p.Kp_ij, p.m_lp, p.m_qp, p.light, temp_fun, p.K_I, p.CMp,
-        p.vmax_i, p.vmax_ij, p.Km_i, p.Km_ij, p.y_ij, p.m_lb, p.m_qb, p.prob_generate_d, p.CM,
-        p.g_max, p.K_g, p.γ, p.m_lz, p.m_qz, p.GrM, p.pen, kappa_z, p.wd, p.ngrid, 
-        p.e_o, p.yo_ij, p.koverh, p.o2_sat, p.ml_boxes, p.t_o2relax, p.o2_deep, fsaven
-    )
-
-    return params, season
+    
 
 end
+
+# function load_saved_params(dt, tt, nrec, nt, fsaven, filename)
+
+#     p = jldopen("results/saved_params/$(filename)", "r") do f
+#                 read(f, "A")
+#     end
+
+#     zc = [p.dz/2 : p.dz : p.H - p.dz/2;]  
+#     zf = [0 : p.dz : p.H;]  
+
+#     season = request(message("SE2"), RadioMenu(message("SE1")))
+#     if season == 1
+#         mlz = 30
+#         temp = 6.5 .*exp.(-zc ./ 150) .+ 9 .*exp.(-zc ./ 500) .+ 3
+#     else
+#         mlz = 15
+#         temp = 10 .*exp.(-zc ./ 150) .+ 9 .*exp.(-zc ./ 500) .+ 2.9
+#     end  
+            
+#     kappa_z = (1e-2  .* exp.(-zf/mlz) .+ 1e-2 .+ 1e-4 .* exp.((zf .- p.H) / 100.)) .* 3600 .* 24 
+#     kappa_z[1], kappa_z[end] = 0, 0
+#     coeffs = [0.8, -4000, 293.15, 273.15]
+#     temp_fun = coeffs[1] .* exp.(coeffs[2] .*(1 ./ (temp .+ coeffs[4]) .- 1 ./ coeffs[3]))
+
+#     params = Prms(
+#         tt, dt, nt, nrec, p.H, p.dz, p.np, p.nb, p.nz, p.nn, p.nd, p.pIC, p.bIC, p.zIC, p.nIC, p.dIC, p.oIC, 
+#         p.umax_i, p.umax_ij, p.Kp_i, p.Kp_ij, p.m_lp, p.m_qp, p.light, temp_fun, p.K_I, p.CMp,
+#         p.vmax_i, p.vmax_ij, p.Km_i, p.Km_ij, p.y_ij, p.m_lb, p.m_qb, p.prob_generate_d, p.CM,
+#         p.g_max, p.K_g, p.γ, p.m_lz, p.m_qz, p.GrM, p.pen, kappa_z, p.wd, p.ngrid, 
+#         p.e_o, p.yo_ij, p.koverh, p.o2_sat, p.ml_boxes, p.t_o2relax, p.o2_deep, fsaven
+#     )
+
+#     return params, season
+
+# end

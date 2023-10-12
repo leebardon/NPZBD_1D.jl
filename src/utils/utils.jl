@@ -5,10 +5,10 @@ function message(v::String, nd::Int64=0, nb::Int64=0, nn::Int64=0, np::Int64=0, 
 
     m = Dict(
         "START" => "\n -------------------------------- STARTING PROGRAM ----------------------------------- \n",
-        "ST1" => ["Start New Run", "Use Saved Params", "Use Prescribed Model"],
-        "ST2" => "\nStart new run, load saved params or run prescribed model?",
-        "TM1" => ["2 years (tt=732)", "10 years (tt=3660)", "30 years (tt=10980)", "100 years (tt=36600)"],
-        "TM2" => "Select Simulation Runtime:",
+        "ST1" => ["Start New Run", "Start Prescribed Model Run", "Continue Run"],
+        "ST2" => "\nStart new simulation, load prescribed model, or continue previous run?",
+        "TM1" => ["2 years (days=732)", "10 years (days=3660)", "30 years (days=10980)", "50 years (days=18300)", "100 years (days=36600)"],
+        "TM2" => "\nSelect Simulation Runtime:",
         "P1" => ["None (steady state)", "Single pulse/10 days", "Pulse each ts for 1 day/10 days"],
         "P2" => "\nSelect nutrient pulsing regime: ",
         "DN" => "\nEnter number of detritus pools (nd): ",
@@ -53,39 +53,79 @@ end
 
 function user_select(run_type=0)
 
-    pulse = request(message("P2"), RadioMenu(message("P1")))
-
-    println(message("DN"))
-    input = readline()
-    nd = parse(Int64, input) 
-    nb = microbe_num("BN")
-    np = microbe_num("PN")
-    nz = microbe_num("ZN")
-    nn = 1
-
-    yield = request(message("Y2"), RadioMenu(message("Y1")))
-    yield == 1 ? y_i = ones(nd)*0.4 : y_i = rand(nd)*0.5
-
-    supply_weight = request(message("SW2"), RadioMenu(message("SW1")))
-
-    if run_type != 3
+    if run_type == 1
+        println(message("DN"))
+        input = readline()
+        nd = parse(Int64, input) 
+        nb = microbe_num("BN")
+        np = microbe_num("PN")
+        nz = microbe_num("ZN")
+        nn = 1
         println(message("SUB"))
         uptake = request(message("UP2"), RadioMenu(message("UP1")))
         uptake == 1 ? vmax_i = ordered_uptake_arr(nd) : vmax_i = random_uptake_arr(nd)
-
         uptake_p = request(message("UPP2"), RadioMenu(message("UPP1")))
         uptake_p == 1 ? umax_i = fill(1., np) : umax_i = random_uptake_arr(np)
-    else 
+
+    elseif run_type == 2
         vmax_i = get_prescribed_params("vmax_i") 
         umax_i = get_prescribed_params("umax_i") 
+        nd = length(vmax_i)
+        np = length(umax_i)
+        nb = length(get_prescribed_params("Fg_b"))
+        nz = size(get_prescribed_params("GrM"), 2)
+        nn = 1
+
     end 
 
+    yield = request(message("Y2"), RadioMenu(message("Y1")))
+    yield == 1 ? y_i = ones(nd)*0.4 : y_i = rand(nd)*0.5
+    supply_weight = request(message("SW2"), RadioMenu(message("SW1")))
+
     println(message("ENV"))
+    pulse = request(message("P2"), RadioMenu(message("P1")))
     season = request(message("SE2"), RadioMenu(message("SE1")))
 
-    @info("User Selections: \n SW = $supply_weight \n B yield = $y_i \n B uptake = $vmax_i \n P uptake = $umax_i \n Season == $season \n")
+    @info("User Selections: \n pulse type = $pulse, SW = $supply_weight \n B yield = $y_i \n B uptake = $vmax_i \n P uptake = $umax_i \n Season == $season \n")
 
     return nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, umax_i, season, pulse
+
+end
+
+
+function get_previous_params()
+
+    files = readdir("results/outfiles/endpoints")
+    f = request("\nSelect output file:", RadioMenu(files))
+    ds = NCDataset("results/outfiles/endpoints/$(files[f])")
+    
+    n = ds["n"][:]
+    p = ds["p"][:]
+    z = ds["z"][:]
+    b = ds["b"][:]
+    d = ds["d"][:]
+    o = ds["o"][:]
+    nn, np, nz, nb, nd = get_size([n, p, z, b, d])
+
+        #NOTE save prob_generate_d
+    y_ij = ds["y_ij"][:]
+    prob_generate_d = get_prescribed_params("supply_weight") 
+    vmax_i = ds["vmax_i"][:]
+    vmax_ij = ds["vmax_ij"][:]
+    umax_i = ds["umax_i"][:]
+    umax_ij = ds["umax_ij"][:]
+    Km_ij = ds["Km_ij"][:]
+    Kp_ij = ds["Kp_ij"][:]
+    season = ds.attrib["Season"]
+    pulse = ds["pulse"][:]
+    CM = ds["CM"][:]
+    GrM = ds["GrM"][:]
+    CMp = ds["CMp"][:]
+    Fg_b = ds["Fg_b"][:]
+    Fg_p = ds["Fg_p"][:]
+
+    return n, p, z, b, d, o, nn, np, nz, nb, nd, y_ij, prob_generate_d, vmax_i, vmax_ij, umax_i, umax_ij, 
+            Km_ij, Kp_ij, season, pulse, CM, GrM, CMp, Fg_b, Fg_p
 
 end
 
