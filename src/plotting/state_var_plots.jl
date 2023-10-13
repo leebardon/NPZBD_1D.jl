@@ -7,7 +7,7 @@ include("/home/lee/Dropbox/Development/NPZBD_1D/src/utils/utils.jl")
 include("/home/lee/Dropbox/Development/NPZBD_1D/src/utils/save_utils.jl")
 
 
-function plot_biomasses(fsaven, season_num)
+function plot_state_vars(fsaven, season_num)
 
     H = 890
     zc = get_zc(H)
@@ -19,13 +19,7 @@ function plot_biomasses(fsaven, season_num)
     if ds["pulse"][:] == 1
         N, P, Z, B, D, O = get_endpoints(["n", "p", "z", "b", "d", "o"], ds)
     else
-        if season == "Winter"
-            pulse_freq = 10
-            N, P, Z, B, D, O = get_cycle_mean(["n", "p", "z", "b", "d", "o"], pulse_freq, ds)
-        else
-            pulse_freq = 30
-            N, P, Z, B, D, O = get_cycle_mean(["n", "p", "z", "b", "d", "o"], pulse_freq, ds)
-        end
+        N, P, Z, B, D, O = mean_over_time(["n", "p", "z", "b", "d", "o"], ds, season)
     end
     
     f1, dir1 = plot_stacked(N, P, Z, B, D, O, zc, filename)
@@ -57,7 +51,7 @@ function plot_stacked(N, P, Z, B, D, O, zc, filename)
     alpha=ab, labelfontsize=lfs, legend=lg, yformatter=Returns(""), xlabel=L" mm/m^3")
 
     p4 = plot(O[:,1], -zc, lw=ls, lc="pink", ls=:dot, grid=false, xrotation=45, label="", ylimits=yl, 
-    alpha=ab, labelfontsize=lfs, yformatter=Returns(""))
+    alpha=ab, labelfontsize=lfs, yformatter=Returns(""), xlabel=L" mm/m^3")
 
     f1 = plot(p1, p2, p3, p4,
         layout = [1 1 1 1],
@@ -136,7 +130,9 @@ function plot_individual(P, Z, B, D, zc, season, filename)
 end
 
 
-fsaven = "results/outfiles/Wi50y_231011_23:28_8P20Z13B5D.nc"
-# fsaven = "results/outfiles/Wi50y_231011_20:23_8P20Z13B5D.nc"
-plot_biomasses(fsaven, 1)
+# fsaven = "results/outfiles/Wi100y_231011_20:23_8P20Z13B5D.nc"
+# fsaven = "results/outfiles/Wi100y_231011_23:28_8P20Z13B5D.nc"
+# fsaven = "results/outfiles/Wi30y_231012_22:36_8P20Z13B5D.nc"
+# fsaven = "results/outfiles/Wi2y_231013_14:09_8P20Z13B5D.nc"
+# plot_state_vars(fsaven, 1)
 

@@ -9,8 +9,8 @@ function message(v::String, nd::Int64=0, nb::Int64=0, nn::Int64=0, np::Int64=0, 
         "ST2" => "\nChoose run type: ",
         "TM1" => ["2 years (days=732)", "10 years (days=3660)", "30 years (days=10980)", "50 years (days=18300)", "100 years (days=36600)"],
         "TM2" => "\nSelect Simulation Runtime:",
-        "P1" => ["None (steady state)", "Single pulse/10 days", "Pulse each ts for 1 day/10 days"],
-        "P2" => "\nSelect nutrient pulsing regime: ",
+        "P1" => ["None (steady state)", "Single pulse at 10 (winter) or 30 (summer) day intervals"],
+        "P2" => "Select nutrient pulsing regime: ",
         "DN" => "\nEnter number of detritus pools (nd): ",
         "BN" => "Enter number of bacteria populations (nb): ",
         "PN" => "Enter number of phyto populations (np): ",
@@ -21,15 +21,15 @@ function message(v::String, nd::Int64=0, nb::Int64=0, nn::Int64=0, np::Int64=0, 
         "SW2" => "\n Select supply weight for OM pools (SW):",
         "SUB" => "\n SETTING SUBSTRATE TRAITS \n -------------------------- ",
         "UP1" => ["Ordered assignment", "Randomly selected along log range"],
-        "UP2" => "Select max bacteria uptake rate (vmax_i, 1/d):",
+        "UP2" => "Select max bacteria uptake rate (umax_i, 1/d):",
         "UPP1" => ["Ordered assignment", "Randomly selected along log range"],
-        "UPP2" => "\nSelect max phyto uptake rate (umax_i, 1/d):",
+        "UPP2" => "\nSelect max phyto uptake rate (vmax_i, 1/d):",
         "MIC" => "\n SETTING MICROBIAL TRAITS \n --------------------------",
         "T1" => ["Tradeoff", "Constant affinity"],
         "TB2" => "Apply bacterial growth rate-affinity tradeoff?",
         "TP2" => "\nApply phyto growth rate-affinity tradeoff?",
         "ENV" => "\n SETTING NUTRIENT SUPPLY \n -------------------------- ",
-        "SE2" => "Simulate winter or summer conditions?",
+        "SE2" => "\nSimulate winter or summer conditions?",
         "SE1" => ["Winter", "Summer"],
         "LVP" => "\nSelect params to load: ",
         "SVP1" => ["Yes", "No"],
@@ -63,15 +63,15 @@ function user_select(run_type=0)
         nn = 1
         println(message("SUB"))
         uptake = request(message("UP2"), RadioMenu(message("UP1")))
-        uptake == 1 ? vmax_i = ordered_uptake_arr(nd) : vmax_i = random_uptake_arr(nd)
+        uptake == 1 ? umax_i = ordered_uptake_arr(nd) : umax_i = random_uptake_arr(nd)
         uptake_p = request(message("UPP2"), RadioMenu(message("UPP1")))
-        uptake_p == 1 ? umax_i = fill(1., np) : umax_i = random_uptake_arr(np)
+        uptake_p == 1 ? vmax_i = fill(1., np) : vmax_i = random_uptake_arr(np)
 
     elseif run_type == 2
-        vmax_i = get_prescribed_params("vmax_i") 
         umax_i = get_prescribed_params("umax_i") 
-        nd = length(vmax_i)
-        np = length(umax_i)
+        vmax_i = get_prescribed_params("vmax_i") 
+        nd = length(umax_i)
+        np = length(vmax_i)
         nb = length(get_prescribed_params("Fg_b"))
         nz = size(get_prescribed_params("GrM"), 1)
         nn = 1
@@ -88,7 +88,7 @@ function user_select(run_type=0)
 
     @info("User Selections: \n pulse type = $pulse, SW = $supply_weight \n B yield = $y_i \n B uptake = $vmax_i \n P uptake = $umax_i \n Season == $season \n")
 
-    return nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, umax_i, season, pulse
+    return nd, nb, np, nz, nn, y_i, supply_weight, umax_i, vmax_i, season, pulse
 
 end
 
@@ -124,7 +124,7 @@ function get_previous_params()
     Fg_b = ds["Fg_b"][:]
     Fg_p = ds["Fg_p"][:]
 
-    return n, p, z, b, d, o, nn, np, nz, nb, nd, y_ij, prob_generate_d, vmax_i, vmax_ij, umax_i, umax_ij, 
+    return n, p, z, b, d, o, nn, np, nz, nb, nd, y_ij, prob_generate_d, umax_i, umax_ij, vmax_i, vmax_ij, 
             Km_ij, Kp_ij, season, pulse, CM, GrM, CMp, Fg_b, Fg_p
 
 end
@@ -212,7 +212,7 @@ end
 
 function print_info(prms)
 
-    @printf("\n np = %5.0f \n nb = %5.0f \n nz = %5.0f \n nn = %5.0f \n nd = %5.0f \n days = %5.0f \n\n", prms.np, prms.nb, prms.nz, prms.nn, prms.nd, prms.tt)
+    @printf("\n np = %5.0f \n nb = %5.0f \n nz = %5.0f \n nn = %5.0f \n nd = %5.0f \n days = %5.0f \n\n", prms.np, prms.nb, prms.nz, prms.nn, prms.nd, prms.days)
     println("File will be saved as: ", prms.fsaven)
     println("nt = ", prms.nt)
 
@@ -255,7 +255,7 @@ function update_tracking_arrs(track_n, track_p, track_z, track_b, track_d, track
     track_o[:,:,j] .= otemp
     track_time[j] = t_id 
 
-    @printf("Day %7.1f out of %5.0f = %4.0f%% done at %s \n", t_id, prms.tt, t_id/prms.tt*100, now())
+    @printf("Day %7.1f out of %5.0f = %4.0f%% done at %s \n", t_id, prms.days, t_id/prms.days*100, now())
 
     return track_n, track_p, track_z, track_b, track_d, track_o, track_time
 
@@ -326,7 +326,21 @@ function set_extinct_to_zero(ds)
 end
 
 
-function get_cycle_mean(vars, pulse_freq, ds)
+function mean_over_time(state_vars, ds, season)
+
+    if season == "Winter"
+        pulse_freq = 10
+        means_over_time = get_cycle_means(state_vars, pulse_freq, ds)
+    else
+        pulse_freq = 30
+        means_over_time = get_cycle_means(state_vars, pulse_freq, ds)
+    end
+
+    return means_over_time
+    
+end
+
+function get_cycle_means(vars, pulse_freq, ds)
 
     num_days = pulse_freq * 10
     ts = num_days * 20

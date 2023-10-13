@@ -8,21 +8,16 @@ include("utils/save_utils.jl")
 include("plotting/rstar_plots.jl")
 
 
-function rstar_analysis(fsaven, season=nothing)
+function rstar_analysis(fsaven, season_num)
 
     global fsaven
     ds = NCDataset(fsaven)
+    season_num == 1 ? season = "Winter" : season = "Summer"
 
     if ds["pulse"][:] == 1
         N, P, Z, B, D = get_endpoints(["n", "p", "z", "b", "d"], ds)
     else
-        if season == "Winter"
-            pulse_freq = 10
-            N, P, Z, B, D = get_cycle_mean(["n", "p", "z", "b", "d"], pulse_freq, ds)
-        else
-            pulse_freq = 30
-            N, P, Z, B, D = get_cycle_mean(["n", "p", "z", "b", "d"], pulse_freq, ds)
-        end
+        N, P, Z, B, D = mean_over_time(["n", "p", "z", "b", "d"], ds, season)
     end
 
     rstar_b, rstar_p, rstar_z = get_rstar(B, P, Z, ds)
@@ -36,9 +31,7 @@ end
 #-----------------------------------------------------------------------------------
 function get_rstar(B, P, Z, ds)
 
-    nb = get_size([B])[1]
-    nz = get_size([Z])[1]
-    np = get_size([P])[1]
+    nb, nz, np = get_size([B, Z, P])
     
     mort_b = mortality(B, ds, nb, "B")
     grz_b = b_grazing(B, Z, np, nb, nz, ds)
@@ -125,7 +118,7 @@ end
 
 function RstarB(loss, ds)
 
-    vmax_ij = ds["vmax_ij"][:]
+    umax_ij = ds["umax_ij"][:]
     Km_ij = ds["Km_ij"][:]
     yield = ds["y_ij"][:]
     temp_mod = get_temp_mod(ds)
@@ -133,7 +126,7 @@ function RstarB(loss, ds)
 
     RS = Any[]
     for j = axes(II, 1)
-        push!(RS, Km_ij[II[j],JJ[j]] .* loss[:, j] ./ (yield[II[j],JJ[j]] .* vmax_ij[II[j],JJ[j]] .* temp_mod .- loss[:, j]))
+        push!(RS, Km_ij[II[j],JJ[j]] .* loss[:, j] ./ (yield[II[j],JJ[j]] .* umax_ij[II[j],JJ[j]] .* temp_mod .- loss[:, j]))
     end
 
     # RS_out = check_for_negatives(RS)
@@ -170,13 +163,13 @@ end
 
 function RstarP(loss, ds, np)
 
-    umax_ij = ds["umax_ij"][:]
+    vmax_ij = ds["vmax_ij"][:]
     Kp_ij = ds["Kp_ij"][:]
     temp_mod = get_temp_mod(ds)
 
     RS = Any[]
     for i in range(1, np)
-        push!(RS, Kp_ij[i] .* loss[:, i] ./ (umax_ij[i] .* temp_mod .- loss[:, i]))
+        push!(RS, Kp_ij[i] .* loss[:, i] ./ (vmax_ij[i] .* temp_mod .- loss[:, i]))
     end
 
     RS_out = check_for_negatives(RS)
@@ -211,6 +204,6 @@ end
 
 
 
-fsaven = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/Wi50y_231011_23:28_8P20Z13B5D.nc"
-rstar_analysis(fsaven, "Winter")
+# fsaven = "results/outfiles/Wi2y_231013_14:47_8P20Z13B5D.nc"
+# rstar_analysis(fsaven, "Winter")
 

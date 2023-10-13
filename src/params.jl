@@ -4,7 +4,7 @@
 # @autodoc
 
 @with_kw struct Prms
-    tt::Int64                      # num days (run time)
+    days::Int64                    # num days (run time)
     dt::Float64                    # length of one time-step
     nt::Int64                      # num days / num timesteps
     nrec::Int64                    # num timepoints to record
@@ -21,8 +21,8 @@
     nIC::Array{Float64,2}          # initial condition for nn n at time 0
     dIC::Array{Float64,2}          # initial condition for nd d at time 0
     oIC::Array{Float64,2}          # initial condition for no o at time 0
-    umax_i::Array{Float64,1}       # max uptake rate overall for p_i
-    umax_ij::Array{Float64,2}      # max uptake rate of phyto j on n
+    vmax_i::Array{Float64,1}       # max uptake rate overall for p_i
+    vmax_ij::Array{Float64,2}      # max uptake rate of phyto j on n
     Kp_i::Array{Float64,1}         # half saturation rate for p_i 
     Kp_ij::Array{Float64,2}        # half saturation rate of phyto j on n 
     m_lp::Array{Float64,1}         # linear mort of p (1/d) 
@@ -32,8 +32,8 @@
     K_I::Float64                   # light half-saturation constant
     CMp::Array{Bool,2}             # consumption matrix: nn X np
     Fg_p::Array{Float64, 1}        # fraction of proteome devoted to growth for each P
-    vmax_i::Array{Float64,1}       # max uptake rate overall for d_i
-    vmax_ij::Array{Float64,2}      # max uptake rate of bacteria j on d_i
+    umax_i::Array{Float64,1}       # max uptake rate overall for d_i
+    umax_ij::Array{Float64,2}      # max uptake rate of bacteria j on d_i
     Km_i::Array{Float64,1}         # half saturation rate overall for d_i 
     Km_ij::Array{Float64,2}        # half saturation rate of bacteria j on d_i 
     y_ij::Array{Float64,2}         # yield rate of bacteria j on d_i
@@ -57,7 +57,7 @@
     e_o::Float64                   # production of O2 (excretion) (mol O2 per mol N uptake)
     yo_ij::Array{Float64, 2}       # O2 yield rate of bacteria j on d_i (mol B/mol O2)
     koverh::Float64                # gas transfer coefficient for each box comprising the mixed layer
-    o2_sat::Float64                 # O2 half-sat constant (mmol/m3)
+    o2_sat::Float64                # O2 half-sat constant (mmol/m3)
     ml_boxes::Int64                # num boxes in mixed layer, close to 100m total sum
     t_o2relax::Float64             # deep oxygen relaxation (1/day)
     o2_deep::Float64               # mmol/m3

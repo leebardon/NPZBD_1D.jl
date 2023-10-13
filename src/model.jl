@@ -48,46 +48,41 @@ function run_NPZBD(prms, season)
         # Runge-Kutta 4th order 
         ntemp, ptemp, ztemp, btemp, dtemp, otemp = rk4(ntemp, ptemp, ztemp, btemp, dtemp, otemp, prms, t)
 
-        if mod(t, trec)==0
+        if mod(t, trec) == 0
 
             track_n, track_p, track_z, track_b, track_d, track_o = update_tracking_arrs(track_n, track_p, track_z, track_b, track_d, track_o, track_time, 
-                                                                                                 ntemp, ptemp, ztemp, btemp, dtemp, otemp, t, trec, prms)
+                                                                                        ntemp, ptemp, ztemp, btemp, dtemp, otemp, t, trec, prms)
             println("Total N: ", sum(ptemp) + sum(btemp) + sum(ntemp) + sum(dtemp) + sum(ztemp))
         
         end 
 
-        # Nutrient pulsing routine (100 timesteps / 1 day)
-        pulse_start, pulse_end = 0, 100
+        # Nutrient pulsing routine 
         if prms.pulse != 1
             if season == 1
-                if t % 1000 == 0 || pulse_start > 0
-                    prms.pulse == 3 ? pulse_start += 1 : nothing
+                if t % 1000 == 0 
                     ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)      
-                    pulse_start == pulse_end ? pulse_start = 0 : nothing
                 end
             else
-                if t % 3000 == 0 || pulse_start > 0
-                    prms.pulse == 3 ? pulse_start += 1 : nothing
+                if t % 3000 == 0 
                     ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)  
-                    pulse_start == pulse_end ? pulse_start = 0 : nothing   
                 end
             end
         end 
 
-        #calculate bacteria uptake and v for last timepoint
+        #calculate bacteria uptake for last timepoint
         if t == prms.nt
             II, JJ = get_nonzero_axes(prms.CM)
             v = zeros(prms.nd, prms.nb) 
-            uptake = zeros(prms.nd, prms.nb) 
+            uptake_b = zeros(prms.nd, prms.nb) 
         
             @inbounds for n = axes(II, 1)
-                v[II[n],JJ[n]] = prms.vmax_ij[II[n],JJ[n]] * prms.pen[JJ[n]] .* dtemp[II[n]] ./ (dtemp[II[n]] .+ prms.Km_ij[II[n],JJ[n]]) 
-                uptake[II[n],JJ[n]] = v[II[n],JJ[n]] .* btemp[JJ[n]]
+                v[II[n],JJ[n]] = prms.umax_ij[II[n],JJ[n]] * prms.pen[JJ[n]] .* dtemp[II[n]] ./ (dtemp[II[n]] .+ prms.Km_ij[II[n],JJ[n]]) 
+                uptake_b[II[n],JJ[n]] = v[II[n],JJ[n]] .* btemp[JJ[n]]
             end  
             
             end_time = now() 
-            save_full_run(track_p, track_b, track_z, track_n, track_d, track_o, track_time, v, uptake, start_time, end_time, prms, season)
-            save_endpoints(track_n, track_p, track_z, track_b, track_d, track_o, prms, season)
+            save_full_run(track_p, track_b, track_z, track_n, track_d, track_o, track_time, uptake_b, start_time, end_time, prms, season)
+            save_endpoints(track_n, track_p, track_z, track_b, track_d, track_o, uptake_b, prms, season)
 
         end
     end 
@@ -146,7 +141,7 @@ function phyto_uptake(prms, N, P, dNdt, dPdt, dOdt, t)
     II, JJ = get_nonzero_axes(prms.CMp)
 
     for j = axes(II, 1)
-        uptake = P[:,JJ[j]] .* prms.temp_fun .* prms.umax_ij[II[j],JJ[j]] .* min.(N./ (N .+ prms.Kp_ij[II[j],JJ[j]]), prms.light ./ (prms.light .+ prms.K_I))
+        uptake = P[:,JJ[j]] .* prms.temp_fun .* prms.vmax_ij[II[j],JJ[j]] .* min.(N./ (N .+ prms.Kp_ij[II[j],JJ[j]]), prms.light ./ (prms.light .+ prms.K_I))
         dNdt += -uptake
         dOdt += uptake * prms.e_o
         dPdt[:,JJ[j]] += uptake 
@@ -162,7 +157,7 @@ function bacteria_uptake(prms, B, D, dDdt, dBdt, dNdt, dOdt, t)
     II, JJ = get_nonzero_axes(prms.CM)
 
     for j = axes(II, 1)
-        uptake = B[:,JJ[j]] .* prms.temp_fun .* prms.vmax_ij[II[j],JJ[j]] .* D[:,II[j]] ./ (D[:,II[j]] .+ prms.Km_ij[II[j],JJ[j]])
+        uptake = B[:,JJ[j]] .* prms.temp_fun .* prms.umax_ij[II[j],JJ[j]] .* D[:,II[j]] ./ (D[:,II[j]] .+ prms.Km_ij[II[j],JJ[j]])
         yield = prms.y_ij[II[j],JJ[j]]
         dDdt[:,II[j]] += -uptake
         dBdt[:,JJ[j]] += uptake .* yield

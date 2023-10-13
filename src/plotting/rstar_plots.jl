@@ -30,8 +30,7 @@ function plot_rstar_b(fsaven, rstar, B, D, competitors, ds)
     nd = get_size([D])[1]
 
     parent_folder = "results/plots/rstar/"
-    # filename = replace(fsaven, ".nc" => "", "results/outfiles/" => "")
-    filename = replace(fsaven, ".nc" => "", "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/" => "")
+    filename = replace(fsaven, ".nc" => "", "/home/lee/Dropbox/Development/NPZBD_1D/" => "", "results/outfiles/" => "")
     dir = check_subfolder_exists(filename, parent_folder)
 
     bcols, dcols, pcols, ncols, zcols, ab, ab_ext, ls, lfs, lg = get_plot_vars()
@@ -104,8 +103,7 @@ function plot_rstar_p(fsaven, rstar, P, N, ds)
     np = get_size([P])[1]
 
     parent_folder = "results/plots/rstar/"
-    # filename = replace(fsaven, ".nc" => "", "results/outfiles/" => "")
-    filename = replace(fsaven, ".nc" => "", "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/" => "")
+    filename = replace(fsaven, ".nc" => "", "/home/lee/Dropbox/Development/NPZBD_1D/" => "", "results/outfiles/" => "")
     dir = check_subfolder_exists(filename, parent_folder)
 
     bcols, dcols, pcols, ncols, zcols, ab, ab_ext, ls, lfs, lg = get_plot_vars()
@@ -165,8 +163,7 @@ function plot_rstar_z(fsaven, rstar, Z, B, P, Z_prey, ds)
     ngrid = length(P[:,1])
 
     parent_folder = "results/plots/rstar/"
-    # filename = replace(fsaven, ".nc" => "", "results/outfiles/" => "")
-    filename = replace(fsaven, ".nc" => "", "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/" => "")
+    filename = replace(fsaven, ".nc" => "", "/home/lee/Dropbox/Development/NPZBD_1D/" => "", "results/outfiles/" => "")
     dir = check_subfolder_exists(filename, parent_folder)
 
     bcols, dcols, pcols, ncols, zcols, ab, ab_ext, ls, lfs, lg = get_plot_vars()

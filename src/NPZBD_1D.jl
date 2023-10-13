@@ -24,9 +24,10 @@
     include("integrate.jl")
     include("prescribed.jl")
     include("rstar.jl")
+    include("copio_indexing.jl")
     include("nutrient_pulse.jl")
-    include("plotting/biomass_plots.jl")
-    include("plotting/equilibrium_plots.jl")
+    include("plotting/state_var_plots.jl")
+    include("plotting/timeseries_plots.jl")
     include("plotting/rstar_plots.jl")
     include("utils/save_params.jl")
     include("utils/utils.jl")
@@ -45,28 +46,28 @@
         simulation_time = request(message("TM2"), RadioMenu(message("TM1")))
         if simulation_time == 1
             years = 2
-            tt = 732
+            days = 732
             nrec = 14640
         elseif simulation_time == 2
             years = 10
-            tt = 3660
+            days = 3660
             nrec = 73200
         elseif simulation_time == 3
             years = 30
-            tt = 10980
+            days = 10980
             nrec = 219600
         elseif simulation_time == 4
             years = 50
-            tt = 18300
+            days = 18300
             nrec = 366000
         else 
             years = 100
-            tt = 36600
+            days = 36600
             nrec = 732000
         end
 
         dt = 0.01
-        nt = Int(tt/dt)
+        nt = Int(days/dt)
 
         logger = set_logger(now())
     
@@ -75,20 +76,23 @@
     #------------------------------------------------------------------------------------------------------------#
 
         if run_type == 1 
-            nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, umax_i, season, pulse = user_select(run_type)
+            # Randomly generated params and consumption/grazing matrices according to user selected state var ratios
+            nd, nb, np, nz, nn, y_i, supply_weight, umax_i, vmax_i, season, pulse = user_select(run_type)
             CM = get_matrix("CM", nd, nb, nn, np, nz)
             GrM = get_matrix("GrM", nd, nb, nn, np, nz)
             CMp = get_matrix("CMp", nd, nb, nn, np, nz)
 
         elseif run_type == 2
-            nd, nb, np, nz, nn, y_i, supply_weight, vmax_i, umax_i, season, pulse = user_select(run_type)
+            # Loads prescribed params and matrices from prescribed.jl
+            nd, nb, np, nz, nn, y_i, supply_weight, umax_i, vmax_i, season, pulse = user_select(run_type)
             CM = get_prescribed_params("CM") 
             GrM = get_prescribed_params("GrM") 
             CMp = get_matrix("CMp", nd, nb, nn, np, nz)
 
         elseif run_type == 3
+            # Continues from end of previous runs (prompts user to select .nc file in results/outfiles )
             n_cont, p_cont, z_cont, b_cont, d_cont, o_cont, nn, np, nz, nb, nd, 
-            y_ij, prob_generate_d, vmax_i, vmax_ij, umax_i, umax_ij, Km_ij, Kp_ij, 
+            y_ij, prob_generate_d, umax_i, umax_ij, vmax_i, vmax_ij, Km_ij, Kp_ij, 
             season, pulse, CM, GrM, CMp, Fg_b, Fg_p = get_previous_params()
 
         end
@@ -113,15 +117,15 @@
         yo_ij = y_ij*10                     # PLACEHOLDER VALUE mol B/mol O2. not realistic
         num_uptakes = sum(CM, dims=1)[1, :]
         pen = 1 ./ num_uptakes
-        Km_i = vmax_i./10 
+        Km_i = umax_i./10 
 
         if run_type != 3
             println(message("MIC"))
             tradeoff_b = request(message("TB2"), RadioMenu(message("T1")))  
             if tradeoff_b == 1 
-                vmax_ij, Km_ij, Fg_b = apply_tradeoff(nb, nd, CM, vmax_i, season, run_type)
+                umax_ij, Km_ij, Fg_b = apply_tradeoff(nb, nd, CM, umax_i, season, run_type)
             else
-                vmax_ij = ones(nd, nb) * vmax_i
+                umax_ij = ones(nd, nb) * umax_i
                 Km_ij = ones(nd, nb) * Km_i
             end
         else; end
@@ -132,14 +136,14 @@
     #------------------------------------------------------------------------------------------------------------
         K_I = 10.0         
         e_o = 150/16   
-        Kp_i = umax_i./10 
+        Kp_i = vmax_i./10 
 
         if run_type != 3
             tradeoff_p = request(message("TP2"), RadioMenu(message("T1")))  
             if tradeoff_p == 1 
-                umax_ij, Kp_ij, Fg_p = apply_tradeoff(np, nn, CMp, umax_i, season, run_type)
+                vmax_ij, Kp_ij, Fg_p = apply_tradeoff(np, nn, CMp, vmax_i, season, run_type)
             else
-                umax_ij = ones(nn, np) * umax_i
+                vmax_ij = ones(nn, np) * vmax_i
                 Kp_ij = ones(nn, np) * Kp_i
             end 
         else; end
@@ -264,9 +268,9 @@
     #   INSTANTIATE PARAMS & RUN MODEL
     #------------------------------------------------------------------------------------------------------------#
         params = Prms(
-                    tt, dt, nt, nrec, H, dz, np, nb, nz, nn, nd, pIC, bIC, zIC, nIC, dIC, oIC, 
-                    umax_i, umax_ij, Kp_i, Kp_ij, m_lp, m_qp, light, temp_fun, K_I, CMp, Fg_p,
-                    vmax_i, vmax_ij, Km_i, Km_ij, y_ij, m_lb, m_qb, prob_generate_d, CM, Fg_b,
+                    days, dt, nt, nrec, H, dz, np, nb, nz, nn, nd, pIC, bIC, zIC, nIC, dIC, oIC, 
+                    vmax_i, vmax_ij, Kp_i, Kp_ij, m_lp, m_qp, light, temp_fun, K_I, CMp, Fg_p,
+                    umax_i, umax_ij, Km_i, Km_ij, y_ij, m_lb, m_qb, prob_generate_d, CM, Fg_b,
                     g_max, K_g, γ, m_lz, m_qz, GrM, pen, kappa_z, wd, ngrid, pulse, ws_POM,
                     e_o, yo_ij, koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, fsaven
                 )
@@ -275,10 +279,12 @@
 
         N, P, Z, B, D, O, track_time = run_NPZBD(params, season)
     
-        save_matrices(CM, CMp, GrM, nd, nb, nn, np, nz)
-        plot_biomasses(fsaven, season)
-        equilibrium_test(fsaven, season)
-        rstar_analysis(fsaven)
+        # save_matrices(CM, CMp, GrM, nd, nb, nn, np, nz)
+        plot_state_vars(fsaven, season)
+        # plot_time_series(fsaven, season)
+        rstar_analysis(fsaven, season)
+        # copio_index_analysis()
+        # diversity_analysis()
 
         save_prm == 1 ? save_params(params) : exit()
 

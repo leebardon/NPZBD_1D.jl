@@ -39,7 +39,7 @@ end
 # end
 
 
-function save_full_run(p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, season_num)
+function save_full_run(p, b, z, n, d, o, timet, uptake_b, tst, tfn, prms, season_num)
 
     outdir = "/home/lee/Dropbox/Development/NPZBD_1D/"
     path = joinpath(outdir, prms.fsaven) 
@@ -138,7 +138,7 @@ function save_full_run(p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, seaso
 
     w = defVar(f, "pulse", Int, ())
     w[:] = prms.pulse
-    w.attrib["nutrient_pulse"] = "1: no pulse, 2: N,D redistributed by mean, 3: N,D redistributed by weighted mean"
+    w.attrib["nutrient_pulse"] = "1: no pulse, 2: Total N,D redistributed along water col"
 
     w = defVar(f, "kappa_z", Float64, ("ndepth1",))
     w[:] = prms.kappa_z
@@ -154,8 +154,8 @@ function save_full_run(p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, seaso
 
     # --------------------------------------------------
 
-    w = defVar(f,"uptake",Float64,("nd","nb"))
-    w[:,:,:] = uptake
+    w = defVar(f,"uptake_b",Float64,("nd","nb"))
+    w[:,:,:] = uptake_b
     w.attrib["units"] = "mmol/m3 C per d; uptake matrix"
 
     w = defVar(f,"prob_generate_d",Float64,("nd",))
@@ -166,16 +166,16 @@ function save_full_run(p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, seaso
     w[:,:] = prms.pen
     w.attrib["units"] = "penalty"
     
-    w = defVar(f, "umax_i", Float64, ("np",))
-    w[:] = prms.umax_i
+    w = defVar(f, "vmax_i", Float64, ("np",))
+    w[:] = prms.vmax_i
     w.attrib["units"] = "m3/mmol/d; max growth rate of p"
 
     w = defVar(f, "Fg_p", Float64, ("np",))
     w[:,:] = prms.Fg_p
     w.attrib["units"] = "per p; fraction proteome assigned to growth"
 
-    w = defVar(f, "umax_ij", Float64, ("nn", "np"))
-    w[:,:] = prms.umax_ij
+    w = defVar(f, "vmax_ij", Float64, ("nn", "np"))
+    w[:,:] = prms.vmax_ij
     w.attrib["units"] = "per n; max uptake rate"
 
     w = defVar(f, "Kp_ij", Float64, ("nn", "np"))
@@ -198,17 +198,17 @@ function save_full_run(p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, seaso
     w[:,:] = prms.y_ij
     w.attrib["units"] = "per d; max yield rate"
 
-    w = defVar(f, "vmax_i", Float64, ("nd",))
-    w[:,:] = prms.vmax_i
+    w = defVar(f, "umax_i", Float64, ("nd",))
+    w[:,:] = prms.umax_i
     w.attrib["units"] = "per d; max uptake rate"
 
     w = defVar(f, "Fg_b", Float64, ("nb",))
     w[:,:] = prms.Fg_b
     w.attrib["units"] = "per b; fraction proteome assigned to growth"
     
-    w = defVar(f, "vmax_ij", Float64, ("nd", "nb"))
-    w[:,:] = prms.vmax_ij
-    w.attrib["units"] = "per d; max uptake rate"
+    w = defVar(f, "umax_ij", Float64, ("nd", "nb"))
+    w[:,:] = prms.umax_ij
+    w.attrib["units"] = "max uptake rate of b on d"
     
     w = defVar(f, "Km_ij", Float64, ("nd", "nb"))
     w[:] = prms.Km_ij
@@ -243,15 +243,15 @@ function save_full_run(p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, seaso
 end
 
 
-function save_endpoints(n, p, z, b, d, o, prms, season)
+function save_endpoints(n, p, z, b, d, o, uptake_b, prms, season)
 
     outdir = "/home/lee/Dropbox/Development/NPZBD_1D/"
     ep_path = replace(prms.fsaven, "results/outfiles" => "results/outfiles/endpoints", ".nc" => "_ep.nc")
     path = joinpath(outdir, ep_path) 
     println("\nSaving endpoints to: ", path)
 
-    ep = get_endpoints([n, p, z, b, d, o])
-    n, p, z, b, d, o = ep[1], ep[2], ep[3], ep[4], ep[5], ep[6]
+    n, p, z, b, d, o = get_endpoints([n, p, z, b, d, o])
+    # n, p, z, b, d, o = ep[1], ep[2], ep[3], ep[4], ep[5], ep[6]
 
     f = NCDataset(path, "c") 
 
@@ -337,7 +337,7 @@ function save_endpoints(n, p, z, b, d, o, prms, season)
 
     w = defVar(f, "pulse", Int, ())
     w[:] = prms.pulse
-    w.attrib["nutrient_pulse"] = "1: no pulse, 2: N,D redistributed by mean, 3: N,D redistributed by weighted mean"
+    w.attrib["nutrient_pulse"] = "1: no pulse, 2: total N,D redistributed evenly along water column"
 
     w = defVar(f,"prob_generate_d",Float64,("nd",))
     w[:,:] = prms.prob_generate_d 
@@ -361,20 +361,20 @@ function save_endpoints(n, p, z, b, d, o, prms, season)
 
     # --------------------------------------------------
 
-    # w = defVar(f,"uptake",Float64,("nd","nb"))
-    # w[:,:,:] = uptake
-    # w.attrib["units"] = "mmol/m3 C per d; uptake matrix"
+    w = defVar(f,"uptake_b",Float64,("nd","nb"))
+    w[:,:,:] = uptake_b
+    w.attrib["units"] = "mmol/m3 C per d; uptake matrix"
     
-    w = defVar(f, "umax_i", Float64, ("np",))
-    w[:] = prms.umax_i
+    w = defVar(f, "vmax_i", Float64, ("np",))
+    w[:] = prms.vmax_i
     w.attrib["units"] = "m3/mmol/d; max growth rate of p"
 
     w = defVar(f, "Fg_p", Float64, ("np",))
     w[:,:] = prms.Fg_p
     w.attrib["units"] = "per p; fraction proteome assigned to growth"
 
-    w = defVar(f, "umax_ij", Float64, ("nn", "np"))
-    w[:,:] = prms.umax_ij
+    w = defVar(f, "vmax_ij", Float64, ("nn", "np"))
+    w[:,:] = prms.vmax_ij
     w.attrib["units"] = "per n; max uptake rate"
 
     w = defVar(f, "Kp_ij", Float64, ("nn", "np"))
@@ -397,17 +397,17 @@ function save_endpoints(n, p, z, b, d, o, prms, season)
     w[:,:] = prms.y_ij
     w.attrib["units"] = "per d; max yield rate"
 
-    w = defVar(f, "vmax_i", Float64, ("nd",))
-    w[:,:] = prms.vmax_i
+    w = defVar(f, "umax_i", Float64, ("nd",))
+    w[:,:] = prms.umax_i
     w.attrib["units"] = "per d; max uptake rate"
 
     w = defVar(f, "Fg_b", Float64, ("nb",))
     w[:,:] = prms.Fg_b
     w.attrib["units"] = "per b; fraction proteome devoted to growth"
     
-    w = defVar(f, "vmax_ij", Float64, ("nd", "nb"))
-    w[:,:] = prms.vmax_ij
-    w.attrib["units"] = "per d; max uptake rate"
+    w = defVar(f, "umax_ij", Float64, ("nd", "nb"))
+    w[:,:] = prms.umax_ij
+    w.attrib["units"] = "max uptake rate of b on d"
     
     w = defVar(f, "Km_ij", Float64, ("nd", "nb"))
     w[:] = prms.Km_ij

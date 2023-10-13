@@ -17,7 +17,7 @@ function remove_extinct(biomass)
 end
 
 
-function copiotrophy_indexing(fsaven, prms=nothing)
+function copio_index_analysis(fsaven, prms=nothing)
 
     ds = NCDataset(fsaven)
 
@@ -120,5 +120,5 @@ function adj_total_per_ts(biomass, n, ngrid, Fg, ts_tot)
 end
 
 
-fsaven = "results/outfiles/Wi50y_231011_20:23_8P20Z13B5D_pt2.nc"
-indx = copiotrophy_indexing(fsaven)
+# fsaven = "results/outfiles/Wi100y_231011_23:28_8P20Z13B5D.nc"
+# indx = copiotrophy_indexing(fsaven)

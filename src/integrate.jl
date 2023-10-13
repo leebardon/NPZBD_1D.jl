@@ -1,8 +1,6 @@
 
 function rk4(ntemp, ptemp, ztemp, btemp, dtemp, otemp, prms, t)
 
-    # n, p, z, b, d, o = copy(ntemp), copy(ptemp), copy(ztemp), copy(btemp), copy(dtemp), copy(otemp)
-
     dNdt1, dPdt1, dZdt1, dBdt1, dDdt1, dOdt1 = model_functions(ntemp, ptemp, ztemp, btemp, dtemp, otemp, prms, t)
     
     track_n1 = ntemp .+ prms.dt/2 .* dNdt1
