@@ -6,7 +6,7 @@ function message(v::String, nd::Int64=0, nb::Int64=0, nn::Int64=0, np::Int64=0, 
     m = Dict(
         "START" => "\n -------------------------------- STARTING PROGRAM ----------------------------------- \n",
         "ST1" => ["Start New Run", "Start Prescribed Model Run", "Continue Run"],
-        "ST2" => "\nStart new simulation, load prescribed model, or continue previous run?",
+        "ST2" => "\nChoose run type: ",
         "TM1" => ["2 years (days=732)", "10 years (days=3660)", "30 years (days=10980)", "50 years (days=18300)", "100 years (days=36600)"],
         "TM2" => "\nSelect Simulation Runtime:",
         "P1" => ["None (steady state)", "Single pulse/10 days", "Pulse each ts for 1 day/10 days"],
@@ -73,7 +73,7 @@ function user_select(run_type=0)
         nd = length(vmax_i)
         np = length(umax_i)
         nb = length(get_prescribed_params("Fg_b"))
-        nz = size(get_prescribed_params("GrM"), 2)
+        nz = size(get_prescribed_params("GrM"), 1)
         nn = 1
 
     end 
@@ -107,7 +107,7 @@ function get_previous_params()
     o = ds["o"][:]
     nn, np, nz, nb, nd = get_size([n, p, z, b, d])
 
-        #NOTE save prob_generate_d
+    #NOTE save prob_generate_d
     y_ij = ds["y_ij"][:]
     prob_generate_d = get_prescribed_params("supply_weight") 
     vmax_i = ds["vmax_i"][:]
@@ -285,11 +285,19 @@ function get_endpoints(vars, ds=nothing)
 
     if ds !== nothing
         for v in vars
-            append!(endpoints, [ds["$v"][:,:,end]])
+            if v != "o"
+                append!(endpoints, [ds["$v"][:,:,end]])
+            else
+                append!(endpoints, [ds["$v"][:,end]])
+            end
         end
     else
         for v in vars
-            append!(endpoints, [v[:,:,end]])
+            if v != "o"
+                append!(endpoints, [v[:,:,end]])
+            else
+                append!(endpoints, [v[:,end]])
+            end
         end
     end
 
@@ -326,7 +334,13 @@ function get_cycle_mean(vars, pulse_freq, ds)
     cycle_mean = Vector{Any}()
 
     for v in vars
-        append!(cycle_mean, [mean(ds["$v"][:,:,end-ts:end], dims=3)])
+        if v != "o"
+            period = ds["$v"][:,:,end-ts:end]
+            period_mean = dropdims(mean(period, dims=3), dims=3)
+            append!(cycle_mean, [period_mean])
+        else
+            append!(cycle_mean, [mean(ds["$v"][:,end-ts:end], dims=2)])
+        end
     end
 
 
@@ -377,7 +391,9 @@ function get_plot_vars()
     dcols = ["blue3", "black", "maroon", "coral", "orange3"]
     pcols = ["olivedrab3", "darkgreen","red4", "cyan4", "gold3", "black", "hotpink2", "wheat2" ]
     ncols = ["blue2"]
-    zcols = ["black", "slategray4", "deeppink3", "sienna", "mediumpurple3", "darkseagreen"]
+    zcols = ["black", "slategray4", "deeppink3", "sienna", "mediumpurple3", "darkseagreen", "snow4", 
+            "silver", "salmon", "coral4", "orange2", "orangered4", "yellow3", "lightyellow4", "goldenrod4",
+            "chartreuse", "lightseagreen", "blueviolet", "slateblue4", "magenta4" ]
     ab = 0.8
     ab_ext = 0.8
     ls = 4

@@ -160,6 +160,8 @@ function plot_rstar_z(fsaven, rstar, Z, B, P, Z_prey, ds)
     H = 500
     zc = get_zc(H)
     nz = get_size([Z])[1]
+    np = get_size([P])[1]
+    nb = get_size([B])[1]
     ngrid = length(P[:,1])
 
     parent_folder = "results/plots/rstar/"
@@ -172,51 +174,105 @@ function plot_rstar_z(fsaven, rstar, Z, B, P, Z_prey, ds)
     tfs=12
     lfs=6
     xtfs=6
-
     dom_lc = ["grey", "darkkhaki", "seagreen4"]
 
-    #TODO add line to remove rstar lines where Z is 0/extinct (use set_extinct_to_zero())
-    fig1 = Array{Plots.Plot, 1}(undef, nz)
-    summed_prey = zeros(Float64, ngrid, nz) 
-    for z in 1:nz
-        for (k, v) in Z_prey
-            if k == z 
-                z_pb = v
-                if z == 1
-                    summed_prey[:, z] = sum(P[:, z_pb[1]:end], dims=2)
-                    fig1[z] = plot(summed_prey[1:50, z], -zc, lw=ls, linestyle=:dot, lc="darkgreen", label=" P$(z_pb[1]):$(z_pb[end])", alpha=ab, legendfontsize=lfs,
-                    ylabel="Depth (m)", xlabel="", xrotation=45, title = "R*", titlefontsize=tfs, grid=false, border=:box, legend=lg, 
-                    xtickfontsize=xtfs)
-                    plot!(rstar[z][1:50], -zc, lw=ls, label=" Z$z", lc=zcols[z], alpha=ab)
+    if nz == 6
+        fig1 = Array{Plots.Plot, 1}(undef, nz)
+        summed_prey = zeros(Float64, ngrid, nz) 
+        for z in 1:nz
+            for (k, v) in Z_prey
+                if k == z 
+                    z_pb = v
+                    if z == 1
+                        summed_prey[:, z] = sum(P[:, z_pb[1]:end], dims=2)
+                        fig1[z] = plot(summed_prey[1:50, z], -zc, lw=ls, linestyle=:dot, lc="darkgreen", label=" P$(z_pb[1]):$(z_pb[end])", alpha=ab, legendfontsize=lfs,
+                        ylabel="Depth (m)", xlabel="", xrotation=45, title = "R*", titlefontsize=tfs, grid=false, border=:box, legend=lg, 
+                        xtickfontsize=xtfs)
+                        plot!(rstar[z][1:50], -zc, lw=ls, label=" Z$z", lc=zcols[z], alpha=ab)
 
-                elseif z == 2
-                    summed_prey[:, z] = sum(P[:, z_pb[1]:end], dims=2)
-                    fig1[z] = plot(summed_prey[1:50, z], -zc, lw=ls, linestyle=:dot, lc="lime", label=" P$(z_pb[1]):$(z_pb[end])", alpha=ab, legendfontsize=lfs,
-                    ylabel="", xlabel="", xrotation=45, title="R*", titlefontsize=tfs, grid=false, border=:box, legend=lg,
-                    yformatter=Returns(""), xtickfontsize=xtfs)
+                    elseif z == 2
+                        summed_prey[:, z] = sum(P[:, z_pb[1]:end], dims=2)
+                        fig1[z] = plot(summed_prey[1:50, z], -zc, lw=ls, linestyle=:dot, lc="lime", label=" P$(z_pb[1]):$(z_pb[end])", alpha=ab, legendfontsize=lfs,
+                        ylabel="", xlabel="", xrotation=45, title="R*", titlefontsize=tfs, grid=false, border=:box, legend=lg,
+                        yformatter=Returns(""), xtickfontsize=xtfs)
 
-                    plot!(rstar[z][1:50], -zc, lw=ls, label=" Z$z", lc=zcols[z], alpha=ab)
+                        plot!(rstar[z][1:50], -zc, lw=ls, label=" Z$z", lc=zcols[z], alpha=ab)
 
-                elseif z == 3
-                    summed_prey[:, z] = B[:, 1]
-                    fig1[z] = plot(summed_prey[1:50, z], -zc, lw=ls, linestyle=:dot, lc="darkorange", label=" POM", alpha=ab, legendfontsize=lfs,
-                    ylabel="", xlabel="", xrotation=45, title="R*", titlefontsize=tfs, grid=false, border=:box, legend=lg,
-                    yformatter=Returns(""), xtickfontsize=xtfs)
+                    elseif z == 3
+                        summed_prey[:, z] = B[:, 1]
+                        fig1[z] = plot(summed_prey[1:50, z], -zc, lw=ls, linestyle=:dot, lc="darkorange", label=" POM", alpha=ab, legendfontsize=lfs,
+                        ylabel="", xlabel="", xrotation=45, title="R*", titlefontsize=tfs, grid=false, border=:box, legend=lg,
+                        yformatter=Returns(""), xtickfontsize=xtfs)
 
-                    plot!(rstar[z][1:50], -zc, lw=ls, label=" Z$z", lc=zcols[z], alpha=ab)
+                        plot!(rstar[z][1:50], -zc, lw=ls, label=" Z$z", lc=zcols[z], alpha=ab)
 
-                else
-                    summed_prey[:, z] = sum(B[:, z_pb[1]:end], dims=2)
-                    fig1[z] = plot(summed_prey[1:50, z], -zc, lw=ls, linestyle=:dot, lc=dom_lc[(z-3)], label=" DOM", alpha=ab, legendfontsize=lfs,
-                    ylabel="", xlabel="", xrotation=45, title="R*", titlefontsize=tfs, grid=false, border=:box, legend=lg,
-                    yformatter=Returns(""), xtickfontsize=xtfs)
+                    else
+                        summed_prey[:, z] = sum(B[:, z_pb[1]:end], dims=2)
+                        fig1[z] = plot(summed_prey[1:50, z], -zc, lw=ls, lc=dom_lc[(z-3)], linestyle=:dot, label=" DOM", alpha=ab, legendfontsize=lfs,
+                        ylabel="", xlabel="", xrotation=45, title="R*", titlefontsize=tfs, grid=false, border=:box, legend=lg,
+                        yformatter=Returns(""), xtickfontsize=xtfs)
 
-                    plot!(rstar[z][1:50], -zc, lw=ls, label=" Z$z", lc=zcols[z], alpha=ab)
+                        plot!(rstar[z][1:50], -zc, lw=ls, label=" Z$z", lc=zcols[z], alpha=ab) 
+                    end
+
                 end
-
             end
         end
+        
+        lay_out = (1, nz)
+else
+    fig1 = Array{Plots.Plot, 1}(undef, nz)
+
+    fig1[1] = plot(rstar[1][1:50], -zc, lw=ls, lc=zcols[1], label=" Z1", alpha=ab, legendfontsize=lfs,
+    ylabel="Depth (m)", xlabel="", xrotation=45, title = "R*", titlefontsize=tfs, grid=false, border=:box, legend=lg, 
+    xtickfontsize=xtfs)
+    plot!(P[1:50, 1], -zc, lw=ls, linestyle=:dot, label=" P1", lc=pcols[1], alpha=ab)
+
+    b = 2
+    for z in 2:nz
+        if z <= np
+            fig1[z] = plot(rstar[z][1:50], -zc, lw=ls, label=" Z$(z)", lc=zcols[z], alpha=ab, legendfontsize=lfs,
+                    ylabel="", xlabel="", xrotation=45, title="R*", titlefontsize=tfs, grid=false, border=:box, legend=lg,
+                    yformatter=Returns(""), xtickfontsize=xtfs)
+                    plot!(P[1:50, z], -zc, lw=ls, linestyle=:dot, label=" P$(z)", lc=pcols[z], alpha=ab)
+        elseif z > np && z <= 10
+            fig1[z] = plot(rstar[z][1:50], -zc, lw=ls, label=" Z$(z)", lc=zcols[z], alpha=ab, legendfontsize=lfs,
+                    ylabel="", xlabel="", xrotation=45, title="R*", titlefontsize=tfs, grid=false, border=:box, legend=lg,
+                    yformatter=Returns(""), xtickfontsize=xtfs)
+                    plot!(B[1:50, b], -zc, lw=ls, linestyle=:dot, label=" B$(b)", lc=bcols[b], alpha=ab)
+                    b += 1
+        elseif z == 11
+            fig1[z] = plot(rstar[z][1:50], -zc, lw=ls, label=" Z$(z)", lc=zcols[z], alpha=ab, legendfontsize=lfs,
+                    ylabel="Depth (m)", xlabel="", xrotation=45, grid=false, border=:box, legend=lg,
+                    xtickfontsize=xtfs)
+                    plot!(B[1:50, b], -zc, lw=ls, linestyle=:dot, label=" B$(b)", lc=bcols[b], alpha=ab)
+                    b += 1
+        else 
+            fig1[z] = plot(rstar[z][1:50], -zc, lw=ls, label=" Z$(z)", lc=zcols[z], alpha=ab, legendfontsize=lfs,
+                    ylabel="", xlabel="", xrotation=45, grid=false, border=:box, legend=lg,
+                    yformatter=Returns(""), xtickfontsize=xtfs)
+                    plot!(B[1:50, b], -zc, lw=ls, linestyle=:dot, label=" B$(b)", lc=bcols[b], alpha=ab)
+                    b += 1
+        end
     end
+
+    lay_out = (2, 10)
+    sze = (1200, 400)
+
+end
+
+f = plot(fig1..., 
+fg_legend = :transparent,
+layout = lay_out,
+size=sze,
+)
+
+savefig(f, "$(dir)/rsZ_$(filename).png")
+
+
+end
+
+
 
     # fig2 = Array{Plots.Plot, 1}(undef, nd);
     # for d in 1:nd
@@ -240,12 +296,3 @@ function plot_rstar_z(fsaven, rstar, Z, B, P, Z_prey, ds)
     #         end
     #     end
     # end
-    
-    f = plot(fig1..., 
-    fg_legend = :transparent,
-    layout = (1,nz),
-    )
-
-    savefig(f, "$(dir)/rsZ_$(filename).png")
-
-end

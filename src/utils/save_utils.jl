@@ -158,7 +158,7 @@ function save_full_run(p, b, z, n, d, o, timet, v, uptake, tst, tfn, prms, seaso
     w[:,:,:] = uptake
     w.attrib["units"] = "mmol/m3 C per d; uptake matrix"
 
-    w = defVar(f,"SW",Float64,("nd",))
+    w = defVar(f,"prob_generate_d",Float64,("nd",))
     w[:,:] = prms.prob_generate_d 
     w.attrib["units"] = "Ind C supply weight: probability"
     
@@ -338,6 +338,10 @@ function save_endpoints(n, p, z, b, d, o, prms, season)
     w = defVar(f, "pulse", Int, ())
     w[:] = prms.pulse
     w.attrib["nutrient_pulse"] = "1: no pulse, 2: N,D redistributed by mean, 3: N,D redistributed by weighted mean"
+
+    w = defVar(f,"prob_generate_d",Float64,("nd",))
+    w[:,:] = prms.prob_generate_d 
+    w.attrib["units"] = "Ind C supply weight: probability"
 
     w = defVar(f, "kappa_z", Float64, ("ndepth1",))
     w[:] = prms.kappa_z

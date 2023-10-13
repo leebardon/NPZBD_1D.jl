@@ -1,10 +1,10 @@
-# using NCDatasets
-# using Plots, ColorSchemes, LaTeXStrings
-# using DataFrames, NCDatasets
-# using SparseArrays, LinearAlgebra
+using NCDatasets
+using Plots, ColorSchemes, LaTeXStrings
+using DataFrames, NCDatasets
+using SparseArrays, LinearAlgebra
 
-# include("utils/utils.jl")
-# include("utils/save_utils.jl")
+include("utils/utils.jl")
+include("utils/save_utils.jl")
 
 
 function remove_extinct(biomass)
@@ -21,8 +21,8 @@ function copiotrophy_indexing(fsaven, prms=nothing)
 
     ds = NCDataset(fsaven)
 
-    Fg_p =  [0.08, 0.15, 0.25, 0.45, 0.68, 0.79, 0.84, 0.91]
-    Fg_b =  [0.5, 0.15, 0.22, 0.31, 0.45, 0.53, 0.60, 0.68, 0.73, 0.79, 0.84, 0.88, 0.91]
+    Fg_p =  ds["Fg_p"][:]
+    Fg_b =  ds["Fg_b"][:]
 
     # prms.pulse == 1 ? get_endpoint_copio(Fg_p, Fg_b, ds) : get_copio_over_time(Fg_p, Fg_b, ds)
     Bt, Pt = get_final_year(ds, ["b", "p"])
@@ -34,8 +34,6 @@ end
 function get_total_biomass(biomass)
 
     total = sum(biomass, dims=2)
-    # B_adj = get_adjusted_biomass(winners[2], ds, get_size([B])[1], Fg_b)
-    # copio_b = calc_copiotrophy_index(B_tot, B_adj)
 
     return total
 
@@ -122,5 +120,5 @@ function adj_total_per_ts(biomass, n, ngrid, Fg, ts_tot)
 end
 
 
-# fsaven = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/Wi100y_230928_20:47_8P6Z13B5D.nc"
-# indx = copiotrophy_indexing(fsaven)
+fsaven = "results/outfiles/Wi50y_231011_20:23_8P20Z13B5D_pt2.nc"
+indx = copiotrophy_indexing(fsaven)

@@ -1,11 +1,11 @@
-# using NCDatasets
-# using Plots, ColorSchemes, LaTeXStrings
-# using DataFrames, CSV
-# using SparseArrays, LinearAlgebra, Statistics
+using NCDatasets
+using Plots, ColorSchemes, LaTeXStrings
+using DataFrames, CSV
+using SparseArrays, LinearAlgebra, Statistics
 
-# include("utils/utils.jl")
-# include("utils/save_utils.jl")
-# include("plotting/rstar_plots.jl")
+include("utils/utils.jl")
+include("utils/save_utils.jl")
+include("plotting/rstar_plots.jl")
 
 
 function rstar_analysis(fsaven, season=nothing)
@@ -16,7 +16,7 @@ function rstar_analysis(fsaven, season=nothing)
     if ds["pulse"][:] == 1
         N, P, Z, B, D = get_endpoints(["n", "p", "z", "b", "d"], ds)
     else
-        if season == "winter"
+        if season == "Winter"
             pulse_freq = 10
             N, P, Z, B, D = get_cycle_mean(["n", "p", "z", "b", "d"], pulse_freq, ds)
         else
@@ -211,6 +211,6 @@ end
 
 
 
-# fsaven = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/Wi100y_231005_12:31_8P6Z13B5D.nc"
-# rstar_analysis(fsaven, "winter")
+fsaven = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/Wi50y_231011_23:28_8P20Z13B5D.nc"
+rstar_analysis(fsaven, "Winter")
 
