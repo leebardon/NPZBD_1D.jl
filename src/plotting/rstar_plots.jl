@@ -26,8 +26,7 @@ function plot_rstar_b(fsaven, rstar, B, D, competitors, ds)
 
     H = 500
     zc = get_zc(H)
-    nb = get_size([B])[1]
-    nd = get_size([D])[1]
+    nb, nd = get_size([B, D])
 
     parent_folder = "results/plots/rstar/"
     filename = replace(fsaven, ".nc" => "", "/home/lee/Dropbox/Development/NPZBD_1D/" => "", "results/outfiles/" => "")
@@ -99,8 +98,7 @@ function plot_rstar_p(fsaven, rstar, P, N, ds)
     #NOTE needs to be merged with plot_rstar_b if we want to use more N's
     H = 200
     zc = get_zc(H)
-    nn = get_size([N])[1]
-    np = get_size([P])[1]
+    nn, np = get_size([N, P])
 
     parent_folder = "results/plots/rstar/"
     filename = replace(fsaven, ".nc" => "", "/home/lee/Dropbox/Development/NPZBD_1D/" => "", "results/outfiles/" => "")
@@ -157,9 +155,7 @@ function plot_rstar_z(fsaven, rstar, Z, B, P, Z_prey, ds)
 
     H = 500
     zc = get_zc(H)
-    nz = get_size([Z])[1]
-    np = get_size([P])[1]
-    nb = get_size([B])[1]
+    nz, np, nb = get_size([Z, P, B])[1]
     ngrid = length(P[:,1])
 
     parent_folder = "results/plots/rstar/"

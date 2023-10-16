@@ -66,6 +66,7 @@
             nrec = 732000
         end
 
+        # 100 ts per day, tracking recorded every 5 ts
         dt = 0.01
         nt = Int(days/dt)
 
