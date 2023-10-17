@@ -5,53 +5,33 @@ using SparseArrays, LinearAlgebra
 
 include("utils/utils.jl")
 include("utils/save_utils.jl")
+include("plotting/heatmaps.jl")
 
-
-function remove_extinct(biomass)
-
-    ex = 10^-6
-    biomass .= ifelse.(biomass .<= ex, 0.0, biomass) 
-
-    return biomass
-    
-end
 
 
 function copio_index_analysis(fsaven, prms=nothing)
 
     ds = NCDataset(fsaven)
-
     Fg_p =  ds["Fg_p"][:]
     Fg_b =  ds["Fg_b"][:]
 
-    # prms.pulse == 1 ? get_endpoint_copio(Fg_p, Fg_b, ds) : get_copio_over_time(Fg_p, Fg_b, ds)
-    Bt, Pt = get_final_year(ds, ["b", "p"])
-    Bt_copio = get_copio_over_time(Bt, Fg_b, ds)
+    B, P = get_final_year(ds, ["b", "p"])
+    copio_b = get_copio_over_time(B, Fg_b)
+    copio_p = get_copio_over_time(P, Fg_p)
+
+    copio_heatmaps(fsaven, copio_b, "B")
+    copio_heatmaps(fsaven, copio_p, "P")
 
 end 
 
 
 function get_total_biomass(biomass)
 
-    total = sum(biomass, dims=2)
+    total = dropdims(sum(biomass, dims=2), dims=2)
 
     return total
 
 end 
-
-
-function get_adjusted_biomass(biomass, n, Fg)
-
-    ngrid = length(biomass[:,1])
-    adj_biomass = zeros(Float64, ngrid, n) 
-
-    for i in 1:n
-        adj_biomass[:, i] = biomass[:, i] .* Fg[i]
-    end
-
-    return sum(adj_biomass, dims=2)
-
-end
 
 
 function calc_copiotrophy_index(tot, adj)
@@ -63,19 +43,15 @@ function calc_copiotrophy_index(tot, adj)
 end
 
 
-function get_copio_over_time(biomass, Fg, ds)
+function get_copio_over_time(biomass, Fg)
 
-    n = get_size([biomass])[1]
-    ngrid = length(biomass[:,1,1])
-    ts_tot = 7320
-
-    winners = remove_extinct(biomass)
-    tot = total_per_ts(winners, ngrid, ts_tot)
-    adj = adj_total_per_ts(winners, n, ngrid, Fg, ts_tot)
+    winners = set_extinct_to_zero(biomass)
+    tot = total_biomass(winners)
+    adj = adj_total_biomass(winners, Fg)
     
-    copio = Array{Float64, 2}(undef, ngrid, ts_tot)
-    for t in range(1, ts_tot)
-        copio[:,t] = B_adj[:,t] ./ B_tot[:,t]
+    copio = Array{Float64, 2}(undef, size(biomass, 1), size(biomass, 3))
+    for t in 1:size(biomass, 3)
+        copio[:,t] = adj[:,t] ./ tot[:,t]
     end
 
     return copio
@@ -88,7 +64,11 @@ function get_final_year(ds, vars)
     final_yr = Vector{Any}()
 
     for v in vars
-        append!(final_yr, [ds[v][:, :, end-(7320-1):end]])
+        if v != "o"
+            append!(final_yr, [ds[v][:, :, end-7319:end]])
+        else
+            append!(final_yr, [ds[v][:, end-7319:end]])
+        end
     end
 
     return final_yr
@@ -96,29 +76,30 @@ function get_final_year(ds, vars)
 end
 
 
-function total_per_ts(biomass, ngrid, ts_tot)
+function adj_total_biomass(biomass, Fg)
 
-    total = Array{Float64, 2}(undef, ngrid, ts_tot)
-    for t in range(1, ts_tot)
-        total[:,t] = get_total_biomass(biomass)
+    adj_biomass = zeros(Float64, size(biomass, 1), size(biomass, 2), size(biomass, 3)) 
+
+    for i in 1:size(biomass, 2)
+        adj_biomass[:,i,:] = biomass[:,i,:] .* Fg[i]
     end
+
+    # return adj_biomass
+    return dropdims(sum(adj_biomass, dims=2), dims=2)
+
+end
+
+
+function total_biomass(biomass)
+    
+    total = dropdims(sum(biomass, dims=2), dims=2)
 
     return total
 
 end
 
 
-function adj_total_per_ts(biomass, n, ngrid, Fg, ts_tot)
+fsaven = "results/outfiles/Wi100y_231011_23:28_8P20Z13B5D.nc"
+# fsaven = "results/outfiles/Wi100y_231011_20:23_8P20Z13B5D.nc"
+copio = copio_index_analysis(fsaven)
 
-    adj_total = Array{Float64, 2}(undef, ngrid, ts_tot)
-    for t in range(1, ts_tot)
-        adj_total[:,t] = get_adjusted_biomass(biomass, n, Fg)
-    end
-
-    return adj_total
-
-end
-
-
-# fsaven = "results/outfiles/Wi100y_231011_23:28_8P20Z13B5D.nc"
-# indx = copiotrophy_indexing(fsaven)

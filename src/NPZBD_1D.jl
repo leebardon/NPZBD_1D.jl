@@ -190,11 +190,16 @@
             end
         else; end
 
-        # Sinking rate for POM  #NOTE could be randomly assigned range 1 t0 10
-        ws = zeros(nd)                  # sinking speed of POM (m/day) 
-        ws_POM = 10.0
-        ws[1] = ws_POM 
-        w = zeros(ngrid + 1)            # water vertical velocity, if there was any
+        # Sinking rate for POM  
+        ws = zeros(nd)                  
+        #NOTE Uncomment for single POM (m/day)
+        # ws_POM = 10.0
+        # ws[1] = ws_POM 
+        #NOTE Uncomment for 3 POM (m/day)
+        ws_POM1, ws_POM2, ws_POM3 = 6.0, 8.0, 10.0
+        ws[1], ws[2], ws[3] = ws_POM1, ws_POM2, ws_POM3
+
+        w = zeros(ngrid + 1)            # water vertical velocity
         wd = transpose(repeat(ws, 1, ngrid + 1)) + repeat(w, 1, nd) # ngrid+1 x nd
         wd[1,:] .= 0                    # no flux boundary at surface 
         wd[end,:] .= 0                  # no flux boundary (bottom box accumulates D)
@@ -272,7 +277,7 @@
                     days, dt, nt, nrec, H, dz, np, nb, nz, nn, nd, pIC, bIC, zIC, nIC, dIC, oIC, 
                     vmax_i, vmax_ij, Kp_i, Kp_ij, m_lp, m_qp, light, temp_fun, K_I, CMp, Fg_p,
                     umax_i, umax_ij, Km_i, Km_ij, y_ij, m_lb, m_qb, prob_generate_d, CM, Fg_b,
-                    g_max, K_g, γ, m_lz, m_qz, GrM, pen, kappa_z, wd, ngrid, pulse, ws_POM,
+                    g_max, K_g, γ, m_lz, m_qz, GrM, pen, kappa_z, wd, ngrid, pulse, 
                     e_o, yo_ij, koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, fsaven
                 )
 

@@ -53,7 +53,6 @@
     wd::Array{Float64, 2}          # sinking rate for POM
     ngrid::Int64                   # number of boxes at depth
     pulse::Int64                   # 1 = no nutrient pulsing, 2 = N,D redistributed by mean, 3 = N,D redistributed by weighted mean
-    ws_POM::Float64                # sinking rate of POM
     e_o::Float64                   # production of O2 (excretion) (mol O2 per mol N uptake)
     yo_ij::Array{Float64, 2}       # O2 yield rate of bacteria j on d_i (mol B/mol O2)
     koverh::Float64                # gas transfer coefficient for each box comprising the mixed layer
