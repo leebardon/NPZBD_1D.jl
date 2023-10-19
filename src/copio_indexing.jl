@@ -1,5 +1,4 @@
 using NCDatasets
-using Plots, ColorSchemes, LaTeXStrings
 using DataFrames, NCDatasets
 using SparseArrays, LinearAlgebra
 
@@ -98,8 +97,11 @@ function total_biomass(biomass)
 
 end
 
-
-fsaven = "results/outfiles/Wi100y_231011_23:28_8P20Z13B5D.nc"
 # fsaven = "results/outfiles/Wi100y_231011_20:23_8P20Z13B5D.nc"
+# fsaven = "results/outfiles/Wi100y_231011_23:28_8P20Z13B5D.nc"
+# fsaven = "results/outfiles/Wi100y_231017_01:23_10P3Z21B9D.nc"
+# fsaven = "results/outfiles/Wi100y_231017_12:01_10P3Z21B9D.nc"
+# fsaven = "results/outfiles/Wi50y_231017_23:00_10P3Z18B8D.nc"
+# fsaven = "results/outfiles/Wi50y_231017_23:32_10P3Z18B8D.nc"
 copio = copio_index_analysis(fsaven)
 

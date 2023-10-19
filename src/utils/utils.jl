@@ -95,8 +95,10 @@ end
 
 function get_previous_params()
 
+    # files = readdir("results/outfiles")
     files = readdir("results/outfiles/endpoints")
     f = request("\nSelect output file:", RadioMenu(files))
+    # ds = NCDataset("results/outfiles/$(files[f])")
     ds = NCDataset("results/outfiles/endpoints/$(files[f])")
     
     n = ds["n"][:]
@@ -105,6 +107,7 @@ function get_previous_params()
     b = ds["b"][:]
     d = ds["d"][:]
     o = ds["o"][:]
+    # n, p, z, b, d, o = get_endpoints(["n", "p", "z", "b", "d", "o"], ds)
     nn, np, nz, nb, nd = get_size([n, p, z, b, d])
 
     #NOTE save prob_generate_d
@@ -305,6 +308,23 @@ function get_endpoints(vars, ds=nothing)
 end
 
 
+function get_final_year(ds, vars)
+
+    final_yr = Vector{Any}()
+
+    for v in vars
+        if v != "o"
+            append!(final_yr, [ds[v][:, :, end-7319:end]])
+        else
+            append!(final_yr, [ds[v][:, end-7319:end]])
+        end
+    end
+
+    return final_yr
+
+end
+
+
 function get_zc(H)
 
     dz = 10
@@ -401,9 +421,10 @@ end
 function get_plot_vars()
 
     bcols = ["cyan3", "darkorange", "indigo", "coral4", "lightcyan4", "magenta2", "thistle", "seagreen4",
-    "darkkhaki", "purple", "crimson",  "yellow3", "navajowhite4"]
-    dcols = ["blue3", "black", "maroon", "coral", "orange3"]
-    pcols = ["olivedrab3", "darkgreen","red4", "cyan4", "gold3", "black", "hotpink2", "wheat2" ]
+            "darkkhaki", "purple", "crimson",  "yellow3", "navajowhite4",  "coral4", "orange2", "orangered4", "yellow3", 
+            "lightyellow4", "goldenrod4", "slateblue4", "mediumpurple3"]
+    dcols = ["blue3", "black", "maroon", "coral", "orange3", "silver", "magenta3", "deeppink", "sienna2"]
+    pcols = ["olivedrab3", "darkgreen","red4", "cyan4", "gold3", "black", "hotpink2", "wheat2", "mediumpurple3", "darkseagreen" ]
     ncols = ["blue2"]
     zcols = ["black", "slategray4", "deeppink3", "sienna", "mediumpurple3", "darkseagreen", "snow4", 
             "silver", "salmon", "coral4", "orange2", "orangered4", "yellow3", "lightyellow4", "goldenrod4",

@@ -1,5 +1,6 @@
 using NCDatasets
-using Plots, ColorSchemes
+# using Plots, ColorSchemes
+using CairoMakie
 using DataFrames
 using SparseArrays, LinearAlgebra, Statistics
 
@@ -25,7 +26,7 @@ function final_year(vars, ds)
 end
 
 
-function plot_bmass_heatmaps(fsaven, var)
+function plot_bmass_heatmaps(fsaven, varname)
 
     zc = get_zc(400)
     ds = NCDataset(fsaven)
@@ -33,8 +34,7 @@ function plot_bmass_heatmaps(fsaven, var)
 
     p, b = final_year(["p", "b"], ds)
 
-    bmass_heatmaps(p, zc, filename, "P", var)
-    # heatmaps(b, zc, filename, "B", var)
+    varname == "P" ? bmass_heatmaps(p, zc, filename, varname) : bmass_heatmaps(b, zc, filename, varname)
 
 end
 
@@ -49,7 +49,7 @@ function get_z_axis(depth, days, daily_data)
         end
     end
 
-    return z
+    return z'
 
 end
 
@@ -67,35 +67,41 @@ function set_zmax(species, num_species)
 end
 
 
-function bmass_heatmaps(species, zc, filename, s_name, var)
+function bmass_heatmaps(species, zc, filename, varname)
 
     parent_folder = "results/plots/heatmaps/biomass/"
     dir = check_subfolder_exists(filename, parent_folder)
     
-    d = -zc[1:40]
+    varname == "P" ? max_d = 30 : max_d = 30
+    d = -zc[1:max_d]
     num_species = size(species, 2)
     zmax = set_zmax(species, num_species)
+    println(zmax)
+    lfs=9
+    varname == "P" ? res=(1000, 500) : res=(1500, 1200)
 
-    fig = Array{Plots.Plot, 1}(undef, num_species)
-
+    joint_limits = (0, zmax)
+    row = 1
+    col = 1
+    fig = Figure(resolution=res)
     for i in range(1, num_species)
-        data = species[1:40, i, :]
+        data = species[1:max_d, i, :]
         survivors = set_extinct_to_zero(data)
         daily_data = survivors[:, 1:20:end]
         days = collect(1:size(daily_data, 2))
         z = get_z_axis(d, days, daily_data)
-        fig[i] = heatmap(days, reverse(d), reverse(z), xrotation=45, clim=(0, zmax))
+
+        heatmap(fig[row, col], days, reverse(d), reverse(z), xrotation=45,  colorrange=joint_limits)
+        col += 1
+        if mod(i, 5) == 0 
+            row += 1
+            col -= 5
+        end
     end
 
-    f = plot(fig..., 
-    fg_legend = :transparent,
-    size=(1300,1000),
-    plot_title = "$s_name $var over time (0-400m)"
-    )
+    Colorbar(fig[:, end+1], colorrange=joint_limits, size=30, label=L"mmol/m^3", labelsize=20)
 
-    println("Saving fig to $(dir)/$(s_name)_$(filename).png")
-    savefig(f, "$(dir)/$(s_name)_$(filename).png")
-
+    save("$(dir)/$(varname)_$(filename).png", fig)
 end
 
 
@@ -106,23 +112,25 @@ function copio_heatmaps(fsaven, copio, s_name)
     dir = check_subfolder_exists(filename, parent_folder)
 
     zc = get_zc(400)
+    depth = -zc[1:30]
 
-    if s_name == "P" 
-        depth = -zc[1:25] 
-        data = copio[1:25, :]
-    else
-        depth = -zc
-        data = copio[1:40, :]
-    end 
-
+    data = copio[1:30, :]
     daily_data = data[:, 1:20:end]
     days = collect(1:size(daily_data, 2))
  
-    fig = heatmap(days, reverse(depth), reverse(daily_data), xrotation=45, clim=(0.3, 0.8), c=:berlin50,
-    xlabel="Days", ylabel="Depth (m)", title="$s_name Copiotrophy Index")
+    z = daily_data'
+    joint_limits = (minimum(daily_data), maximum(daily_data))
+    fig = Figure(resolution=(600,500))
+    ax, hm = heatmap(fig[1, 1], days, reverse(depth), reverse(z), clim=joint_limits, colormap=(:berlin50))
+
+    ax.xlabel="Days"
+    ax.ylabel="Depth (m)"
+    ax.title="$s_name Copiotrophy Index"
+
+    Colorbar(fig[:, end+1], colorrange=joint_limits, colormap=(:berlin50), size=20)
 
     println("Saving fig to $(dir)/$(s_name)_$(filename).png")
-    savefig(fig, "$(dir)/$(s_name)_$(filename).png")
+    save("$(dir)/$(s_name)_$(filename).png", fig)
 
 end
 
@@ -131,4 +139,9 @@ end
 
 # fsaven = "results/outfiles/Wi100y_231011_20:23_8P20Z13B5D.nc"
 # fsaven = "results/outfiles/Wi100y_231011_23:28_8P20Z13B5D.nc"
-# plot_heatmaps(fsaven, "biomass")
+# fsaven = "results/outfiles/Wi100y_231017_01:23_10P3Z21B9D.nc"
+# fsaven = "results/outfiles/Wi100y_231017_12:01_10P3Z21B9D.nc"
+# fsaven = "results/outfiles/Wi50y_231017_23:00_10P3Z18B8D.nc"
+# fsaven = "results/outfiles/Wi50y_231017_23:32_10P3Z18B8D.nc"
+# plot_bmass_heatmaps(fsaven, "P")
+# plot_bmass_heatmaps(fsaven, "B")

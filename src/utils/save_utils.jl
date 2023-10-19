@@ -351,9 +351,9 @@ function save_endpoints(n, p, z, b, d, o, uptake_b, prms, season)
     w[:] = prms.wd
     w.attrib["units"] = "sinking rate"
 
-    w = defVar(f, "ws_POM", Float64, ())
-    w[:] = prms.ws_POM
-    w.attrib["units"] = "sinking rate of POM in m/day"
+    # w = defVar(f, "ws_POM", Float64, ())
+    # w[:] = prms.ws_POM
+    # w.attrib["units"] = "sinking rate of POM in m/day"
 
     w = defVar(f, "temp_fun", Float64, ("ndepth",))
     w[:] = prms.temp_fun

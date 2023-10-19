@@ -134,5 +134,7 @@ end
 # fsaven = "results/outfiles/Wi100y_231011_23:28_8P20Z13B5D.nc"
 # fsaven = "results/outfiles/Wi30y_231012_22:36_8P20Z13B5D.nc"
 # fsaven = "results/outfiles/Wi2y_231013_14:09_8P20Z13B5D.nc"
+# fsaven = "results/outfiles/Wi100y_231017_01:23_10P3Z21B9D.nc"
+# fsaven = "results/outfiles/Wi100y_231017_12:01_10P3Z21B9D.nc"
 # plot_state_vars(fsaven, 1)
 
