@@ -1,4 +1,4 @@
-using NCDatasets
+
 using DataFrames, NCDatasets
 using SparseArrays, LinearAlgebra
 
@@ -103,5 +103,8 @@ end
 # fsaven = "results/outfiles/Wi100y_231017_12:01_10P3Z21B9D.nc"
 # fsaven = "results/outfiles/Wi50y_231017_23:00_10P3Z18B8D.nc"
 # fsaven = "results/outfiles/Wi50y_231017_23:32_10P3Z18B8D.nc"
-copio = copio_index_analysis(fsaven)
+# fsaven = "results/outfiles/Wi100y_231017_14:44_10P3Z21B9D.nc"
+# fsaven = "results/outfiles/Wi100y_231019_17:22_10P3Z18B8D.nc"
+# fsaven = "results/outfiles/Wi100y_231019_19:45_10P3Z18B8D.nc"
+# copio = copio_index_analysis(fsaven)
 

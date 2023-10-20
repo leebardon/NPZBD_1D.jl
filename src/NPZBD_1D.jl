@@ -6,7 +6,7 @@
     using Dates, Printf, Parameters
     using SparseArrays, Distributions, LinearAlgebra
     using Statistics, StatsBase, Random, StableRNGs
-    using DataFrames, NCDatasets, JLD, CSV
+    using DataFrames, NCDatasets, CSV
     using Plots, ColorSchemes, Colors, LaTeXStrings
     using Distributed
 
@@ -26,6 +26,7 @@
     include("rstar.jl")
     include("copio_indexing.jl")
     include("nutrient_pulse.jl")
+    include("plotting/heatmaps.jl")
     include("plotting/state_var_plots.jl")
     include("plotting/timeseries_plots.jl")
     include("plotting/rstar_plots.jl")
@@ -168,7 +169,7 @@
 
         m_lb = ones(nb) * 1e-2 
         m_qb = ones(nb) * 0.1 
-        m_qb[1] = 1  # POM consumer 
+        # m_qb[1] = 1  # POM consumer (use if no pom grazer)
 
         m_lz = ones(nz) * 1e-2
         m_qz = ones(nz) * 1.0 
@@ -288,11 +289,12 @@
         # save_matrices(CM, CMp, GrM, nd, nb, nn, np, nz)
         plot_state_vars(fsaven, season)
         # plot_time_series(fsaven, season)
-        rstar_analysis(fsaven, season)
+        # rstar_analysis(fsaven, season)
         # copio_index_analysis()
         # diversity_analysis()
 
-        save_prm == 1 ? save_params(params) : exit()
+        # save_prm == 1 ? save_params(params) : exit()
+        exit()
 
 end
 

@@ -1,5 +1,5 @@
 
-using DataFrames, NCDatasets, JLD
+using DataFrames, NCDatasets
 
 
 function set_savefiles(launch_time, season, years, np, nz, nb, nd)
@@ -154,16 +154,16 @@ function save_full_run(p, b, z, n, d, o, timet, uptake_b, tst, tfn, prms, season
 
     # --------------------------------------------------
 
-    w = defVar(f,"uptake_b",Float64,("nd","nb"))
-    w[:,:,:] = uptake_b
-    w.attrib["units"] = "mmol/m3 C per d; uptake matrix"
+    # w = defVar(f,"uptake_b",Float64,("nd","nb"))
+    # w[:,:,:] = uptake_b
+    # w.attrib["units"] = "mmol/m3 C per d; uptake matrix"
 
     w = defVar(f,"prob_generate_d",Float64,("nd",))
-    w[:,:] = prms.prob_generate_d 
+    w[:] = prms.prob_generate_d 
     w.attrib["units"] = "Ind C supply weight: probability"
     
     w = defVar(f,"pen",Float64,("nb",))
-    w[:,:] = prms.pen
+    w[:] = prms.pen
     w.attrib["units"] = "penalty"
     
     w = defVar(f, "vmax_i", Float64, ("np",))
@@ -171,7 +171,7 @@ function save_full_run(p, b, z, n, d, o, timet, uptake_b, tst, tfn, prms, season
     w.attrib["units"] = "m3/mmol/d; max growth rate of p"
 
     w = defVar(f, "Fg_p", Float64, ("np",))
-    w[:,:] = prms.Fg_p
+    w[:] = prms.Fg_p
     w.attrib["units"] = "per p; fraction proteome assigned to growth"
 
     w = defVar(f, "vmax_ij", Float64, ("nn", "np"))
@@ -179,7 +179,7 @@ function save_full_run(p, b, z, n, d, o, timet, uptake_b, tst, tfn, prms, season
     w.attrib["units"] = "per n; max uptake rate"
 
     w = defVar(f, "Kp_ij", Float64, ("nn", "np"))
-    w[:] = prms.Kp_ij
+    w[:,:] = prms.Kp_ij
     w.attrib["units"] = "mmol/m3; half-sat"
 
     w = defVar(f,"CM",Float64,("nd","nb"))
@@ -199,11 +199,11 @@ function save_full_run(p, b, z, n, d, o, timet, uptake_b, tst, tfn, prms, season
     w.attrib["units"] = "per d; max yield rate"
 
     w = defVar(f, "umax_i", Float64, ("nd",))
-    w[:,:] = prms.umax_i
+    w[:] = prms.umax_i
     w.attrib["units"] = "per d; max uptake rate"
 
     w = defVar(f, "Fg_b", Float64, ("nb",))
-    w[:,:] = prms.Fg_b
+    w[:] = prms.Fg_b
     w.attrib["units"] = "per b; fraction proteome assigned to growth"
     
     w = defVar(f, "umax_ij", Float64, ("nd", "nb"))
@@ -215,11 +215,11 @@ function save_full_run(p, b, z, n, d, o, timet, uptake_b, tst, tfn, prms, season
     w.attrib["units"] = "mmol/m3; half-sat"
     
     w = defVar(f, "m_lb", Float64, ("nb",))
-    w[:,:] = prms.m_lb
+    w[:] = prms.m_lb
     w.attrib["units"] = "m3/mmol; linear death rate of b"
 
     w = defVar(f, "m_qb", Float64, ("nb",))
-    w[:,:] = prms.m_qb
+    w[:] = prms.m_qb
     w.attrib["units"] = "m3/mmol; quadratic death rate of b"
     
     w = defVar(f, "K_g", Float64, ("nz",))
@@ -231,11 +231,11 @@ function save_full_run(p, b, z, n, d, o, timet, uptake_b, tst, tfn, prms, season
     w.attrib["units"] = "fraction of digestion of z"
     
     w = defVar(f, "m_lz", Float64, ("nz",))
-    w[:,:] = prms.m_lz
+    w[:] = prms.m_lz
     w.attrib["units"] = "m3/mmol; linear death rate of z"
 
     w = defVar(f, "m_qz", Float64, ("nz",))
-    w[:,:] = prms.m_qz
+    w[:] = prms.m_qz
     w.attrib["units"] = "m3/mmol; quadratic death rate of z"
     
     close(f)
@@ -340,7 +340,7 @@ function save_endpoints(n, p, z, b, d, o, uptake_b, prms, season)
     w.attrib["nutrient_pulse"] = "1: no pulse, 2: total N,D redistributed evenly along water column"
 
     w = defVar(f,"prob_generate_d",Float64,("nd",))
-    w[:,:] = prms.prob_generate_d 
+    w[:] = prms.prob_generate_d 
     w.attrib["units"] = "Ind C supply weight: probability"
 
     w = defVar(f, "kappa_z", Float64, ("ndepth1",))
@@ -348,7 +348,7 @@ function save_endpoints(n, p, z, b, d, o, uptake_b, prms, season)
     w.attrib["units"] = "vertical water velocity"
     
     w = defVar(f, "wd", Float64, ("ndepth1","nd"))
-    w[:] = prms.wd
+    w[:,:] = prms.wd
     w.attrib["units"] = "sinking rate"
 
     # w = defVar(f, "ws_POM", Float64, ())
@@ -362,7 +362,7 @@ function save_endpoints(n, p, z, b, d, o, uptake_b, prms, season)
     # --------------------------------------------------
 
     w = defVar(f,"uptake_b",Float64,("nd","nb"))
-    w[:,:,:] = uptake_b
+    w[:,:] = uptake_b
     w.attrib["units"] = "mmol/m3 C per d; uptake matrix"
     
     w = defVar(f, "vmax_i", Float64, ("np",))
@@ -370,7 +370,7 @@ function save_endpoints(n, p, z, b, d, o, uptake_b, prms, season)
     w.attrib["units"] = "m3/mmol/d; max growth rate of p"
 
     w = defVar(f, "Fg_p", Float64, ("np",))
-    w[:,:] = prms.Fg_p
+    w[:] = prms.Fg_p
     w.attrib["units"] = "per p; fraction proteome assigned to growth"
 
     w = defVar(f, "vmax_ij", Float64, ("nn", "np"))
@@ -378,7 +378,7 @@ function save_endpoints(n, p, z, b, d, o, uptake_b, prms, season)
     w.attrib["units"] = "per n; max uptake rate"
 
     w = defVar(f, "Kp_ij", Float64, ("nn", "np"))
-    w[:] = prms.Kp_ij
+    w[:,:] = prms.Kp_ij
     w.attrib["units"] = "mmol/m3; half-sat"
 
     w = defVar(f,"CM",Float64,("nd","nb"))
@@ -398,11 +398,11 @@ function save_endpoints(n, p, z, b, d, o, uptake_b, prms, season)
     w.attrib["units"] = "per d; max yield rate"
 
     w = defVar(f, "umax_i", Float64, ("nd",))
-    w[:,:] = prms.umax_i
+    w[:] = prms.umax_i
     w.attrib["units"] = "per d; max uptake rate"
 
     w = defVar(f, "Fg_b", Float64, ("nb",))
-    w[:,:] = prms.Fg_b
+    w[:] = prms.Fg_b
     w.attrib["units"] = "per b; fraction proteome devoted to growth"
     
     w = defVar(f, "umax_ij", Float64, ("nd", "nb"))
@@ -410,15 +410,15 @@ function save_endpoints(n, p, z, b, d, o, uptake_b, prms, season)
     w.attrib["units"] = "max uptake rate of b on d"
     
     w = defVar(f, "Km_ij", Float64, ("nd", "nb"))
-    w[:] = prms.Km_ij
+    w[:,:] = prms.Km_ij
     w.attrib["units"] = "mmol/m3; half-sat"
     
     w = defVar(f, "m_lb", Float64, ("nb",))
-    w[:,:] = prms.m_lb
+    w[:] = prms.m_lb
     w.attrib["units"] = "m3/mmol; linear death rate of b"
 
     w = defVar(f, "m_qb", Float64, ("nb",))
-    w[:,:] = prms.m_qb
+    w[:] = prms.m_qb
     w.attrib["units"] = "m3/mmol; quadratic death rate of b"
     
     w = defVar(f, "K_g", Float64, ("nz",))
@@ -430,11 +430,11 @@ function save_endpoints(n, p, z, b, d, o, uptake_b, prms, season)
     w.attrib["units"] = "fraction of digestion of z"
     
     w = defVar(f, "m_lz", Float64, ("nz",))
-    w[:,:] = prms.m_lz
+    w[:] = prms.m_lz
     w.attrib["units"] = "m3/mmol; linear death rate of z"
 
     w = defVar(f, "m_qz", Float64, ("nz",))
-    w[:,:] = prms.m_qz
+    w[:] = prms.m_qz
     w.attrib["units"] = "m3/mmol; quadratic death rate of z"
     
     close(f)

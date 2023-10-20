@@ -1,5 +1,5 @@
 
-using DataFrames, NCDatasets, JLD, Printf
+using DataFrames, NCDatasets, Printf
 
 function message(v::String, nd::Int64=0, nb::Int64=0, nn::Int64=0, np::Int64=0, nz::Int64=0, fsaven::String="")
 
@@ -101,29 +101,29 @@ function get_previous_params()
     # ds = NCDataset("results/outfiles/$(files[f])")
     ds = NCDataset("results/outfiles/endpoints/$(files[f])")
     
-    n = ds["n"][:]
-    p = ds["p"][:]
-    z = ds["z"][:]
-    b = ds["b"][:]
-    d = ds["d"][:]
-    o = ds["o"][:]
+    n = ds["n"][:,:]
+    p = ds["p"][:,:]
+    z = ds["z"][:,:]
+    b = ds["b"][:,:]
+    d = ds["d"][:,:]
+    o = ds["o"][:,:]
     # n, p, z, b, d, o = get_endpoints(["n", "p", "z", "b", "d", "o"], ds)
     nn, np, nz, nb, nd = get_size([n, p, z, b, d])
 
     #NOTE save prob_generate_d
-    y_ij = ds["y_ij"][:]
+    y_ij = ds["y_ij"][:,:]
     prob_generate_d = get_prescribed_params("supply_weight") 
     vmax_i = ds["vmax_i"][:]
-    vmax_ij = ds["vmax_ij"][:]
+    vmax_ij = ds["vmax_ij"][:,:]
     umax_i = ds["umax_i"][:]
-    umax_ij = ds["umax_ij"][:]
-    Km_ij = ds["Km_ij"][:]
-    Kp_ij = ds["Kp_ij"][:]
+    umax_ij = ds["umax_ij"][:,:]
+    Km_ij = ds["Km_ij"][:,:]
+    Kp_ij = ds["Kp_ij"][:,:]
     season = ds.attrib["Season"]
-    pulse = ds["pulse"][:]
-    CM = ds["CM"][:]
-    GrM = ds["GrM"][:]
-    CMp = ds["CMp"][:]
+    pulse = ds["pulse"][:][1]
+    CM = ds["CM"][:,:]
+    GrM = ds["GrM"][:,:]
+    CMp = ds["CMp"][:,:]
     Fg_b = ds["Fg_b"][:]
     Fg_p = ds["Fg_p"][:]
 
