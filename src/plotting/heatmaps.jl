@@ -1,28 +1,27 @@
-# using NCDatasets
-# using CairoMakie
-# using DataFrames
-# using SparseArrays, LinearAlgebra, Statistics
+using NCDatasets
+using CairoMakie
+using LinearAlgebra, Statistics
 
-# include("/home/lee/Dropbox/Development/NPZBD_1D/src/utils/utils.jl")
-# include("/home/lee/Dropbox/Development/NPZBD_1D/src/utils/save_utils.jl")
+include("/home/lee/Dropbox/Development/NPZBD_1D/src/utils/utils.jl")
+include("/home/lee/Dropbox/Development/NPZBD_1D/src/utils/save_utils.jl")
 
 
-function final_year(vars, ds)
-    # 100 ts each day, 1 in 5 recorded (i.e. 20 each day) -- 366 * 20 = 7320 recorded ts
+# function final_year(vars, ds)
+#     # 100 ts each day, 1 in 5 recorded (i.e. 20 each day) -- 366 * 20 = 7320 recorded ts
 
-    final_yr = Vector{Any}()
+#     final_yr = Vector{Any}()
 
-    for v in vars
-        if v != "o"
-            append!(final_yr, [ds[v][:, :, end-7319:end]])
-        else
-            append!(final_yr, [ds[v][:, end-7319:end]])
-        end
-    end
+#     for v in vars
+#         if v != "o"
+#             append!(final_yr, [ds[v][:, :, end-7319:end]])
+#         else
+#             append!(final_yr, [ds[v][:, end-7319:end]])
+#         end
+#     end
 
-    return final_yr
+#     return final_yr
 
-end
+# end
 
 
 function plot_bmass_heatmaps(fsaven, varname)
@@ -31,7 +30,7 @@ function plot_bmass_heatmaps(fsaven, varname)
     ds = NCDataset(fsaven)
     filename = replace(fsaven, ".nc" => "", "/home/lee/Dropbox/Development/NPZBD_1D/" => "", "results/outfiles/" => "")
 
-    p, b = final_year(["p", "b"], ds)
+    p, b = get_final_year(["p", "b"], ds)
 
     varname == "P" ? bmass_heatmaps(p, zc, filename, varname) : bmass_heatmaps(b, zc, filename, varname)
 
@@ -133,6 +132,34 @@ function copio_heatmaps(fsaven, copio, s_name)
 
 end
 
+
+function npp_heatmaps(fsaven, npp)
+
+    parent_folder = "results/plots/heatmaps/npp/"
+    filename = replace(fsaven, ".nc" => "", "/home/lee/Dropbox/Development/NPZBD_1D/" => "", "results/outfiles/" => "")
+    dir = check_subfolder_exists(filename, parent_folder)
+
+    zc = get_zc(890)
+    depth = -zc[1:30]
+
+    daily_data = npp[:, 1:20:end]
+    days = collect(1:size(daily_data, 2))
+ 
+    z = daily_data'
+    joint_limits = (minimum(daily_data), maximum(daily_data))
+    fig = Figure(resolution=(600,500))
+    ax, hm = heatmap(fig[1, 1], days, reverse(depth), reverse(z), clim=joint_limits, colormap=(:berlin50))
+
+    ax.xlabel="Days"
+    ax.ylabel="Depth (m)"
+    ax.title="Net Primary Productivity"
+
+    Colorbar(fig[:, end+1], colorrange=joint_limits, colormap=(:berlin50), size=20)
+
+    println("Saving fig to $(dir)/$(filename)_npp.png")
+    save("$(dir)/$(filename)_npp.png", fig)
+
+end
 
 
 

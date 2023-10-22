@@ -58,21 +58,21 @@ function get_copio_over_time(biomass, Fg)
 end
 
 
-function get_final_year(ds, vars)
+# function get_final_year(ds, vars)
 
-    final_yr = Vector{Any}()
+#     final_yr = Vector{Any}()
 
-    for v in vars
-        if v != "o"
-            append!(final_yr, [ds[v][:, :, end-7319:end]])
-        else
-            append!(final_yr, [ds[v][:, end-7319:end]])
-        end
-    end
+#     for v in vars
+#         if v != "o"
+#             append!(final_yr, [ds[v][:, :, end-7319:end]])
+#         else
+#             append!(final_yr, [ds[v][:, end-7319:end]])
+#         end
+#     end
 
-    return final_yr
+#     return final_yr
 
-end
+# end
 
 
 function adj_total_biomass(biomass, Fg)

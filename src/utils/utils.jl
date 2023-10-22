@@ -414,6 +414,10 @@ function get_temp_mod(ds)
 
 end
 
+function get_light()
+    return CSV.read("/home/lee/Dropbox/Development/NPZBD_1D/data/light/light.csv", DataFrame, header=false)
+end
+
 #------------------------------------------------------------------------
 #                             PLOT UTILS 
 #------------------------------------------------------------------------

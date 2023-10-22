@@ -138,16 +138,7 @@ end
 
 function phyto_uptake(prms, N, P, dNdt, dPdt, dOdt, t)
 
-    II, JJ = get_nonzero_axes(prms.CMp)
 
-    for j = axes(II, 1)
-        uptake = P[:,JJ[j]] .* prms.temp_fun .* prms.vmax_ij[II[j],JJ[j]] .* min.(N./ (N .+ prms.Kp_ij[II[j],JJ[j]]), prms.light ./ (prms.light .+ prms.K_I))
-        dNdt += -uptake
-        dOdt += uptake * prms.e_o
-        dPdt[:,JJ[j]] += uptake 
-    end
-
-    return dPdt, dNdt, dOdt
 
 end 
 
