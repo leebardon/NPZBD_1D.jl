@@ -309,14 +309,14 @@ end
 
 
 function get_final_year(ds, vars)
-
+    # where year is 12 * 30 days
     final_yr = Vector{Any}()
 
     for v in vars
         if v != "o"
-            append!(final_yr, [ds[v][:, :, end-7319:end]])
+            append!(final_yr, [ds[v][:, :, end-7199:end]])
         else
-            append!(final_yr, [ds[v][:, end-7319:end]])
+            append!(final_yr, [ds[v][:, end-7199:end]])
         end
     end
 

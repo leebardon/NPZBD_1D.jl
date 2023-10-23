@@ -1,27 +1,10 @@
-using NCDatasets
+using NCDatasets, DataFrames
 using CairoMakie
 using LinearAlgebra, Statistics
 
 include("/home/lee/Dropbox/Development/NPZBD_1D/src/utils/utils.jl")
 include("/home/lee/Dropbox/Development/NPZBD_1D/src/utils/save_utils.jl")
 
-
-# function final_year(vars, ds)
-#     # 100 ts each day, 1 in 5 recorded (i.e. 20 each day) -- 366 * 20 = 7320 recorded ts
-
-#     final_yr = Vector{Any}()
-
-#     for v in vars
-#         if v != "o"
-#             append!(final_yr, [ds[v][:, :, end-7319:end]])
-#         else
-#             append!(final_yr, [ds[v][:, end-7319:end]])
-#         end
-#     end
-
-#     return final_yr
-
-# end
 
 
 function plot_bmass_heatmaps(fsaven, varname)
@@ -138,23 +121,23 @@ function npp_heatmaps(fsaven, npp)
     parent_folder = "results/plots/heatmaps/npp/"
     filename = replace(fsaven, ".nc" => "", "/home/lee/Dropbox/Development/NPZBD_1D/" => "", "results/outfiles/" => "")
     dir = check_subfolder_exists(filename, parent_folder)
+    cols = :tofino25
 
     zc = get_zc(890)
-    depth = -zc[1:30]
+    depth = -zc[1:20]
+    days = collect(1:size(npp, 2))
+    z = npp'
 
-    daily_data = npp[:, 1:20:end]
-    days = collect(1:size(daily_data, 2))
- 
-    z = daily_data'
-    joint_limits = (minimum(daily_data), maximum(daily_data))
     fig = Figure(resolution=(600,500))
-    ax, hm = heatmap(fig[1, 1], days, reverse(depth), reverse(z), clim=joint_limits, colormap=(:berlin50))
+    limits = (minimum(npp), maximum(npp))
+    ax, hm = heatmap(fig[1, 1], days, reverse(depth), reverse(z), clim=limits, colormap=(cols))
 
-    ax.xlabel="Days"
+    ax.xlabel="Months"
+    ax.xticks = 1:12
     ax.ylabel="Depth (m)"
-    ax.title="Net Primary Productivity"
+    ax.title="NPP (30 day means)"
 
-    Colorbar(fig[:, end+1], colorrange=joint_limits, colormap=(:berlin50), size=20)
+    Colorbar(fig[:, end+1], colorrange=limits, colormap=(cols), size=20, label=L"mmol/m^3", labelsize=20)
 
     println("Saving fig to $(dir)/$(filename)_npp.png")
     save("$(dir)/$(filename)_npp.png", fig)
