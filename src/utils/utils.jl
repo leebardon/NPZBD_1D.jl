@@ -362,7 +362,7 @@ end
 
 function get_cycle_means(vars, pulse_freq, ds)
 
-    num_days = pulse_freq * 10
+    num_days = pulse_freq * 100
     ts = num_days * 20
 
     cycle_mean = Vector{Any}()
@@ -381,6 +381,8 @@ function get_cycle_means(vars, pulse_freq, ds)
     return cycle_mean
 
 end
+
+
 
 
 function check_for_negatives(RS)

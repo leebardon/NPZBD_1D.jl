@@ -116,34 +116,59 @@ function copio_heatmaps(fsaven, copio, s_name)
 end
 
 
-function npp_heatmaps(fsaven, npp)
-
+function npp_heatmaps(fsaven, npp_months, npp, mov_avs, daily_means)
+       
     parent_folder = "results/plots/heatmaps/npp/"
     filename = replace(fsaven, ".nc" => "", "/home/lee/Dropbox/Development/NPZBD_1D/" => "", "results/outfiles/" => "")
     dir = check_subfolder_exists(filename, parent_folder)
-    cols = :tofino25
+
+    cols_hm = :tofino25
+    cols_ln = ["orangered", "seagreen3", "purple4", "black", "skyblue1"]
+    dnames = ["5m", "50m", "100m", "150m", "200m"]
 
     zc = get_zc(890)
-    depth = -zc[1:20]
-    days = collect(1:size(npp, 2))
-    z = npp'
+    depth = -zc[1:30]
+    ts = collect(1:length(mov_avs[1]))
 
-    fig = Figure(resolution=(600,500))
-    limits = (minimum(npp), maximum(npp))
-    ax, hm = heatmap(fig[1, 1], days, reverse(depth), reverse(z), clim=limits, colormap=(cols))
+    let
+        fig = Figure(resolution=(600,1250))
 
-    ax.xlabel="Months"
-    ax.xticks = 1:12
-    ax.ylabel="Depth (m)"
-    ax.title="NPP (30 day means)"
+        z = npp'
+        limits = (minimum(npp), maximum(npp))
+        ax1, hm = heatmap(fig[1:2, 1], ts, reverse(depth), reverse(z), clim=limits, colormap=(cols_hm))
+        Colorbar(fig[1:2, 2], colorrange=limits, colormap=(cols_hm), size=20, label=L"mmol/m^3", labelsize=20)
+        ax1.xlabel=L"Timesteps"
+        ax1.ylabel=L"Depth~(m)"
+        ax1.title="Net Primary Productivity"
 
-    Colorbar(fig[:, end+1], colorrange=limits, colormap=(cols), size=20, label=L"mmol/m^3", labelsize=20)
+        z2 = npp_months'
+        days = collect(1:size(npp_months, 2))
+        limits = (minimum(npp_months), maximum(npp_months))
+        ax2, hm = heatmap(fig[3:4, 1], days, reverse(depth), reverse(z2), clim=limits, colormap=(cols_hm))
+        Colorbar(fig[3:4, 2], colorrange=limits, colormap=(cols_hm), size=20, label=L"mmol/m^3", labelsize=20)
+        ax2.xlabel=L"Months"
+        ax2.xticks = 1:12
+        ax2.ylabel=L"Depth~(m)"
+        ax2.title="NPP Monthly Means"
 
-    println("Saving fig to $(dir)/$(filename)_npp.png")
-    save("$(dir)/$(filename)_npp.png", fig)
+        ax3 = fig[5, 1] = Axis(fig)
+        for i in range(1, length(dnames))
+            lines!(ts, mov_avs[i], alpha=0.7, linewidth=3, color=cols_ln[i], label=dnames[i])
+             # td = collect(1:length(daily_means[1]))
+            # scatterlines!(t, convert(Array{Float64}, daily_means[i]), markersize=3, color=cols_ln[i], strokewidth=1, strokecolor=:black, alpha=0.1, label=dnames[i])
+            # lines!(td, convert(Array{Float64}, daily_means[i]), color=cols_ln[i], alpha=0.5, label=dnames[i], grid=false)
+        end
+
+        fig[5, 2] = Legend(fig, ax3, framevisible=false)
+        ax3.xlabel=L"Timesteps"
+        ax3.ylabel=L"mmol/m^3"
+        ax3.title="Moving Averages"
+
+        println("Saving fig to $(dir)/$(filename)_npp.png")
+        save("$(dir)/$(filename)_npp.png", fig)
+    end
 
 end
-
 
 
 # fsaven = "results/outfiles/Wi100y_231011_20:23_8P20Z13B5D.nc"
