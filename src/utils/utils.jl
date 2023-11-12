@@ -79,14 +79,14 @@ function user_select(run_type=0)
     end 
 
     yield = request(message("Y2"), RadioMenu(message("Y1")))
-    yield == 1 ? y_i = ones(nd)*0.4 : y_i = rand(nd)*0.5
+    yield == 1 ? y_i = ones(nd)*0.3 : y_i = rand(nd)*0.5
     supply_weight = request(message("SW2"), RadioMenu(message("SW1")))
 
     println(message("ENV"))
     pulse = request(message("P2"), RadioMenu(message("P1")))
     season = request(message("SE2"), RadioMenu(message("SE1")))
 
-    @info("User Selections: \n pulse type = $pulse, SW = $supply_weight \n B yield = $y_i \n B uptake = $vmax_i \n P uptake = $umax_i \n Season == $season \n")
+    @info("User Selections: \n pulse type = $pulse, SW = $supply_weight \n B yield = $y_i \n B uptake = $umax_i \n P uptake = $vmax_i \n Season == $season \n")
 
     return nd, nb, np, nz, nn, y_i, supply_weight, umax_i, vmax_i, season, pulse
 
@@ -362,7 +362,7 @@ end
 
 function get_cycle_means(vars, pulse_freq, ds)
 
-    num_days = pulse_freq * 100
+    num_days = pulse_freq * 10
     ts = num_days * 20
 
     cycle_mean = Vector{Any}()

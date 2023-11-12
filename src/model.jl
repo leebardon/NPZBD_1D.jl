@@ -53,17 +53,22 @@ function run_NPZBD(prms, season)
             track_n, track_p, track_z, track_b, track_d, track_o = update_tracking_arrs(track_n, track_p, track_z, track_b, track_d, track_o, track_time, 
                                                                                         ntemp, ptemp, ztemp, btemp, dtemp, otemp, t, trec, prms)
             println("Total N: ", sum(ptemp) + sum(btemp) + sum(ntemp) + sum(dtemp) + sum(ztemp))
-        
+            println("n = ", sum(ntemp))
+            println("d = ", sum(dtemp))
+            println("o = ", sum(otemp))
+            
         end 
 
         # Nutrient pulsing routine 
         if prms.pulse != 1
             if season == 1
                 if t % 1000 == 0 
+                    println("PULSED at t=$t")
                     ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)      
                 end
             else
                 if t % 3000 == 0 
+                    println("PULSED at t=$t")
                     ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)  
                 end
             end
@@ -138,7 +143,16 @@ end
 
 function phyto_uptake(prms, N, P, dNdt, dPdt, dOdt, t)
 
+    II, JJ = get_nonzero_axes(prms.CMp)
 
+    for j = axes(II, 1)
+        uptake = P[:,JJ[j]] .* prms.temp_fun .* prms.vmax_ij[II[j],JJ[j]] .* min.(N./ (N .+ prms.Kp_ij[II[j],JJ[j]]), prms.light ./ (prms.light .+ prms.K_I))
+        dNdt += -uptake
+        dOdt += uptake * prms.e_o
+        dPdt[:,JJ[j]] += uptake 
+    end
+
+    return dPdt, dNdt, dOdt
 
 end 
 
@@ -153,7 +167,7 @@ function bacteria_uptake(prms, B, D, dDdt, dBdt, dNdt, dOdt, t)
         dDdt[:,II[j]] += -uptake
         dBdt[:,JJ[j]] += uptake .* yield
         dNdt += uptake .* (1 - yield)
-        dOdt +=  -uptake .* yield ./ prms.yo_ij[II[j],JJ[j]]
+        dOdt +=  -uptake .* (yield ./ prms.yo_ij[II[j],JJ[j]])
     end
 
     return dDdt, dBdt, dNdt, dOdt

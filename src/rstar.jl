@@ -204,6 +204,6 @@ end
 
 
 
-fsaven = "results/outfiles/Wi100y_231019_17:22_10P3Z18B8D.nc"
-rstar_analysis(fsaven, "Winter")
+# fsaven = "results/outfiles/Wi100y_231019_17:22_10P3Z18B8D.nc"
+# rstar_analysis(fsaven, "Winter")
 
