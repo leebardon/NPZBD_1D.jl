@@ -9,6 +9,8 @@ function message(v::String, nd::Int64=0, nb::Int64=0, nn::Int64=0, np::Int64=0, 
         "ST2" => "\nChoose run type: ",
         "TM1" => ["2 years (days=732)", "10 years (days=3660)", "30 years (days=10980)", "50 years (days=18300)", "100 years (days=36600)"],
         "TM2" => "\nSelect Simulation Runtime:",
+        "DR1" => ["Yes", "No"],
+        "DR2" => "\n Are you using params from prescribed_darwin.jl?",
         "P1" => ["None (steady state)", "Single pulse at 10 (winter) or 30 (summer) day intervals"],
         "P2" => "Select nutrient pulsing regime: ",
         "DN" => "\nEnter number of detritus pools (nd): ",
@@ -427,9 +429,9 @@ end
 function get_plot_vars()
 
     bcols = ["cyan3", "darkorange", "indigo", "coral4", "lightcyan4", "magenta2", "thistle", "seagreen4",
-            "darkkhaki", "purple", "crimson",  "yellow3", "navajowhite4",  "coral4", "orange2", "orangered4", "yellow3", 
+            "darkkhaki", "purple", "black",  "yellow3", "navajowhite4",  "coral4", "orange2", "orangered4", "yellow3", 
             "lightyellow4", "goldenrod4", "slateblue4", "mediumpurple3"]
-    dcols = ["blue3", "black", "maroon", "coral", "orange3", "silver", "magenta3", "deeppink", "sienna2"]
+    dcols = ["blue3", "black", "maroon", "coral", "orange3", "silver", "magenta3", "cyan3", "seagreen"]
     pcols = ["olivedrab3", "darkgreen","red4", "cyan4", "gold3", "black", "hotpink2", "wheat2", "mediumpurple3", "darkseagreen" ]
     ncols = ["blue2"]
     zcols = ["black", "slategray4", "deeppink3", "sienna", "mediumpurple3", "darkseagreen", "snow4", 

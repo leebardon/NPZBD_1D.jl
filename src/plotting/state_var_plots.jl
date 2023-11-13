@@ -36,7 +36,7 @@ function plot_stacked(N, P, Z, B, D, O, zc, filename)
     parent_folder = "results/plots/bmass_stacked/"
     dir = check_subfolder_exists(filename, parent_folder)
 
-    yl=(-500.0, 0)
+    yl=(-890.0, 0)
     bcols, dcols, pcols, ncols, zcols, ab, ab_ext, ls, lfs, lg = get_plot_vars()
     
     p1 = plot(sum(P, dims=2), -zc, lw=ls, lc="darkgreen", grid=false, xrotation=45, label=" Total P", 
@@ -69,7 +69,7 @@ function plot_individual(P, Z, B, D, zc, season, filename)
     parent_folder = "results/plots/bmass_individual/"
     dir = check_subfolder_exists(filename, parent_folder)
 
-    yl=(-500.0, 0)
+    yl=(-890.0, 0)
     sizes = get_size([B, D, Z, P])
     bcols, dcols, pcols, ncols, zcols, ab, ab_ext, ls, lfs, lg = get_plot_vars()
     nb, nd, nz, np = sizes[1], sizes[2], sizes[3], sizes[4]
@@ -101,11 +101,23 @@ function plot_individual(P, Z, B, D, zc, season, filename)
     end
 
     # Plot bac
-    p3 = plot(B[:,1], -zc, lc=bcols[1], grid=false, lw=ls, label=" B1", xrotation=45, ylimits=yl, title=tls[3], 
+    bcols = ["red3", "darkorange", "indigo", "lightgreen", "olivedrab4", "darkgreen", "cyan2", "dodgerblue",
+    "gray85", "gray67", "gray48",  "gray30", "black"] #uncomment for darwin runs
+    p3 = plot(B[:,1], -zc, lc=bcols[1], grid=false, lw=ls, linestyle=:dot, label=" B1", xrotation=45, ylimits=yl, title=tls[3], 
     titlefontsize=tfs, alpha=ab, labelfontsize=lfs, legend=lg, yformatter=Returns(""), xlabel=L" mm/m^3")
     if nb > 1
         for k in 2:nb
-            plot!(B[:,k], -zc, lc=bcols[k], lw=ls, label=" B$k", alpha=ab, labelfontsize=lfs , legend=lg)
+            if k == 2 || k == 3
+                plot!(B[:,k], -zc, lc=bcols[k], lw=ls, linestyle=:dot, label=" B$k", alpha=ab, labelfontsize=lfs , legend=lg)
+            elseif k == 4 
+                plot!(B[:,k], -zc, lc=bcols[k], lw=ls, label=" B$(k)", alpha=ab, labelfontsize=lfs, legend=lg)
+            elseif 5 <= k <= 8
+                plot!(B[:,k], -zc, lc=bcols[k], lw=ls, label=" B$k", alpha=ab, labelfontsize=lfs, legend=lg)
+            elseif k == 9
+                plot!(B[:,k], -zc, lc=bcols[k], lw=ls, label=" B$(k)", alpha=ab, labelfontsize=lfs, legend=lg)
+            else
+                plot!(B[:,k], -zc, lc=bcols[k], lw=ls, label=" B$k", alpha=ab, labelfontsize=lfs, legend=lg)
+            end
         end
     end
 
@@ -136,6 +148,6 @@ end
 # fsaven = "results/outfiles/Wi2y_231013_14:09_8P20Z13B5D.nc"
 # fsaven = "results/outfiles/Wi100y_231017_01:23_10P3Z21B9D.nc"
 # fsaven = "results/outfiles/Wi100y_231017_12:01_10P3Z21B9D.nc"
-fsaven = "results/outfiles/Wi2y_231112_13:32_8P6Z13B5D.nc"
+fsaven = "results/outfiles/Wi50y_231112_16:56_6P3Z13B8D.nc"
 plot_state_vars(fsaven, 1)
 

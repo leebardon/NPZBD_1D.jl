@@ -23,6 +23,7 @@
     include("traits.jl")
     include("integrate.jl")
     include("prescribed.jl")
+    include("prescribed_darwin.jl")
     include("rstar.jl")
     include("copio_indexing.jl")
     include("nutrient_pulse.jl")
@@ -85,6 +86,9 @@
             CMp = get_matrix("CMp", nd, nb, nn, np, nz)
 
         elseif run_type == 2
+            darwin = request(message("DR2"), RadioMenu(message("DR1")))
+            darwin == 1 ? run_prescribed_darwin(years, days, nrec, dt, nt, run_type) : nothing
+            
             # Loads prescribed params and matrices from prescribed.jl
             nd, nb, np, nz, nn, y_i, supply_weight, umax_i, vmax_i, season, pulse = user_select(run_type)
             CM = get_prescribed_params("CM") 

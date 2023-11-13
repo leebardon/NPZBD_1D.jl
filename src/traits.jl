@@ -104,4 +104,31 @@ function set_Kp_ij(nn, np, F_a, CM, vmax_ij)
 end
 
 
+# function get_grazing_mort_params()
 
+#     g_max = ones(nz)*1.0
+#     K_g = ones(nz)*1.0
+#     γ = ones(nz)*0.3
+#     m_lp = ones(np) * 1e-1  
+#     m_qp = ones(np) * 0.1  # (.1 if grazers, if not, 1)
+#     m_lb = ones(nb) * 1e-2 
+#     m_qb = ones(nb) * 0.1 
+#     # m_qb[1] = 1  # POM consumer (use if no pom grazer)
+#     m_lz = ones(nz) * 1e-2
+#     m_qz = ones(nz) * 1.0 
+
+#     println(""" 
+#         g_max = $(g_max[1])
+#         K_g = $(K_g[1])
+#         γ = $(γ[1])
+#         m_lp = $(m_lp[1])
+#         m_qp = $(m_qp[1])
+#         m_lb = $(m_lb[1])
+#         m_qb = $(m_qb[1])
+#         m_lz = $(m_lz[1])
+#         m_qz = $(m_qz[1])
+#     """)
+
+#     return g_max, K_g, γ, m_lp, m_qp, m_lb, m_qb, m_lz, m_qz
+
+# end
