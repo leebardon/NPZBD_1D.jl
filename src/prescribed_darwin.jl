@@ -94,7 +94,7 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
     # -----------------------------------------------------------------------------------------------------------#
     #   ZOOPLANKTON GRAZING 
     #------------------------------------------------------------------------------------------------------------
-    g_max = ones(nz)
+    g_max = ones(nz)*2.0
     K_g = ones(nz)*1.0
     γ = ones(nz)*0.3
 
@@ -102,14 +102,14 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
     # -----------------------------------------------------------------------------------------------------------#
     #   MORTALITY
     #------------------------------------------------------------------------------------------------------------#
-    m_lp = ones(np) * 1e-1  
-    m_qp = ones(np) * 0.1  # (.1 if grazers, if not, 1)
+    m_lp = ones(np) * 0 
+    m_qp = ones(np) * 0.1  # (.1 if explicit grazers, if not, 1)
 
-    m_lb = ones(nb) * 1e-2 
+    m_lb = ones(nb) * 0 
     m_qb = ones(nb) * 0.1 
 
-    m_lz = ones(nz) * 1e-2
-    m_qz = ones(nz) * 1.0 
+    m_lz = ones(nz) * 0
+    m_qz = ones(nz) * 0.1 
 
 
     # -----------------------------------------------------------------------------------------------------------#
@@ -121,7 +121,8 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
 
     # Sinking rate for POM  
     ws = zeros(nd)                  
-    ws[1], ws[2], ws[3] = 10.0, 5.0, 1.0
+    ws[1], ws[2], ws[3] = 10.0, 10.0, 10.0
+    # re-run these - do runs tonight and sent new plots to emily - do the two conditions - and include pulses 
 
 
     #------------------------------------------------------------------------------------------------------------#
@@ -211,7 +212,7 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
     N, P, Z, B, D, O, track_time = run_NPZBD(params, season)
 
     # save_matrices(CM, CMp, GrM, nd, nb, nn, np, nz)
-    plot_state_vars(fsaven, season)
+    plot_state_vars_dar(fsaven, season)
     # plot_time_series(fsaven, season)
     # rstar_analysis(fsaven, season)
     # copio_index_analysis()

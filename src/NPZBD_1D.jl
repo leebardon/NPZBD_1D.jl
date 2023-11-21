@@ -291,7 +291,7 @@
         N, P, Z, B, D, O, track_time = run_NPZBD(params, season)
     
         # save_matrices(CM, CMp, GrM, nd, nb, nn, np, nz)
-        plot_state_vars(fsaven, season)
+        # plot_state_vars(fsaven, season)
         # plot_time_series(fsaven, season)
         # rstar_analysis(fsaven, season)
         # copio_index_analysis()

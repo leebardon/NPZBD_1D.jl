@@ -114,7 +114,7 @@ function get_previous_params()
 
     #NOTE save prob_generate_d
     y_ij = ds["y_ij"][:,:]
-    prob_generate_d = get_prescribed_params("supply_weight") 
+    prob_generate_d = ds["prob_generate_d"][:]
     vmax_i = ds["vmax_i"][:]
     vmax_ij = ds["vmax_ij"][:,:]
     umax_i = ds["umax_i"][:]
@@ -364,7 +364,7 @@ end
 
 function get_cycle_means(vars, pulse_freq, ds)
 
-    num_days = pulse_freq * 10
+    num_days = pulse_freq * 100
     ts = num_days * 20
 
     cycle_mean = Vector{Any}()
@@ -431,7 +431,7 @@ function get_plot_vars()
     bcols = ["cyan3", "darkorange", "indigo", "coral4", "lightcyan4", "magenta2", "thistle", "seagreen4",
             "darkkhaki", "purple", "black",  "yellow3", "navajowhite4",  "coral4", "orange2", "orangered4", "yellow3", 
             "lightyellow4", "goldenrod4", "slateblue4", "mediumpurple3"]
-    dcols = ["blue3", "black", "maroon", "coral", "orange3", "silver", "magenta3", "cyan3", "seagreen"]
+    dcols = ["blue3", "black", "maroon", "coral", "orange3", "silver", "magenta3", "cyan3", "seagreen", "mediumpurple3"]
     pcols = ["olivedrab3", "darkgreen","red4", "cyan4", "gold3", "black", "hotpink2", "wheat2", "mediumpurple3", "darkseagreen" ]
     ncols = ["blue2"]
     zcols = ["black", "slategray4", "deeppink3", "sienna", "mediumpurple3", "darkseagreen", "snow4", 

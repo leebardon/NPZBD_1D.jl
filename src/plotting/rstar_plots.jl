@@ -12,8 +12,8 @@ function plot_rstar(rstar_b, rstar_p, rstar_z, fsaven)
 
     ds = NCDataset(fsaven)
     N, P, Z, B, D = get_endpoints(["n", "p", "z", "b", "d"], ds)
-    BD_competitors = group_interactions( sparse(ds["CM"][:]), get_size([D])[1] )
-    Z_prey = group_interactions( sparse(ds["GrM"][:]), (get_size([B])[1] + get_size([P])[1]) ) 
+    BD_competitors = group_interactions( sparse(ds["CM"][:,:]), get_size([D])[1] )
+    Z_prey = group_interactions( sparse(ds["GrM"][:,:]), (get_size([B])[1] + get_size([P])[1]) ) 
 
     plot_rstar_b(fsaven, rstar_b, B, D, BD_competitors, ds)
     plot_rstar_p(fsaven, rstar_p, P, N, ds)
@@ -155,7 +155,7 @@ function plot_rstar_z(fsaven, rstar, Z, B, P, Z_prey, ds)
 
     H = 500
     zc = get_zc(H)
-    nz, np, nb = get_size([Z, P, B])[1]
+    nz, np, nb = get_size([Z, P, B])
     ngrid = length(P[:,1])
 
     parent_folder = "results/plots/rstar/"
@@ -265,7 +265,85 @@ savefig(f, "$(dir)/rsZ_$(filename).png")
 
 end
 
+#---------------------------------------------------------------------------------------------------------------------
+function plot_rstar_dar(rstar_b, rstar_p, rstar_z, fsaven)
 
+    ds = NCDataset(fsaven)
+    N, P, Z, B, D = get_endpoints(["n", "p", "z", "b", "d"], ds)
+    BD_competitors = group_interactions( sparse(ds["CM"][:,:]), get_size([D])[1] )
+    Z_prey = group_interactions( sparse(ds["GrM"][:,:]), (get_size([B])[1] + get_size([P])[1]) ) 
+
+    plot_rstar_b_dar(fsaven, rstar_b, B, D, BD_competitors, ds)
+    # plot_rstar_p(fsaven, rstar_p, P, N, ds)
+    # plot_rstar_z(fsaven, rstar_z, Z, B, P, Z_prey, ds)
+
+end
+
+
+function plot_rstar_b_dar(fsaven, rstar, B, D, competitors, ds)
+
+    H = 890
+    zc = get_zc(H)
+    nb, nd = get_size([B, D])
+
+    parent_folder = "results/plots/rstar/"
+    filename = replace(fsaven, ".nc" => "", "/home/lee/Dropbox/Development/NPZBD_1D/" => "", "results/outfiles/" => "")
+    dir = check_subfolder_exists(filename, parent_folder)
+
+    bcols, dcols, pcols, ncols, zcols, ab, ab_ext, ls, lfs, lg = get_plot_vars()
+    tfs = 9
+    ls=7
+    ab=0.6
+    lfs = 8
+    ls2=3
+    xtfs=8
+
+    dcols = ["teal", "lightblue1", "azure4", "red4", "black"]
+    bcols = ["teal", "lightblue1", "azure4", "red4", "pink", "black","grey"]
+
+    tls = ["POM", "POM Consumers", "DOM", "DOM Consumers"]
+    lab_om=sum([D[:,4], D[:,5], D[:,6]])
+    rs_lab_cop=sum([rstar[4], rstar[5], rstar[6]])
+    rs_lab_oli=sum([rstar[9], rstar[10], rstar[11]])
+
+    fig1 = Array{Plots.Plot, 1}(undef, 5);
+    fig1[1] =   plot(D[1:89, 1], -zc, lw=ls2, lc=dcols[1], linestyle=:dot, label=" POM1", legendfontsize=lfs,
+                    ylabel="Depth (m)", xlabel="", xrotation=45, title = "POM Labile", titlefontsize=tfs, grid=false, border=:box, legend=lg, 
+                    xtickfontsize=xtfs)
+                plot!(rstar[1][1:89], -zc, lw=ls, label=" R* Copio.", lc=bcols[1])
+
+    fig1[2] =   plot(D[1:89, 2], -zc, lw=ls2, lc=dcols[2], linestyle=:dot, label=" POM2", legendfontsize=lfs,
+                    ylabel="", xlabel="", xrotation=45, title="POM Semi", titlefontsize=tfs, grid=false, border=:box, legend=lg,
+                    yformatter=Returns(""), xtickfontsize=xtfs)               
+                plot!(rstar[2][1:89], -zc, lw=ls, label=" R* Semi", lc=bcols[2])
+
+    fig1[3] =   plot(D[1:89, 3], -zc, lw=ls2, lc=dcols[3], linestyle=:dot, label=" POM3", legendfontsize=lfs,
+                ylabel="", xlabel="", xrotation=45, title="POM Recalc.", titlefontsize=tfs, grid=false, border=:box, legend=lg,
+                yformatter=Returns(""), xtickfontsize=xtfs)               
+                plot!(rstar[3][1:89], -zc, lw=ls, label=" R* Oligo.", lc=bcols[3])
+
+    fig1[4] =   plot(lab_om[1:89, :], -zc, lw=ls2, lc=dcols[4], linestyle=:dot, label=" DOM", legendfontsize=lfs,
+                ylabel="", xlabel="", xrotation=45, title="DOM Labile", titlefontsize=tfs, grid=false, border=:box, legend=lg,
+                yformatter=Returns(""), xtickfontsize=xtfs)               
+                plot!(rs_lab_cop[1:89], -zc, lw=ls, label=" R* Copio.", lc=bcols[4], alpha=ab)
+                plot!(rs_lab_oli[1:89], -zc, lw=ls, label=" R* Oligo.", lc=bcols[5], alpha=ab)
+
+    fig1[5] =   plot(D[1:89, 7], -zc, lw=ls2, lc=dcols[5], linestyle=:dot, label=" DOM", legendfontsize=lfs,
+                ylabel="", xlabel="", xrotation=45, title="DOM Recalc.", titlefontsize=tfs, grid=false, border=:box, legend=lg,
+                yformatter=Returns(""), xtickfontsize=xtfs)               
+                plot!(rstar[7][1:89], -zc, lw=ls, label=" R* Copio.", lc=bcols[6])
+                plot!(rstar[12][1:89], -zc, lw=ls, label=" R* Oligo.", lc=bcols[7])
+
+    
+    f = plot(fig1..., 
+    fg_legend = :transparent,
+    layout = (1,5),
+    size=(700,380),
+    )
+
+    savefig(f, "$(dir)/rsBD_$(filename).png")
+
+end
 
     # fig2 = Array{Plots.Plot, 1}(undef, nd);
     # for d in 1:nd

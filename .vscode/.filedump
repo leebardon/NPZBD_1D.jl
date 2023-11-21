@@ -1,6 +1,6 @@
 
 		begin
-      f = addfile("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Wi50y_231111_15:54_6P3Z13B8D_ep.nc","r")
+      f = addfile("/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/endpoints/Su50y_231118_14:08_6P3Z13B8D_ep.nc","r")
       print(f)
 		end
     

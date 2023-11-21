@@ -60,7 +60,7 @@ function run_NPZBD(prms, season)
         end 
 
         # Nutrient pulsing routine 
-        if prms.pulse != 1
+        if prms.pulse == 2
             if season == 1
                 if t % 1000 == 0 
                     println("PULSED at t=$t")

@@ -21,7 +21,8 @@ function rstar_analysis(fsaven, season_num)
     end
 
     rstar_b, rstar_p, rstar_z = get_rstar(B, P, Z, ds)
-    plot_rstar(rstar_b, rstar_p, rstar_z, fsaven)
+    # plot_rstar(rstar_b, rstar_p, rstar_z, fsaven)
+    plot_rstar_dar(rstar_b, rstar_p, rstar_z, fsaven)
 
 end 
 
@@ -81,7 +82,7 @@ end
 
 function b_grazing(B, Z, np, nb, nz, ds)
 
-    GrM = ds["GrM"][:]
+    GrM = ds["GrM"][:,:]
     g_max = 1.0
     K_g = 1.0
     ngrid = length(B[:,1])
@@ -118,11 +119,11 @@ end
 
 function RstarB(loss, ds)
 
-    umax_ij = ds["umax_ij"][:]
-    Km_ij = ds["Km_ij"][:]
-    yield = ds["y_ij"][:]
+    umax_ij = ds["umax_ij"][:,:]
+    Km_ij = ds["Km_ij"][:,:]
+    yield = ds["y_ij"][:,:]
     temp_mod = get_temp_mod(ds)
-    II, JJ = get_nonzero_axes(ds["CM"][:])
+    II, JJ = get_nonzero_axes(ds["CM"][:,:])
 
     RS = Any[]
     for j = axes(II, 1)
@@ -140,7 +141,7 @@ end
 #-----------------------------------------------------------------------------------
 function p_grazing(P, Z, ds, np, nz)
 
-    GrM = ds["GrM"][:]
+    GrM = ds["GrM"][:,:]
     grazing = Any[]
     g_max = 1.0
     K_g = 1.0
@@ -163,8 +164,8 @@ end
 
 function RstarP(loss, ds, np)
 
-    vmax_ij = ds["vmax_ij"][:]
-    Kp_ij = ds["Kp_ij"][:]
+    vmax_ij = ds["vmax_ij"][:,:]
+    Kp_ij = ds["Kp_ij"][:,:]
     temp_mod = get_temp_mod(ds)
 
     RS = Any[]
@@ -204,6 +205,9 @@ end
 
 
 
-# fsaven = "results/outfiles/Wi100y_231019_17:22_10P3Z18B8D.nc"
-# rstar_analysis(fsaven, "Winter")
-
+# fsaven = "results/outfiles/Wi100y_231119_13:54_6P3Z13B8D.nc" # meso pulse 100yrs
+# fsaven = "results/outfiles/Wi100y_231119_15:34_6P3Z13B8D.nc" # meso steady 100yrs
+# fsaven = "results/outfiles/Su100y_231119_14:25_6P3Z13B8D.nc" #oligo pulse 100yrs
+fsaven = "results/outfiles/Su100y_231119_16:05_6P3Z13B8D.nc" #oligo steady 100yrs
+# rstar_analysis(fsaven, 1)
+rstar_analysis(fsaven, 2)
