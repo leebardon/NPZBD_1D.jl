@@ -31,6 +31,7 @@
     include("plotting/state_var_plots.jl")
     include("plotting/timeseries_plots.jl")
     include("plotting/rstar_plots.jl")
+    include("plotting/state_var_dar.jl")
     include("utils/save_params.jl")
     include("utils/utils.jl")
     include("utils/save_utils.jl")
@@ -97,9 +98,26 @@
 
         elseif run_type == 3
             # Continues from end of previous runs (prompts user to select .nc file in results/outfiles )
-            n_cont, p_cont, z_cont, b_cont, d_cont, o_cont, nn, np, nz, nb, nd, 
-            y_ij, prob_generate_d, umax_i, umax_ij, vmax_i, vmax_ij, Km_ij, Kp_ij, 
-            season, pulse, CM, GrM, CMp, Fg_b, Fg_p = get_previous_params()
+            H, dz, nIC, pIC, zIC, bIC, dIC, oIC, nn, np, nz, nb, nd, 
+            vmax_i, vmax_ij, Kp_i, Kp_ij, m_lp, m_qp, light, temp_fun, K_I, CMp, Fg_p, 
+            umax_i, umax_ij, Km_i, Km_ij, m_lb, m_qb, y_ij, prob_generate_d, CM, Fg_b,
+            g_max, K_g, γ, m_lz, m_qz, GrM, pen, kappa_z, wd, ngrid, pulse, e_o, yo_ij,
+            koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, season = get_previous_params()
+
+            fsaven = set_savefiles(now(), season, years, np, nz, nb, nd)
+
+            params = Prms(
+                        days, dt, nt, nrec, H, dz, np, nb, nz, nn, nd, pIC, bIC, zIC, nIC, dIC, oIC, 
+                        vmax_i, vmax_ij, Kp_i, Kp_ij, m_lp, m_qp, light, temp_fun, K_I, CMp, Fg_p,
+                        umax_i, umax_ij, Km_i, Km_ij, y_ij, m_lb, m_qb, prob_generate_d, CM, Fg_b,
+                        g_max, K_g, γ, m_lz, m_qz, GrM, pen, kappa_z, wd, ngrid, pulse, 
+                        e_o, yo_ij, koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, fsaven
+            )
+
+            log_params(params)
+            N, P, Z, B, D, O, track_time = run_NPZBD(params, season)
+
+            exit()
 
         end
 
@@ -140,8 +158,6 @@
     # -----------------------------------------------------------------------------------------------------------#
     #   PHYTOPLANKTON PARAMS 
     #------------------------------------------------------------------------------------------------------------
-        K_I = 10.0         
-        e_o = 150/16   
         Kp_i = vmax_i./10 
 
         if run_type != 3
@@ -223,6 +239,7 @@
             kappa_z[end] = 0
 
         # LIGHT (Irradiance, I) 
+            K_I = 10                    # Light half-saturation constant
             euz = 25                    # euphotic zone lengthscale #NOTE scales with amount of biomass but VERY sensitive
             light_top = 700             # avg incoming PAR = (1400/2)  Light_avg*(cos(t*dt*2*3.1416)+1) for light daily cycle
             light = light_top .* exp.( -zc ./ euz)
@@ -235,7 +252,11 @@
 
         # OXYGEN (deep oxygen relaxation)
             o2_deep = 200.0             # mmol/m3, avg (for ~7 C) and 35
-            t_o2relax = 0.01            # 1/day, range from 0.01 to 0.1. Set to 0 to turn off.
+            t_o2relax = 0.01            # 1/day, range from 0.01 to 0.1. Set to 0 to turn off
+
+        # OXYGEN (biotic production)
+            yo_ij = y_ij*10             #NOTE PLACEHOLDER VALUE (mol B/mol O2) not realistic
+            e_o = 150/16                # production of O2 (excretion). mol O2/mol N uptake
 
 
         # TEMPERATURE (SPOT along water column)
@@ -286,7 +307,8 @@
                     e_o, yo_ij, koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, fsaven
                 )
 
-        @info("Model Params: \n $params \n") ; print_info(params)
+        # @info("Model Params: \n $params \n") ; print_info(params)
+        log_params(params)
 
         N, P, Z, B, D, O, track_time = run_NPZBD(params, season)
     

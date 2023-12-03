@@ -97,40 +97,61 @@ end
 
 function get_previous_params()
 
-    # files = readdir("results/outfiles")
     files = readdir("results/outfiles/endpoints")
     f = request("\nSelect output file:", RadioMenu(files))
-    # ds = NCDataset("results/outfiles/$(files[f])")
     ds = NCDataset("results/outfiles/endpoints/$(files[f])")
-    
-    n = ds["n"][:,:]
-    p = ds["p"][:,:]
-    z = ds["z"][:,:]
-    b = ds["b"][:,:]
-    d = ds["d"][:,:]
-    o = ds["o"][:,:]
-    # n, p, z, b, d, o = get_endpoints(["n", "p", "z", "b", "d", "o"], ds)
-    nn, np, nz, nb, nd = get_size([n, p, z, b, d])
 
-    #NOTE save prob_generate_d
-    y_ij = ds["y_ij"][:,:]
-    prob_generate_d = ds["prob_generate_d"][:]
+    H = ds["H"][:][1]
+    dz = ds["dz"][:][1]
+    nIC, pIC, zIC, bIC, dIC, oIC0 = get_endpoints(["n", "p", "z", "b", "d", "o"], ds)
+    oIC = oIC0[:,:]
+    nn, np, nz, nb, nd = get_size([nIC, pIC, zIC, bIC, dIC])
     vmax_i = ds["vmax_i"][:]
     vmax_ij = ds["vmax_ij"][:,:]
+    Kp_i = ds["Kp_i"][:]
+    Kp_ij = ds["Kp_ij"][:,:]
+    m_lp = ds["m_lp"][:]
+    m_qp = ds["m_qp"][:]
+    light = ds["light"][:]
+    temp_fun = ds["temp_fun"][:]
+    K_I = ds["K_I"][:][1]
+    CMp = ds["CMp"][:,:]
+    Fg_p = ds["Fg_p"][:]
     umax_i = ds["umax_i"][:]
     umax_ij = ds["umax_ij"][:,:]
+    Km_i = ds["Km_i"][:]
     Km_ij = ds["Km_ij"][:,:]
-    Kp_ij = ds["Kp_ij"][:,:]
-    season = ds.attrib["Season"]
-    pulse = ds["pulse"][:][1]
+    m_lb = ds["m_lb"][:]
+    m_qb = ds["m_qb"][:]
+    y_ij = ds["y_ij"][:,:]
+    prob_generate_d = ds["prob_generate_d"][:]
     CM = ds["CM"][:,:]
-    GrM = ds["GrM"][:,:]
-    CMp = ds["CMp"][:,:]
     Fg_b = ds["Fg_b"][:]
-    Fg_p = ds["Fg_p"][:]
+    g_max = ds["g_max"][:]
+    K_g = ds["K_g"][:]
+    γ = ds["γ"][:]
+    m_lz = ds["m_lz"][:]
+    m_qz = ds["m_qz"][:]
+    GrM = ds["GrM"][:,:]
+    pen = ds["pen"][:]
+    kappa_z = ds["kappa_z"][:]
+    wd = ds["wd"][:,:]
+    ngrid = ds["ngrid"][:][1]
+    pulse = ds["pulse"][:][1]
+    e_o = ds["e_o"][:][1]
+    yo_ij = ds["yo_ij"][:,:]
+    koverh = ds["koverh"][:][1]
+    o2_sat = ds["o2_sat"][:][1]
+    ml_boxes = ds["ml_boxes"][:][1]
+    t_o2relax = ds["t_o2relax"][:][1]
+    o2_deep = ds["o2_deep"][:][1]
+    season = ds.attrib["Season"]
 
-    return n, p, z, b, d, o, nn, np, nz, nb, nd, y_ij, prob_generate_d, umax_i, umax_ij, vmax_i, vmax_ij, 
-            Km_ij, Kp_ij, season, pulse, CM, GrM, CMp, Fg_b, Fg_p
+    return H, dz, nIC, pIC, zIC, bIC, dIC, oIC, nn, np, nz, nb, nd, 
+           vmax_i, vmax_ij, Kp_i, Kp_ij, m_lp, m_qp, light, temp_fun, K_I, CMp, Fg_p, 
+           umax_i, umax_ij, Km_i, Km_ij, m_lb, m_qb, y_ij, prob_generate_d, CM, Fg_b,
+           g_max, K_g, γ, m_lz, m_qz, GrM, pen, kappa_z, wd, ngrid, pulse, e_o, yo_ij,
+           koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, season
 
 end
 
@@ -244,6 +265,57 @@ function activate_logger(loginfo)
     global_logger(logger)
 
     return logger 
+
+end
+
+
+function log_params(prms)
+
+    @info(
+    """Model Params: 
+    days:           $(prms.days)
+    ts/day (dt):    $(prms.dt)
+    total ts (nt):  $(prms.nt)                    
+    recorded ts:    $(prms.nt) 
+    nn:             $(prms.nn)                    
+    np:             $(prms.np)                     
+    nz:             $(prms.nz)        
+    nb:             $(prms.nb)         
+    nd:             $(prms.nd)    
+    nIC:            $(prms.nIC[1])                        
+    pIC:            $(prms.pIC[1])
+    zIC:            $(prms.zIC[1])
+    bIC:            $(prms.bIC[1])
+    dIC:            $(prms.dIC[1])
+    oIC:            $(prms.oIC[1])
+    vmax_i:         $(prms.vmax_i)
+    vmax_ij:        $(prms.vmax_ij)
+    umax_i:         $(prms.umax_i)
+    umax_ij:        $(prms.umax_ij)
+    Kp_i:           $(prms.Kp_i)
+    Kp_ij:          $(prms.Kp_ij)
+    Km_i:           $(prms.Km_i)
+    Km_ij:          $(prms.Km_ij)
+    y_ij:           $(prms.y_ij[1])
+    K_g:            $(prms.K_g[1])
+    g_max:          $(prms.g_max[1])
+    γ:              $(prms.γ[1])
+    m_lp:           $(prms.m_lp[1])
+    m_qp:           $(prms.m_qp[1])
+    m_lb:           $(prms.m_lb[1])
+    m_qb:           $(prms.m_qb[1])
+    m_lz:           $(prms.m_lz[1])
+    m_qz:           $(prms.m_qz[1])
+    prob_generate_d: $(prms.prob_generate_d)
+    wd:             $(prms.wd)
+    pulse? (1=no)   $(prms.pulse)   
+    Fg_p:           $(prms.Fg_p)
+    Fg_b:           $(prms.Fg_b)
+    light half sat: $(prms.K_I)
+    """) 
+    
+    print_info(prms)
+
 
 end
 
@@ -362,6 +434,7 @@ function mean_over_time(state_vars, ds, season)
     
 end
 
+
 function get_cycle_means(vars, pulse_freq, ds)
 
     num_days = pulse_freq * 100
@@ -418,9 +491,11 @@ function get_temp_mod(ds)
 
 end
 
+
 function get_light()
     return CSV.read("/home/lee/Dropbox/Development/NPZBD_1D/data/light/light.csv", DataFrame, header=false)
 end
+
 
 #------------------------------------------------------------------------
 #                             PLOT UTILS 
@@ -432,7 +507,7 @@ function get_plot_vars()
             "darkkhaki", "purple", "black",  "yellow3", "navajowhite4",  "coral4", "orange2", "orangered4", "yellow3", 
             "lightyellow4", "goldenrod4", "slateblue4", "mediumpurple3"]
     dcols = ["blue3", "black", "maroon", "coral", "orange3", "silver", "magenta3", "cyan3", "seagreen", "mediumpurple3"]
-    pcols = ["olivedrab3", "darkgreen","red4", "cyan4", "gold3", "black", "hotpink2", "wheat2", "mediumpurple3", "darkseagreen" ]
+    pcols = ["hotpink2", "darkgreen","red4", "cyan4", "gold3", "black", "brown", "wheat2", "mediumpurple3", "darkseagreen" ]
     ncols = ["blue2"]
     zcols = ["black", "slategray4", "deeppink3", "sienna", "mediumpurple3", "darkseagreen", "snow4", 
             "silver", "salmon", "coral4", "orange2", "orangered4", "yellow3", "lightyellow4", "goldenrod4",

@@ -2,18 +2,18 @@
 # using CairoMakie
 # using LinearAlgebra, Statistics
 
-include("/home/lee/Dropbox/Development/NPZBD_1D/src/utils/utils.jl")
-include("/home/lee/Dropbox/Development/NPZBD_1D/src/utils/save_utils.jl")
+# include("/home/lee/Dropbox/Development/NPZBD_1D/src/utils/utils.jl")
+# include("/home/lee/Dropbox/Development/NPZBD_1D/src/utils/save_utils.jl")
 
 
 
 function plot_bmass_heatmaps(fsaven, varname)
 
-    zc = get_zc(400)
+    zc = get_zc(890)
     ds = NCDataset(fsaven)
     filename = replace(fsaven, ".nc" => "", "/home/lee/Dropbox/Development/NPZBD_1D/" => "", "results/outfiles/" => "")
 
-    p, b = get_final_year(["p", "b"], ds)
+    p, b = get_final_year(ds, ["p", "b"])
 
     varname == "P" ? bmass_heatmaps(p, zc, filename, varname) : bmass_heatmaps(b, zc, filename, varname)
 
@@ -53,7 +53,7 @@ function bmass_heatmaps(species, zc, filename, varname)
     parent_folder = "results/plots/heatmaps/biomass/"
     dir = check_subfolder_exists(filename, parent_folder)
     
-    varname == "P" ? max_d = 30 : max_d = 30
+    varname == "P" ? max_d = 30 : max_d = 89
     d = -zc[1:max_d]
     num_species = size(species, 2)
     zmax = set_zmax(species, num_species)
@@ -171,16 +171,8 @@ function npp_heatmaps(fsaven, npp_months, npp, mov_avs, daily_means)
 end
 
 
-# fsaven = "results/outfiles/Wi100y_231011_20:23_8P20Z13B5D.nc"
-# fsaven = "results/outfiles/Wi100y_231011_23:28_8P20Z13B5D.nc"
-# fsaven = "results/outfiles/Wi100y_231017_01:23_10P3Z21B9D.nc"
-# fsaven = "results/outfiles/Wi100y_231017_12:01_10P3Z21B9D.nc"
-# fsaven = "results/outfiles/Wi50y_231017_23:00_10P3Z18B8D.nc"
-# fsaven = "results/outfiles/Wi50y_231017_23:32_10P3Z18B8D.nc"
-# fsaven = "results/outfiles/Wi100y_231019_17:22_10P3Z18B8D.nc"
-# fsaven = "results/outfiles/Wi100y_231019_19:45_10P3Z18B8D.nc"
-# println("start")
+# fsaven = "results/outfiles/Wi50y_231122_16:59_6P3Z13B8D.nc"
+# fsaven = "results/outfiles/Su50y_231122_20:39_6P3Z13B8D.nc"
+# fsaven = "results/outfiles/Wi50y_231122_22:17_6P3Z13B8D.nc"
 # plot_bmass_heatmaps(fsaven, "P")
-# println("done1")
 # plot_bmass_heatmaps(fsaven, "B")
-# println("done2")

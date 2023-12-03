@@ -16,11 +16,58 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
 
     global fsaven = set_savefiles(now(), season, years, np, nz, nb, nd)
 
-    vmax_i = [1.8, 3.0, 5.0, 7.0, 9.0, 12.0]
-    vmax_ij = reshape([0.9, 2.1, 5.0, 8.4, 12.24, 18.96], 1, 6)
-    Fg_p = [0.1, 0.25, 0.5, 0.68, 0.79, 0.91]
 
-    umax_i = [1., 1., 1., 1., 1., 1., 1., 1.]
+    #------------------------------------------------------------------------------------------------------------#
+    #   GRID SETUP
+    #------------------------------------------------------------------------------------------------------------#
+    H = 890                         # depth at SPOT (m)
+    dz = 10                         # height per box
+    ngrid = Int(H/dz)               # number of boxes
+    zc = [dz/2 : dz : H - dz/2;]    # centered depth 
+    zf = [0 : dz : H;]              # face depth; 1 longer than zc
+
+
+    # -----------------------------------------------------------------------------------------------------------#
+    #   PHYTOPLANKTON PARAMS 
+    #------------------------------------------------------------------------------------------------------------
+    CMp = get_matrix("CMp", nd, nb, nn, np, nz)
+    K_I = 10.0         
+    e_o = 150/16   
+
+    Fg_p = [0.1, 0.25, 0.5, 0.68, 0.79, 0.91]      # fraction of proteome optimized to growth
+    Fa_p = 1. .- Fg_p                              # fraction optimized to substrate affintiy
+
+    vmax_i = [1.8, 3.0, 5.0, 7.0, 9.0, 12.0]       # max growth rates
+    Kp_i = vmax_i./10                              # half saturation of P_i
+
+    vmax_ij = set_vmax_ij(nn, np, vmax_i, Fg_p)    # growth rate of P_i on N
+    Kp_ij = set_Kp_ij(nn, np, Fa_p, CMp, vmax_ij)  # half saturation of P_i on N
+
+
+    # -----------------------------------------------------------------------------------------------------------#
+    #   HETEROTROPHIC BACTERIA PARAMS
+    #------------------------------------------------------------------------------------------------------------#
+    CM = [1  0  0  0  0  0  0  0  0  0  0  0  0   
+          0  1  0  0  0  0  0  0  0  0  0  0  0    
+          0  0  1  0  0  0  0  0  0  0  0  0  0  
+          0  0  0  1  0  0  0  0  1  0  0  0  0 
+          0  0  0  0  1  0  0  0  0  1  0  0  0 
+          0  0  0  0  0  1  0  0  0  0  1  0  0 
+          0  0  0  0  0  0  1  0  0  0  0  1  0 
+          0  0  0  0  0  0  0  1  0  0  0  0  1 ] 
+    
+    y_i = ones(nd)*0.3
+    y_ij = broadcast(*, y_i, CM) 
+    yo_ij = y_ij*10                                # PLACEHOLDER VALUE mol B/mol O2. not realistic
+    num_uptakes = sum(CM, dims=1)[1, :]
+    pen = 1 ./ num_uptakes
+
+    Fg_b = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+    Fa_b = 1. .- Fg_b      
+
+    umax_i = [1., 1., 1., 1., 1., 1., 1., 1.]      # Fg_b and umax_i are dummy vals - already provided from Emily's previous work (trade-off applied)
+    Km_i = umax_i./10 
+
     umax_ij =  [5.17  0  0  0  0  0  0  0  0  0  0  0  0    # first 3 are POM, next 10 are DOM
                 0  0.92  0  0  0  0  0  0  0  0  0  0  0    
                 0  0  0.16  0  0  0  0  0  0  0  0  0  0  
@@ -38,63 +85,25 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
              0  0  0  0  0  0.05  0  0  0  0  0.022  0  0 
              0  0  0  0  0  0  0.0088  0  0  0  0  0.004  0 
              0  0  0  0  0  0  0  0.00156  0  0  0  0  0.00072 ]  
-    Fg_b = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]  #dummy as Fg vals used to set umax_ij/Km_ij, and those vals already provided
 
-    CM = [1  0  0  0  0  0  0  0  0  0  0  0  0   
-          0  1  0  0  0  0  0  0  0  0  0  0  0    
-          0  0  1  0  0  0  0  0  0  0  0  0  0  
-          0  0  0  1  0  0  0  0  1  0  0  0  0 
-          0  0  0  0  1  0  0  0  0  1  0  0  0 
-          0  0  0  0  0  1  0  0  0  0  1  0  0 
-          0  0  0  0  0  0  1  0  0  0  0  1  0 
-          0  0  0  0  0  0  0  1  0  0  0  0  1 ] 
 
-    # GrM - first 6 cols are phyto, next 10 are dom consuming bacteria, rows are zoo
+
+    # -----------------------------------------------------------------------------------------------------------#
+    #   ZOOPLANKTON PARAMS 
+    #------------------------------------------------------------------------------------------------------------#
+        # GrM - first 6 cols are phyto, next 10 are dom consuming bacteria, rows are zoo
     # Z1 - pom consumers; Z2 - larger (copio, 0.6um) and phyto grazer; Z3 - smaller (oligo, 0.3um) 
-    GrM = [1.0  1.0  1.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
-           0.0  0.0  0.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  0.0  0.0  0.0  0.0  0.0 
-           0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  1.0  1.0  1.0  1.0  1.0 ] 
+    #NOTE this GrM config messes up the main model code, which expects z1 to graze P
+    # GrM = [1.0  1.0  1.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+    #        0.0  0.0  0.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  0.0  0.0  0.0  0.0  0.0 
+    #        0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  1.0  1.0  1.0  1.0  1.0 ] 
 
-    CMp = get_matrix("CMp", nd, nb, nn, np, nz)
+    # z1 grazes P, z2 grazes POM consumers, Z3 grazes DOM consumers
+    GrM = [1.0  1.0  1.0  1.0  1.0  1.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+           0.0  0.0  0.0  0.0  0.0  0.0  1.0  1.0  1.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+           0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0 ] 
 
-
-    #------------------------------------------------------------------------------------------------------------#
-    #   GRID SETUP
-    #------------------------------------------------------------------------------------------------------------#
-    H = 890                         # depth at SPOT (m)
-    dz = 10                         # height per box
-    ngrid = Int(H/dz)               # number of boxes
-    zc = [dz/2 : dz : H - dz/2;]    # centered depth 
-    zf = [0 : dz : H;]              # face depth; 1 longer than zc
-
-
-    # -----------------------------------------------------------------------------------------------------------#
-    #   HETEROTROPHIC MICROBE PARAMS
-    #------------------------------------------------------------------------------------------------------------#
-    y_i = ones(nd)*0.3
-    y_ij = broadcast(*, y_i, CM) 
-    yo_ij = y_ij*10                     # PLACEHOLDER VALUE mol B/mol O2. not realistic
-    num_uptakes = sum(CM, dims=1)[1, :]
-    pen = 1 ./ num_uptakes
-    Km_i = umax_i./10 
-
-
-    # -----------------------------------------------------------------------------------------------------------#
-    #   PHYTOPLANKTON PARAMS 
-    #------------------------------------------------------------------------------------------------------------
-    K_I = 10.0         
-    e_o = 150/16   
-    Kp_i = vmax_i./10 
-
-    Fa_p = 1. .- Fg_p
-    vmax_ij = set_vmax_ij(nn, np, vmax_i, Fg_p)
-    Kp_ij = set_Kp_ij(nn, np, Fa_p, CMp, vmax_ij)
-
-
-    # -----------------------------------------------------------------------------------------------------------#
-    #   ZOOPLANKTON GRAZING 
-    #------------------------------------------------------------------------------------------------------------
-    g_max = ones(nz)*2.0
+    g_max = ones(nz)*1.0
     K_g = ones(nz)*1.0
     γ = ones(nz)*0.3
 
@@ -105,24 +114,24 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
     m_lp = ones(np) * 0 
     m_qp = ones(np) * 0.1  # (.1 if explicit grazers, if not, 1)
 
-    m_lb = ones(nb) * 0 
+    m_lb = ones(nb) * 0
     m_qb = ones(nb) * 0.1 
 
-    m_lz = ones(nz) * 0
+    m_lz = ones(nz) * 0.1
     m_qz = ones(nz) * 0.1 
 
 
     # -----------------------------------------------------------------------------------------------------------#
     #   ORGANIC MATTER
     #------------------------------------------------------------------------------------------------------------#
-    # prob_generate_d calculated as: dist = Lognormal(1.5, 2) 
-    # pom = rand(dist, 3) ; dom = rand(dist, 5) ; d = vcat(pom, dom) ; out = d / sum(d)
-    prob_generate_d = [0.05, 0.2, 0.05, 0.05, 0.1, 0.40, 0.1, 0.05]
+    # prob_generate_d = [0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125]
+    # prob_generate_d = [0.05, 0.4, 0.05, 0.0028, 0.0747, 0.345, 0.0747, 0.0028] # 50% each to POM and DOM
+    prob_generate_d = [0.03, 0.27, 0.03, 0.01, 0.1, 0.45, 0.1, 0.01 ] # 33% to POM, 66 to DOM
+
 
     # Sinking rate for POM  
     ws = zeros(nd)                  
-    ws[1], ws[2], ws[3] = 10.0, 10.0, 10.0
-    # re-run these - do runs tonight and sent new plots to emily - do the two conditions - and include pulses 
+    ws[1], ws[2], ws[3] = 4.0, 6.0, 8.0
 
 
     #------------------------------------------------------------------------------------------------------------#
@@ -152,7 +161,7 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
         o2_sat = 212.1              # mmol/m3 from calc_oxsat(25+273,35) in matlab. WOCE clim-avg surf T at 10S, E. Pac.
         Kgast = 3e-5*86400          # m/d
         ml_boxes = 100/dz           # discrete n of boxes in the mixed layer, close to 100m total sum
-        koverh = Kgast/ml_boxes # gas transfer coeff for each of the n boxes comprising the ml. 
+        koverh = Kgast/ml_boxes     # gas transfer coeff for each of the n boxes comprising the ml. 
 
     # OXYGEN (deep oxygen relaxation)
         o2_deep = 200.0             # mmol/m3, avg (for ~7 C) and 35
@@ -183,7 +192,7 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
         nIC = ones(Float64, ngrid, nn) * 20.0
         pIC = ones(Float64, ngrid, np) * 0.1 
         zIC = ones(Float64, ngrid, nz) * 0.01
-        dIC = ones(Float64, ngrid, nd) * 0.01
+        dIC = ones(Float64, ngrid, nd) * 0.1
         bIC = ones(Float64, ngrid, nb) * 0.1 
         oIC = ones(Float64, ngrid, 1)  * 100.0
     else
@@ -207,7 +216,7 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
                 e_o, yo_ij, koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, fsaven
             )
 
-    @info("Model Params: \n $params \n") ; print_info(params)
+    log_params(params) ; print_info(params)
 
     N, P, Z, B, D, O, track_time = run_NPZBD(params, season)
 

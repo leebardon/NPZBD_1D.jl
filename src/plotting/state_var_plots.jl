@@ -174,6 +174,6 @@ end
 # plot_state_vars_dar(fsaven, 2, "(steady state)")
 
 
-fsaven = "results/outfiles/Wi50y_231120_09:29_6P2Z10B10D.nc" # meso pulse 100yrs - lability test
+# fsaven = "results/outfiles/Wi50y_231120_09:29_6P2Z10B10D.nc" # meso pulse 100yrs - lability test
 # plot_state_vars(fsaven, 1)
-plot_state_vars_lab(fsaven, 1)
+# plot_state_vars_lab(fsaven, 1)

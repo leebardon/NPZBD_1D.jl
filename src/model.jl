@@ -42,6 +42,10 @@ function run_NPZBD(prms, season)
     dtemp = copy(prms.dIC) 
     otemp = copy(prms.oIC) 
 
+    # Create quasi-random vector of unique timesteps on which nutrient pulses occur, if pulsing enabled
+    season == 1 ? npulses = floor(prms.days/10) : npulses = floor(prms.days/40)
+    pulse_vec = sample(1:Int(prms.nt), Int(npulses), replace=false)
+
 
     # @time for t = 1:prms.nt 
     for t = 1:prms.nt
@@ -59,20 +63,29 @@ function run_NPZBD(prms, season)
             
         end 
 
-        # Nutrient pulsing routine 
+        # Nutrient pulsing routine (every 10 or 30 days)
+        # if prms.pulse == 2
+        #     if season == 1
+        #         if t % 1000 == 0 
+        #             println("PULSED at t=$t")
+        #             ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)      
+        #         end
+        #     else
+        #         if t % 3000 == 0 
+        #             println("PULSED at t=$t")
+        #             ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)  
+        #         end
+        #     end
+        # end 
+
+        # Nutrient pulsing routine (semi-stochastic - equivalent number of pulses as above routine, but random period between)
         if prms.pulse == 2
-            if season == 1
-                if t % 1000 == 0 
-                    println("PULSED at t=$t")
-                    ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)      
-                end
-            else
-                if t % 3000 == 0 
-                    println("PULSED at t=$t")
-                    ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)  
-                end
-            end
-        end 
+            if t in pulse_vec 
+                ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse) 
+                println("PULSED at t=$t")
+            end 
+        end
+    
 
         #calculate bacteria uptake for last timepoint
         if t == prms.nt
@@ -87,7 +100,7 @@ function run_NPZBD(prms, season)
             
             end_time = now() 
             save_full_run(track_p, track_b, track_z, track_n, track_d, track_o, track_time, uptake_b, start_time, end_time, prms, season)
-            save_endpoints(track_n, track_p, track_z, track_b, track_d, track_o, uptake_b, prms, season)
+            save_endpoints(track_p, track_b, track_z, track_n, track_d, track_o, track_time, uptake_b, start_time, end_time, prms, season)
 
         end
     end 

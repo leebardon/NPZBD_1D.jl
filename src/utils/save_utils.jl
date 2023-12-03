@@ -60,11 +60,11 @@ function save_full_run(p, b, z, n, d, o, timet, uptake_b, tst, tfn, prms, season
     defDim(f,"ndepth",prms.ngrid)
     defDim(f,"ndepth1",prms.ngrid+1)
 
-    # define the dim of the time length
+    # define the dim of the time length 
     nrec1 = Int(prms.nrec+1) #bc i added time 0
-    nprey = prms.np + prms.nb
-    
     defDim(f,"nrec",nrec1)
+
+    nprey = prms.np + prms.nb
     defDim(f,"nprey",nprey)
    
     # info
@@ -136,6 +136,26 @@ function save_full_run(p, b, z, n, d, o, timet, uptake_b, tst, tfn, prms, season
     w[:] = prms.dz
     w.attrib["units"] = "m; box height"
 
+    w = defVar(f, "np", Int, ())
+    w[:] = prms.np
+    w.attrib["units"] = "num phytoplankton"
+
+    w = defVar(f, "nb", Int, ())
+    w[:] = prms.nb
+    w.attrib["units"] = "num heterotrophic bacteria"
+
+    w = defVar(f, "nz", Int, ())
+    w[:] = prms.nz
+    w.attrib["units"] = "num zooplankton"
+
+    w = defVar(f, "nn", Int, ())
+    w[:] = prms.nn
+    w.attrib["units"] = "num inorganic nutrient pools"
+
+    w = defVar(f, "nd", Int, ())
+    w[:] = prms.nd
+    w.attrib["units"] = "num organic nutrient pools"
+
     w = defVar(f, "pulse", Int, ())
     w[:] = prms.pulse
     w.attrib["nutrient_pulse"] = "1: no pulse, 2: Total N,D redistributed along water col"
@@ -148,39 +168,51 @@ function save_full_run(p, b, z, n, d, o, timet, uptake_b, tst, tfn, prms, season
     w[:] = prms.wd
     w.attrib["units"] = "sinking rate"
 
-    # w = defVar(f, "temp_fun", Float64, ("ndepth",))
-    # w[:] = prms.temp_fun
-    # w.attrib["units"] = "temp mod to metabolic rate"
+    w = defVar(f, "temp_fun", Float64, ("ndepth",))
+    w[:] = prms.temp_fun
+    w.attrib["units"] = "temp mod to metabolic rate"
+
+    w = defVar(f, "light", Float64, ("ndepth",))
+    w[:] = prms.light
+    w.attrib["units"] = "irradiance profile applied to water col, with eutrophic zone factored in"
+
+    w = defVar(f, "e_o", Float64, ())
+    w[:] = prms.e_o
+    w.attrib["units"] = "production of O2 (excretion) - mol O2/mol N uptake"
+
+    w = defVar(f, "K_I", Float64, ())
+    w[:] = prms.K_I
+    w.attrib["units"] = "light half-sat constant"
+
+    w = defVar(f, "ngrid", Int, ())
+    w[:] = prms.ngrid
+    w.attrib["units"] = "num of horizontal grid cells"
+
+    w = defVar(f, "yo_ij", Float64, ("nd","nb"))
+    w[:,:] = prms.yo_ij
+    w.attrib["units"] = "oxygen yield - mol B/mol O2"
+
+    w = defVar(f, "koverh", Float64, ())
+    w[:] = prms.koverh
+    w.attrib["units"] = "gas transfer coefficient for each box comprising the mixed layer"
+
+    w = defVar(f, "o2_sat", Float64, ())
+    w[:] = prms.o2_sat
+    w.attrib["units"] = "O2 half-sat constant (mmol/m3)"
+
+    w = defVar(f, "t_o2relax", Float64, ())
+    w[:] = prms.t_o2relax
+    w.attrib["units"] = "deep oxygen relaxation time (1/day)"
+
+    w = defVar(f, "o2_deep", Float64, ())
+    w[:] = prms.o2_deep
+    w.attrib["units"] = "deep oxygen relaxation mmol/m3"
+
+    w = defVar(f, "ml_boxes", Int, ())
+    w[:] = prms.ml_boxes
+    w.attrib["units"] = "discrete n of boxes in the mixed layer, close to 100m total sum"
 
     # --------------------------------------------------
-
-    # w = defVar(f,"uptake_b",Float64,("nd","nb"))
-    # w[:,:,:] = uptake_b
-    # w.attrib["units"] = "mmol/m3 C per d; uptake matrix"
-
-    w = defVar(f,"prob_generate_d",Float64,("nd",))
-    w[:] = prms.prob_generate_d 
-    w.attrib["units"] = "Ind C supply weight: probability"
-    
-    w = defVar(f,"pen",Float64,("nb",))
-    w[:] = prms.pen
-    w.attrib["units"] = "penalty"
-    
-    w = defVar(f, "vmax_i", Float64, ("np",))
-    w[:] = prms.vmax_i
-    w.attrib["units"] = "m3/mmol/d; max growth rate of p"
-
-    w = defVar(f, "Fg_p", Float64, ("np",))
-    w[:] = prms.Fg_p
-    w.attrib["units"] = "per p; fraction proteome assigned to growth"
-
-    w = defVar(f, "vmax_ij", Float64, ("nn", "np"))
-    w[:,:] = prms.vmax_ij
-    w.attrib["units"] = "per n; max uptake rate"
-
-    w = defVar(f, "Kp_ij", Float64, ("nn", "np"))
-    w[:,:] = prms.Kp_ij
-    w.attrib["units"] = "mmol/m3; half-sat"
 
     w = defVar(f,"CM",Float64,("nd","nb"))
     w[:,:] = prms.CM
@@ -194,25 +226,61 @@ function save_full_run(p, b, z, n, d, o, timet, uptake_b, tst, tfn, prms, season
     w[:,:] = prms.GrM
     w.attrib["units"] = "Grazing Matrix"
 
-    w = defVar(f, "y_ij", Float64, ("nd","nb"))
-    w[:,:] = prms.y_ij
-    w.attrib["units"] = "per d; max yield rate"
+    w = defVar(f,"prob_generate_d",Float64,("nd",))
+    w[:] = prms.prob_generate_d 
+    w.attrib["units"] = "Ind C supply weight: probability"
+    
+    w = defVar(f,"pen",Float64,("nb",))
+    w[:] = prms.pen
+    w.attrib["units"] = "penalty"
+
+    # --------------------------------------------------
+    
+    w = defVar(f, "vmax_i", Float64, ("np",))
+    w[:] = prms.vmax_i
+    w.attrib["units"] = "m3/mmol/d; max growth rate of p"
+
+    w = defVar(f, "vmax_ij", Float64, ("nn", "np"))
+    w[:,:] = prms.vmax_ij
+    w.attrib["units"] = "per n; max uptake rate"
+
+    w = defVar(f, "Kp_i", Float64, ("np",))
+    w[:] = prms.Kp_i
+    w.attrib["units"] = "mmol/m3; intrinsic half-sat of P_i before trade-off applied"
+
+    w = defVar(f, "Kp_ij", Float64, ("nn", "np"))
+    w[:,:] = prms.Kp_ij
+    w.attrib["units"] = "mmol/m3; half-sat of P_i on N_j"
+
+    w = defVar(f, "m_lp", Float64, ("np",))
+    w[:] = prms.m_lp
+    w.attrib["units"] = "m3/mmol; linear death rate of p"
+
+    w = defVar(f, "m_qp", Float64, ("np",))
+    w[:] = prms.m_qp
+    w.attrib["units"] = "m3/mmol; quadratic death rate of p"
+
+    w = defVar(f, "Fg_p", Float64, ("np",))
+    w[:] = prms.Fg_p
+    w.attrib["units"] = "per p; fraction proteome assigned to growth"
+
+    # --------------------------------------------------
 
     w = defVar(f, "umax_i", Float64, ("nd",))
     w[:] = prms.umax_i
-    w.attrib["units"] = "per d; max uptake rate"
-
-    w = defVar(f, "Fg_b", Float64, ("nb",))
-    w[:] = prms.Fg_b
-    w.attrib["units"] = "per b; fraction proteome assigned to growth"
+    w.attrib["units"] = "per d; max uptake rate of d_i before trade-off applied"
     
     w = defVar(f, "umax_ij", Float64, ("nd", "nb"))
     w[:,:] = prms.umax_ij
-    w.attrib["units"] = "max uptake rate of b on d"
+    w.attrib["units"] = "max uptake rate of b_i on d_j"
+
+    w = defVar(f, "Km_i", Float64, ("nd",))
+    w[:] = prms.Km_i
+    w.attrib["units"] = "mmol/m3; half-sat of d_i before trade-off applied"
     
     w = defVar(f, "Km_ij", Float64, ("nd", "nb"))
     w[:] = prms.Km_ij
-    w.attrib["units"] = "mmol/m3; half-sat"
+    w.attrib["units"] = "mmol/m3; half-sat of b_i on d_j"
     
     w = defVar(f, "m_lb", Float64, ("nb",))
     w[:] = prms.m_lb
@@ -221,10 +289,24 @@ function save_full_run(p, b, z, n, d, o, timet, uptake_b, tst, tfn, prms, season
     w = defVar(f, "m_qb", Float64, ("nb",))
     w[:] = prms.m_qb
     w.attrib["units"] = "m3/mmol; quadratic death rate of b"
-    
+
+    w = defVar(f, "y_ij", Float64, ("nd","nb"))
+    w[:,:] = prms.y_ij
+    w.attrib["units"] = "per d; max yield rate"
+
+    w = defVar(f, "Fg_b", Float64, ("nb",))
+    w[:] = prms.Fg_b
+    w.attrib["units"] = "per b; fraction proteome assigned to growth"
+
+    # --------------------------------------------------
+
     w = defVar(f, "K_g", Float64, ("nz",))
     w[:] = prms.K_g
     w.attrib["units"] = "m3/mmol; half-sat rate of z"
+
+    w = defVar(f, "g_max", Float64, ("nz",))
+    w[:] = prms.g_max
+    w.attrib["units"] = "m3/mmol; max uptake rate of z"
     
     w = defVar(f, "γ", Float64, ("nz",))
     w[:] = prms.γ
@@ -243,7 +325,7 @@ function save_full_run(p, b, z, n, d, o, timet, uptake_b, tst, tfn, prms, season
 end
 
 
-function save_endpoints(n, p, z, b, d, o, uptake_b, prms, season)
+function save_endpoints(p, b, z, n, d, o, timet, uptake_b, tst, tfn, prms, season)
 
     outdir = "/home/lee/Dropbox/Development/NPZBD_1D/"
     ep_path = replace(prms.fsaven, "results/outfiles" => "results/outfiles/endpoints", ".nc" => "_ep.nc")
@@ -256,12 +338,12 @@ function save_endpoints(n, p, z, b, d, o, uptake_b, prms, season)
     f = NCDataset(path, "c") 
 
     # define the dim of p, b, z, n, d
-    defDim(f,"np", prms.np)
-    defDim(f,"nb",prms.nb)
-    defDim(f,"nz",prms.nz)
-    defDim(f,"nn",prms.nn)
-    defDim(f,"nd",prms.nd)
-    defDim(f,"no",1)
+    defDim(f, "np", prms.np)
+    defDim(f, "nb", prms.nb)
+    defDim(f, "nz", prms.nz)
+    defDim(f, "nn", prms.nn)
+    defDim(f, "nd", prms.nd)
+    defDim(f, "no", 1)
 
     # define the dim of the depth
     defDim(f,"ndepth",89)
@@ -303,7 +385,7 @@ function save_endpoints(n, p, z, b, d, o, uptake_b, prms, season)
     w[:,:] = o
     w.attrib["units"] = "mmol/m3 O2"
 
-    # --------------------------------------------------
+  # --------------------------------------------------
     
     w = defVar(f,"pIC",Float64,("ndepth","np"))
     w[:,:] = prms.pIC
@@ -326,6 +408,10 @@ function save_endpoints(n, p, z, b, d, o, uptake_b, prms, season)
     w.attrib["units"] = "mmol/m3 C OM"
 
     # --------------------------------------------------
+    
+    w = defVar(f, "timet", Float64, ("nrec",))
+    w[:] = timet
+    w.attrib["units"] = "days"
 
     w = defVar(f, "H", Int, ())
     w[:] = prms.H
@@ -335,51 +421,83 @@ function save_endpoints(n, p, z, b, d, o, uptake_b, prms, season)
     w[:] = prms.dz
     w.attrib["units"] = "m; box height"
 
+    w = defVar(f, "np", Int, ())
+    w[:] = prms.np
+    w.attrib["units"] = "num phytoplankton"
+
+    w = defVar(f, "nb", Int, ())
+    w[:] = prms.nb
+    w.attrib["units"] = "num heterotrophic bacteria"
+
+    w = defVar(f, "nz", Int, ())
+    w[:] = prms.nz
+    w.attrib["units"] = "num zooplankton"
+
+    w = defVar(f, "nn", Int, ())
+    w[:] = prms.nn
+    w.attrib["units"] = "num inorganic nutrient pools"
+
+    w = defVar(f, "nd", Int, ())
+    w[:] = prms.nd
+    w.attrib["units"] = "num organic nutrient pools"
+
     w = defVar(f, "pulse", Int, ())
     w[:] = prms.pulse
-    w.attrib["nutrient_pulse"] = "1: no pulse, 2: total N,D redistributed evenly along water column"
-
-    w = defVar(f,"prob_generate_d",Float64,("nd",))
-    w[:] = prms.prob_generate_d 
-    w.attrib["units"] = "Ind C supply weight: probability"
+    w.attrib["nutrient_pulse"] = "1: no pulse, 2: Total N,D redistributed along water col"
 
     w = defVar(f, "kappa_z", Float64, ("ndepth1",))
     w[:] = prms.kappa_z
     w.attrib["units"] = "vertical water velocity"
     
     w = defVar(f, "wd", Float64, ("ndepth1","nd"))
-    w[:,:] = prms.wd
+    w[:] = prms.wd
     w.attrib["units"] = "sinking rate"
-
-    # w = defVar(f, "ws_POM", Float64, ())
-    # w[:] = prms.ws_POM
-    # w.attrib["units"] = "sinking rate of POM in m/day"
 
     w = defVar(f, "temp_fun", Float64, ("ndepth",))
     w[:] = prms.temp_fun
     w.attrib["units"] = "temp mod to metabolic rate"
 
+    w = defVar(f, "light", Float64, ("ndepth",))
+    w[:] = prms.light
+    w.attrib["units"] = "irradiance profile applied to water col, with eutrophic zone factored in"
+
+    w = defVar(f, "e_o", Float64, ())
+    w[:] = prms.e_o
+    w.attrib["units"] = "production of O2 (excretion) - mol O2/mol N uptake"
+
+    w = defVar(f, "K_I", Float64, ())
+    w[:] = prms.K_I
+    w.attrib["units"] = "light half-sat constant"
+
+    w = defVar(f, "ngrid", Int, ())
+    w[:] = prms.ngrid
+    w.attrib["units"] = "num of horizontal grid cells"
+
+    w = defVar(f, "yo_ij", Float64, ("nd","nb"))
+    w[:,:] = prms.yo_ij
+    w.attrib["units"] = "oxygen yield - mol B/mol O2"
+
+    w = defVar(f, "koverh", Float64, ())
+    w[:] = prms.koverh
+    w.attrib["units"] = "gas transfer coefficient for each box comprising the mixed layer"
+
+    w = defVar(f, "o2_sat", Float64, ())
+    w[:] = prms.o2_sat
+    w.attrib["units"] = "O2 half-sat constant (mmol/m3)"
+
+    w = defVar(f, "t_o2relax", Float64, ())
+    w[:] = prms.t_o2relax
+    w.attrib["units"] = "deep oxygen relaxation time (1/day)"
+
+    w = defVar(f, "o2_deep", Float64, ())
+    w[:] = prms.o2_deep
+    w.attrib["units"] = "deep oxygen relaxation mmol/m3"
+
+    w = defVar(f, "ml_boxes", Int, ())
+    w[:] = prms.ml_boxes
+    w.attrib["units"] = "discrete n of boxes in the mixed layer, close to 100m total sum"
+
     # --------------------------------------------------
-
-    w = defVar(f,"uptake_b",Float64,("nd","nb"))
-    w[:,:] = uptake_b
-    w.attrib["units"] = "mmol/m3 C per d; uptake matrix"
-    
-    w = defVar(f, "vmax_i", Float64, ("np",))
-    w[:] = prms.vmax_i
-    w.attrib["units"] = "m3/mmol/d; max growth rate of p"
-
-    w = defVar(f, "Fg_p", Float64, ("np",))
-    w[:] = prms.Fg_p
-    w.attrib["units"] = "per p; fraction proteome assigned to growth"
-
-    w = defVar(f, "vmax_ij", Float64, ("nn", "np"))
-    w[:,:] = prms.vmax_ij
-    w.attrib["units"] = "per n; max uptake rate"
-
-    w = defVar(f, "Kp_ij", Float64, ("nn", "np"))
-    w[:,:] = prms.Kp_ij
-    w.attrib["units"] = "mmol/m3; half-sat"
 
     w = defVar(f,"CM",Float64,("nd","nb"))
     w[:,:] = prms.CM
@@ -393,25 +511,61 @@ function save_endpoints(n, p, z, b, d, o, uptake_b, prms, season)
     w[:,:] = prms.GrM
     w.attrib["units"] = "Grazing Matrix"
 
-    w = defVar(f, "y_ij", Float64, ("nd","nb"))
-    w[:,:] = prms.y_ij
-    w.attrib["units"] = "per d; max yield rate"
+    w = defVar(f,"prob_generate_d",Float64,("nd",))
+    w[:] = prms.prob_generate_d 
+    w.attrib["units"] = "Ind C supply weight: probability"
+    
+    w = defVar(f,"pen",Float64,("nb",))
+    w[:] = prms.pen
+    w.attrib["units"] = "penalty"
+
+    # --------------------------------------------------
+    
+    w = defVar(f, "vmax_i", Float64, ("np",))
+    w[:] = prms.vmax_i
+    w.attrib["units"] = "m3/mmol/d; max growth rate of p"
+
+    w = defVar(f, "vmax_ij", Float64, ("nn", "np"))
+    w[:,:] = prms.vmax_ij
+    w.attrib["units"] = "per n; max uptake rate"
+
+    w = defVar(f, "Kp_i", Float64, ("np",))
+    w[:] = prms.Kp_i
+    w.attrib["units"] = "mmol/m3; intrinsic half-sat of P_i before trade-off applied"
+
+    w = defVar(f, "Kp_ij", Float64, ("nn", "np"))
+    w[:,:] = prms.Kp_ij
+    w.attrib["units"] = "mmol/m3; half-sat of P_i on N_j"
+
+    w = defVar(f, "m_lp", Float64, ("np",))
+    w[:] = prms.m_lp
+    w.attrib["units"] = "m3/mmol; linear death rate of p"
+
+    w = defVar(f, "m_qp", Float64, ("np",))
+    w[:] = prms.m_qp
+    w.attrib["units"] = "m3/mmol; quadratic death rate of p"
+
+    w = defVar(f, "Fg_p", Float64, ("np",))
+    w[:] = prms.Fg_p
+    w.attrib["units"] = "per p; fraction proteome assigned to growth"
+
+    # --------------------------------------------------
 
     w = defVar(f, "umax_i", Float64, ("nd",))
     w[:] = prms.umax_i
-    w.attrib["units"] = "per d; max uptake rate"
-
-    w = defVar(f, "Fg_b", Float64, ("nb",))
-    w[:] = prms.Fg_b
-    w.attrib["units"] = "per b; fraction proteome devoted to growth"
+    w.attrib["units"] = "per d; max uptake rate of d_i before trade-off applied"
     
     w = defVar(f, "umax_ij", Float64, ("nd", "nb"))
     w[:,:] = prms.umax_ij
-    w.attrib["units"] = "max uptake rate of b on d"
+    w.attrib["units"] = "max uptake rate of b_i on d_j"
+
+    w = defVar(f, "Km_i", Float64, ("nd",))
+    w[:] = prms.Km_i
+    w.attrib["units"] = "mmol/m3; half-sat of d_i before trade-off applied"
     
     w = defVar(f, "Km_ij", Float64, ("nd", "nb"))
-    w[:,:] = prms.Km_ij
-    w.attrib["units"] = "mmol/m3; half-sat"
+    w[:] = prms.Km_ij
+    w.attrib["units"] = "mmol/m3; half-sat of b_i on d_j"
     
     w = defVar(f, "m_lb", Float64, ("nb",))
     w[:] = prms.m_lb
@@ -420,10 +574,24 @@ function save_endpoints(n, p, z, b, d, o, uptake_b, prms, season)
     w = defVar(f, "m_qb", Float64, ("nb",))
     w[:] = prms.m_qb
     w.attrib["units"] = "m3/mmol; quadratic death rate of b"
-    
+
+    w = defVar(f, "y_ij", Float64, ("nd","nb"))
+    w[:,:] = prms.y_ij
+    w.attrib["units"] = "per d; max yield rate"
+
+    w = defVar(f, "Fg_b", Float64, ("nb",))
+    w[:] = prms.Fg_b
+    w.attrib["units"] = "per b; fraction proteome assigned to growth"
+
+    # --------------------------------------------------
+
     w = defVar(f, "K_g", Float64, ("nz",))
     w[:] = prms.K_g
     w.attrib["units"] = "m3/mmol; half-sat rate of z"
+
+    w = defVar(f, "g_max", Float64, ("nz",))
+    w[:] = prms.g_max
+    w.attrib["units"] = "m3/mmol; max uptake rate of z"
     
     w = defVar(f, "γ", Float64, ("nz",))
     w[:] = prms.γ
