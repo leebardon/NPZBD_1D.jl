@@ -241,7 +241,14 @@ end
 # fsaven = "results/outfiles/Wi50y_231203_00:10_6P3Z13B8D.nc"
 # fsaven="results/outfiles/Wi50y_231203_00:42_6P3Z13B8D.nc"
 # fsaven="results/outfiles/Wi50y_231203_01:17_6P3Z13B8D.nc"
-fsaven="results/outfiles/Wi50y_231203_01:42_6P3Z13B8D.nc"
+# fsaven="results/outfiles/Wi50y_231203_01:42_6P3Z13B8D.nc"
+# fsaven="results/outfiles/Wi100y_231203_10:39_6P3Z13B8D.nc"
+# fsaven="results/outfiles/Wi100y_231203_11:03_6P3Z13B8D.nc"
 
-rstar_analysis(fsaven, 1)
-# rstar_analysis(fsaven, 2)
+# fsaven="results/outfiles/Wi100y_231203_10:39_6P3Z13B8D.nc" #winter steady
+# fsaven="results/outfiles/Wi100y_231203_11:03_6P3Z13B8D.nc" #winter pulse
+# fsaven="results/outfiles/Su100y_231203_14:48_6P3Z13B8D.nc" #summer steady
+fsaven="results/outfiles/Su100y_231203_19:58_6P3Z13B8D.nc"  #summer pulse
+
+# rstar_analysis(fsaven, 1)
+rstar_analysis(fsaven, 2)

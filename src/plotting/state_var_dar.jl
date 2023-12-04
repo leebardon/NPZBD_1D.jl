@@ -158,6 +158,10 @@ end
 # fsaven = "results/outfiles/Wi50y_231202_16:48_6P3Z13B8D.nc"
 # fsaven = "results/outfiles/Wi100y_231202_17:10_6P3Z13B8D.nc"
 
-fsaven = "results/outfiles/Wi50y_231202_23:38_6P3Z13B8D.nc"
-
+# fsaven = "results/outfiles/Wi50y_231202_23:38_6P3Z13B8D.nc"
+# fsaven="results/outfiles/Wi100y_231203_10:39_6P3Z13B8D.nc" #winter steady
+# fsaven="results/outfiles/Wi100y_231203_11:03_6P3Z13B8D.nc" #winter pulse
+# fsaven="results/outfiles/Su100y_231203_14:48_6P3Z13B8D.nc" #summer steady
+# fsaven="results/outfiles/Su100y_231203_19:58_6P3Z13B8D.nc"  #summer pulse
 # plot_state_vars_dar(fsaven, 1)
+# plot_state_vars_dar(fsaven, 2)
