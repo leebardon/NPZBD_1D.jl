@@ -269,7 +269,7 @@ function activate_logger(loginfo)
 end
 
 
-function log_params(prms)
+function log_params(prms, season)
 
     @info(
     """Model Params: 
@@ -308,10 +308,12 @@ function log_params(prms)
     m_qz:           $(prms.m_qz[1])
     prob_generate_d: $(prms.prob_generate_d)
     wd:             $(prms.wd)
-    pulse? (1=no)   $(prms.pulse)   
     Fg_p:           $(prms.Fg_p)
     Fg_b:           $(prms.Fg_b)
     light half sat: $(prms.K_I)
+    pulse (1=no)    $(prms.pulse)  
+    season (1=win)  $(season) 
+    savefile:       $(prms.fsaven)
     """) 
     
     print_info(prms)
@@ -399,6 +401,25 @@ function get_final_year(ds, vars)
 end
 
 
+function get_final_three_cycles(ds, vars, pulse_freq)
+    # where year is 12 * 30 days
+
+    final_3 = Vector{Any}()
+    ts = 20 * pulse_freq * 3
+
+    for v in vars
+        if v != "o"
+            append!(final_3, [ds[v][:, :, end-(ts-1):end]])
+        else
+            append!(final_3, [ds[v][:, end-(ts-1):end]])
+        end
+    end
+
+    return final_3
+
+end
+
+
 function get_zc(H)
 
     dz = 10
@@ -420,9 +441,9 @@ function set_extinct_to_zero(ds)
 end
 
 
-function mean_over_time(state_vars, ds, season)
+function mean_over_time(state_vars, ds, season_num)
 
-    if season == "Winter"
+    if season_num == 1
         pulse_freq = 10
         means_over_time = get_cycle_means(state_vars, pulse_freq, ds)
     else
@@ -437,8 +458,10 @@ end
 
 function get_cycle_means(vars, pulse_freq, ds)
 
-    num_days = pulse_freq * 100
-    ts = num_days * 20
+    #mean of last 10 pulse cycles given 20 recorded ts per day
+    cycles = 10
+    days = pulse_freq * cycles
+    ts = days * 20
 
     cycle_mean = Vector{Any}()
 

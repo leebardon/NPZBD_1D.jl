@@ -43,7 +43,7 @@ function run_NPZBD(prms, season)
     otemp = copy(prms.oIC) 
 
     # Create quasi-random vector of unique timesteps on which nutrient pulses occur, if pulsing enabled
-    season == 1 ? npulses = floor(prms.days/10) : npulses = floor(prms.days/40)
+    season == 1 ? npulses = floor(prms.days/10) : npulses = floor(prms.days/40) # nutrient pulse on average every 10 days in winter, 40 days in summer
     pulse_vec = sample(1:Int(prms.nt), Int(npulses), replace=false)
 
 
@@ -63,34 +63,33 @@ function run_NPZBD(prms, season)
             
         end 
 
-        # Nutrient pulsing routine (every 10 or 30 days)
-        # if prms.pulse == 2
-        #     if season == 1
-        #         if t % 1000 == 0 
-        #             println("PULSED at t=$t")
-        #             ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)      
-        #         end
-        #     else
-        #         if t % 3000 == 0 
-        #             println("PULSED at t=$t")
-        #             ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)  
-        #         end
-        #     end
-        # end 
-
-        # Nutrient pulsing routine (semi-stochastic - equivalent number of pulses as above routine, but random period between)
+        # Nutrient pulsing routine (every 10 or 50 days)
         if prms.pulse == 2
-            if t in pulse_vec 
-                ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse) 
-                println("PULSED at t=$t")
-            end 
-        end
+            if season == 1
+                if t % 1000 == 0 
+                    println("PULSED at t=$t")
+                    ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)      
+                end
+            else
+                if t % 5000 == 0 
+                    println("PULSED at t=$t")
+                    ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)  
+                end
+            end
+        end 
+
+        # Nutrient pulsing routine (semi-stochastic)
+        # if prms.pulse == 2
+        #     if t in pulse_vec 
+        #         ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse) 
+        #         println("PULSED at t=$t")
+        #     end 
+        # end
     
 
         #calculate bacteria uptake for last timepoint
         if t == prms.nt
             II, JJ = get_nonzero_axes(prms.CM)
-            v = zeros(prms.nd, prms.nb) 
             uptake_b = zeros(prms.nd, prms.nb) 
         
             @inbounds for n = axes(II, 1)
@@ -124,7 +123,6 @@ function model_functions(N, P, Z, B, D, O, prms, t)
     d_gain_total = zeros(prms.ngrid)
 
     # phyto uptake 
-    #TODO phyto assimilation efficiency and contribution to dDdt?
     dPdt, dNdt, dOdt = phyto_uptake(prms, N, P, dNdt, dPdt, dOdt, t)
 
     # bacteria uptake
@@ -155,11 +153,15 @@ end
 
 
 function phyto_uptake(prms, N, P, dNdt, dPdt, dOdt, t)
+    # uptake calculated as function of most limiting factor - light supply ot nutrient supply
 
     II, JJ = get_nonzero_axes(prms.CMp)
 
+    Iz = calc_light_attenuation(P, prms)
+
     for j = axes(II, 1)
-        uptake = P[:,JJ[j]] .* prms.temp_fun .* prms.vmax_ij[II[j],JJ[j]] .* min.(N./ (N .+ prms.Kp_ij[II[j],JJ[j]]), prms.light ./ (prms.light .+ prms.K_I))
+        # uptake = P[:,JJ[j]] .* prms.temp_fun .* prms.vmax_ij[II[j],JJ[j]] .* min.(N./ (N .+ prms.Kp_ij[II[j],JJ[j]]), prms.light ./ (prms.light .+ prms.K_I))
+        uptake = P[:,JJ[j]] .* prms.temp_fun .* prms.vmax_ij[II[j],JJ[j]] .* min.(N./ (N .+ prms.Kp_ij[II[j],JJ[j]]), Iz ./ (Iz .+ prms.K_I))
         dNdt += -uptake
         dOdt += uptake * prms.e_o
         dPdt[:,JJ[j]] += uptake 
@@ -170,12 +172,44 @@ function phyto_uptake(prms, N, P, dNdt, dPdt, dOdt, t)
 end 
 
 
+function calc_light_attenuation(P, prms)
+    # Following Zakem et al 2015
+
+    I_max = 1400                                        # Incident radiation at surface W/m2 #TODO what's the val at SPOT?
+    I_in = I_max/2                                      # avg incoming PAR = (1400/2)  Light_avg*(cos(t*dt*2*3.1416)+1) for light daily cycle
+    a_chlD = 0.04                                       # Absorption coeff incorporating Chl-a and CDOM (m2/mg Chl) 
+    chl2c_max = 0.2                                     # max chlorophyll to carbon ratio (mg Chl/mmol C)
+    chl2c_min = 0.02                                    # max chlorophyll to carbon ratio (mg Chl/mmol C)
+    kw = 0.04                                           # attenuation coeff of water (m2/mg Chl)
+    zc = [prms.dz/2 : prms.dz : prms.H - prms.dz/2;]    # centered depth 
+
+    Iz = zeros(prms.ngrid)                         
+    chl_tot = sum(P, dims=2) .* chl2c_min .* 6.6       # mmolN/m3 * mgChl/mmolC  (redfield ratio -> 6.6 C for every N)
+
+    for d in range(1, prms.ngrid)
+        Iz[d] = I_in * exp(-zc[d]*(kw + sum(chl_tot[1:d]*a_chlD)))
+    end
+
+    return Iz
+
+    # #NOTE: to implement daily light cycling, use below:
+    # if dailycycle == 1 
+    #     I_in = I_max/2*(cos(t*prms.dt*2*3.1416)+1)
+    # else 
+    #     I_in = I_max/2
+    # end
+
+end
+
+
 function bacteria_uptake(prms, B, D, dDdt, dBdt, dNdt, dOdt, t)
 
     II, JJ = get_nonzero_axes(prms.CM)
 
     for j = axes(II, 1)
-        uptake = B[:,JJ[j]] .* prms.temp_fun .* prms.umax_ij[II[j],JJ[j]] .* D[:,II[j]] ./ (D[:,II[j]] .+ prms.Km_ij[II[j],JJ[j]])
+        growth_rate = prms.temp_fun .* prms.umax_ij[II[j],JJ[j]] .* D[:,II[j]] ./ (D[:,II[j]] .+ prms.Km_ij[II[j],JJ[j]])
+        uptake = B[:,JJ[j]] .* growth_rate
+        # uptake = B[:,JJ[j]] .* prms.temp_fun .* prms.umax_ij[II[j],JJ[j]] .* D[:,II[j]] ./ (D[:,II[j]] .+ prms.Km_ij[II[j],JJ[j]])
         yield = prms.y_ij[II[j],JJ[j]]
         dDdt[:,II[j]] += -uptake
         dBdt[:,JJ[j]] += uptake .* yield

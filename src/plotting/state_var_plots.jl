@@ -7,19 +7,19 @@ include("/home/lee/Dropbox/Development/NPZBD_1D/src/utils/utils.jl")
 include("/home/lee/Dropbox/Development/NPZBD_1D/src/utils/save_utils.jl")
 
 
-function plot_state_vars(fsaven, season_num)
+function plot_state_vars(fsaven)
 
     H = 890
     zc = get_zc(H)
 
     ds = NCDataset(fsaven)
     filename = replace(fsaven, ".nc" => "", "results/outfiles/" => "")
-    season_num == 1 ? season = "Winter" : season = "Summer"
+    ds.attrib["Season"] == "winter" ? season_num == 1 : season_num == 2
 
     if ds["pulse"][:] == 1
         N, P, Z, B, D, O = get_endpoints(["n", "p", "z", "b", "d", "o"], ds)
     else
-        N, P, Z, B, D, O = mean_over_time(["n", "p", "z", "b", "d", "o"], ds, season)
+        N, P, Z, B, D, O = mean_over_time(["n", "p", "z", "b", "d", "o"], ds, season_num)
     end
     
     f1, dir1 = plot_stacked(N, P, Z, B, D, O, zc, filename)

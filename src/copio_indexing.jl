@@ -107,4 +107,3 @@ end
 # fsaven = "results/outfiles/Wi100y_231019_17:22_10P3Z18B8D.nc"
 # fsaven = "results/outfiles/Wi100y_231019_19:45_10P3Z18B8D.nc"
 # copio = copio_index_analysis(fsaven)
-

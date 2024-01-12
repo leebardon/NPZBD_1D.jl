@@ -28,6 +28,8 @@ function rstar_analysis(fsaven, season_num)
     # plot_rstar(rstar_b, rstar_p, rstar_z, fsaven)
     plot_rstar_dar(rstar_b, rstar_p, rstar_z, fsaven)
 
+    return rstar_b, rstar_p, rstar_z
+
 end 
 
 
@@ -248,7 +250,10 @@ end
 # fsaven="results/outfiles/Wi100y_231203_10:39_6P3Z13B8D.nc" #winter steady
 # fsaven="results/outfiles/Wi100y_231203_11:03_6P3Z13B8D.nc" #winter pulse
 # fsaven="results/outfiles/Su100y_231203_14:48_6P3Z13B8D.nc" #summer steady
-fsaven="results/outfiles/Su100y_231203_19:58_6P3Z13B8D.nc"  #summer pulse
+# fsaven="results/outfiles/Su100y_231203_19:58_6P3Z13B8D.nc"  #summer pulse
 
+# fsaven="results/outfiles/Wi50y_231212_16:28_6P3Z13B8D.nc"
 # rstar_analysis(fsaven, 1)
-rstar_analysis(fsaven, 2)
+
+# fsaven="results/outfiles/Su50y_231212_12:30_6P3Z13B8D.nc"
+# rstar_analysis(fsaven, 2)

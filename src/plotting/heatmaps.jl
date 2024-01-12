@@ -13,7 +13,10 @@ function plot_bmass_heatmaps(fsaven, varname)
     ds = NCDataset(fsaven)
     filename = replace(fsaven, ".nc" => "", "/home/lee/Dropbox/Development/NPZBD_1D/" => "", "results/outfiles/" => "")
 
-    p, b = get_final_year(ds, ["p", "b"])
+    # p, b = get_final_year(ds, ["p", "b"])
+
+    ds.attrib["Season"] == "winter" ? pulse_freq = 10 : pulse_freq = 30
+    p, b = get_final_three_cycles(ds, ["p", "b"], pulse_freq)
 
     varname == "P" ? bmass_heatmaps(p, zc, filename, varname) : bmass_heatmaps(b, zc, filename, varname)
 
@@ -174,5 +177,11 @@ end
 # fsaven = "results/outfiles/Wi50y_231122_16:59_6P3Z13B8D.nc"
 # fsaven = "results/outfiles/Su50y_231122_20:39_6P3Z13B8D.nc"
 # fsaven = "results/outfiles/Wi50y_231122_22:17_6P3Z13B8D.nc"
+
+# fsaven = "results/outfiles/Su50y_240104_14:04_6P3Z13B8D.nc"
+# fsaven = "results/outfiles/Wi50y_240103_14:18_6P3Z13B8D.nc"
+
+# fsaven="results/outfiles/Wi50y_240108_16:48_6P3Z13B8D.nc"
+# fsaven="results/outfiles/Wi50y_240108_20:47_6P3Z13B8D.nc"
 # plot_bmass_heatmaps(fsaven, "P")
 # plot_bmass_heatmaps(fsaven, "B")

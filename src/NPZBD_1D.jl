@@ -114,7 +114,7 @@
                         e_o, yo_ij, koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, fsaven
             )
 
-            log_params(params)
+            log_params(params, season)
             N, P, Z, B, D, O, track_time = run_NPZBD(params, season)
 
             exit()
@@ -182,16 +182,16 @@
 
 
     # -----------------------------------------------------------------------------------------------------------#
-    #   MORTALITY
+    #   MORTALITY RATES (mmol/day)
     #------------------------------------------------------------------------------------------------------------#
-        m_lp = ones(np) * 1e-1  
+        m_lp = ones(np) * 0.1 
         m_qp = ones(np) * 0.1  # (.1 if grazers, if not, 1)
 
-        m_lb = ones(nb) * 1e-2 
+        m_lb = ones(nb) * 0.01 
         m_qb = ones(nb) * 0.1 
         # m_qb[1] = 1  # POM consumer (use if no pom grazer)
 
-        m_lz = ones(nz) * 1e-2
+        m_lz = ones(nz) * 0.01
         m_qz = ones(nz) * 1.0 
 
 
@@ -240,7 +240,7 @@
 
         # LIGHT (Irradiance, I) 
             K_I = 10                    # Light half-saturation constant
-            euz = 25                    # euphotic zone lengthscale #NOTE scales with amount of biomass but VERY sensitive
+            euz = 25                    # euphotic zone lengthscale 
             light_top = 700             # avg incoming PAR = (1400/2)  Light_avg*(cos(t*dt*2*3.1416)+1) for light daily cycle
             light = light_top .* exp.( -zc ./ euz)
 
@@ -259,12 +259,22 @@
             e_o = 150/16                # production of O2 (excretion). mol O2/mol N uptake
 
 
+        #NOTE do proper temp fit. Win colder at surface and 5m, spring colder at DCM and below
+        # Similarly, summer warmer at surface and 5m, fall warmer at dcm and below
         # TEMPERATURE (SPOT along water column)
-        #fit to SPOT data (approx 20 to 4, approx 16 to 4)
+            # if season == 1 
+            #     temp = 4.2 .* exp.(-zc ./ 150) .+ 8.2 .* exp.(-zc ./ 500) .+ 2.9
+            # elseif season == 2
+            #     temp = 5.2 .* exp.(-zc ./ 150) .+ 7.5 .* exp.(-zc ./ 500) .+ 3
+            # elseif season == 3
+            #     temp = 9 .* exp.(-zc ./ 150) .+ 8 .* exp.(-zc ./ 500) .+ 2.9
+            # else
+            #     temp = 7 .* exp.(-zc ./ 150) .+ 7.5 .* exp.(-zc ./ 500) .+ 3
+            # end
             if season == 1 
-                temp = 6.5 .* exp.(-zc ./ 150) .+ 9 .* exp.(-zc ./ 500) .+ 3
+                temp = 4.2 .* exp.(-zc ./ 150) .+ 8.2 .* exp.(-zc ./ 500) .+ 2.9
             else
-                temp = 10 .* exp.(-zc ./ 150) .+ 9 .* exp.(-zc ./ 500) .+ 2.9
+                temp = 9 .* exp.(-zc ./ 150) .+ 8 .* exp.(-zc ./ 500) .+ 2.9
             end
 
         # TEMPERATURE (modification to metabolic rates)
@@ -276,7 +286,7 @@
 
 
     # -----------------------------------------------------------------------------------------------------------#
-    #   INITIAL CONDITIONS
+    #   INITIAL CONDITIONS (mmol N/m3)
     #------------------------------------------------------------------------------------------------------------#
         
         if run_type != 3
@@ -308,7 +318,7 @@
                 )
 
         # @info("Model Params: \n $params \n") ; print_info(params)
-        log_params(params)
+        log_params(params, season)
 
         N, P, Z, B, D, O, track_time = run_NPZBD(params, season)
     

@@ -37,7 +37,7 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
     Fg_p = [0.1, 0.25, 0.5, 0.68, 0.79, 0.91]      # fraction of proteome optimized to growth
     Fa_p = 1. .- Fg_p                              # fraction optimized to substrate affintiy
 
-    vmax_i = [1.8, 3.0, 5.0, 7.0, 9.0, 12.0]       # max growth rates
+    vmax_i = [1.8, 3.0, 5.0, 7.0, 9.0, 12.0]       # max growth rates (per day)
     Kp_i = vmax_i./10                              # half saturation of P_i
 
     vmax_ij = set_vmax_ij(nn, np, vmax_i, Fg_p)    # growth rate of P_i on N
@@ -68,23 +68,27 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
     umax_i = [1., 1., 1., 1., 1., 1., 1., 1.]      # Fg_b and umax_i are dummy vals - already provided from Emily's previous work (trade-off applied)
     Km_i = umax_i./10 
 
-    umax_ij =  [5.17  0  0  0  0  0  0  0  0  0  0  0  0    # first 3 are POM, next 10 are DOM
-                0  0.92  0  0  0  0  0  0  0  0  0  0  0    
-                0  0  0.16  0  0  0  0  0  0  0  0  0  0  
-                0  0  0  29.1  0  0  0  0  16.3  0  0  0  0 
-                0  0  0  0  5.17  0  0  0  0  2.9  0  0  0 
-                0  0  0  0  0  0.92  0  0  0  0  0.51  0  0 
-                0  0  0  0  0  0  0.16  0  0  0  0  0.091  0 
-                0  0  0  0  0  0  0  0.029  0  0  0  0  0.016 ] 
+    # umax_ij =  [5.17  0  0  0  0  0  0  0  0  0  0  0  0    # first 3 are POM, next 10 are DOM
+    #              0  0.92  0  0  0  0  0  0  0  0  0  0  0    
+    #              0  0  0.16  0  0  0  0  0  0  0  0  0  0  
 
-    Km_ij = [0.28  0  0  0  0  0  0  0  0  0  0  0  0    # in units of K_DON, calculated from K_DOC in zakem paper by dividing by 5
-             0  0.05  0  0  0  0  0  0  0  0  0  0  0    
-             0  0  0.0088  0  0  0  0  0  0  0  0  0  0  
-             0  0  0  1.56  0  0  0  0  0.72  0  0  0  0 
-             0  0  0  0  0.28  0  0  0  0  0.128  0  0  0 
-             0  0  0  0  0  0.05  0  0  0  0  0.022  0  0 
-             0  0  0  0  0  0  0.0088  0  0  0  0  0.004  0 
-             0  0  0  0  0  0  0  0.00156  0  0  0  0  0.00072 ]  
+    umax_ij =  [10.0  0  0  0  0  0  0  0  0  0  0  0  0    # first 3 are POM, next 10 are DOM
+                0  1.0  0  0  0  0  0  0  0  0  0  0  0    
+                0  0  0.1  0  0  0  0  0  0  0  0  0  0  
+                0  0  0  32.0  0  0  0  0  22.0  0  0  0  0 
+                0  0  0  0  5.6  0  0  0  0  4.0  0  0  0 
+                0  0  0  0  0  1.0  0  0  0  0  0.71  0  0 
+                0  0  0  0  0  0  0.18  0  0  0  0  0.13  0 
+                0  0  0  0  0  0  0  0.029  0  0  0  0  0.022 ] 
+
+    Km_ij = [0.54  0  0  0  0  0  0  0  0  0  0  0  0    # in units of K_DON, calculated from K_DOC in zakem paper by dividing by 5
+             0  0.054  0  0  0  0  0  0  0  0  0  0  0    
+             0  0  0.0054  0  0  0  0  0  0  0  0  0  0  
+             0  0  0  1.54  0  0  0  0  0.7  0  0  0  0 
+             0  0  0  0  0.28  0  0  0  0  0.124  0  0  0 
+             0  0  0  0  0  0.048  0  0  0  0  0.022  0  0 
+             0  0  0  0  0  0  0.0086  0  0  0  0  0.004  0 
+             0  0  0  0  0  0  0  0.00154  0  0  0  0  0.0007 ]  
 
 
 
@@ -109,16 +113,18 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
 
 
     # -----------------------------------------------------------------------------------------------------------#
-    #   MORTALITY
+    #   MORTALITY RATES (mmol/day)
     #------------------------------------------------------------------------------------------------------------#
     m_lp = ones(np) * 0 
-    m_qp = ones(np) * 0.1  # (.1 if explicit grazers, if not, 1)
+    m_qp = ones(np) * 0.01  # (.1 if explicit grazers, if not, 1)
 
     m_lb = ones(nb) * 0
-    m_qb = ones(nb) * 0.1 
+    m_qb = ones(nb) * 0.01 
 
     m_lz = ones(nz) * 0.1
-    m_qz = ones(nz) * 0.1 
+    m_qz = ones(nz) * 0.01 
+    #TODO try putting quadratic mort for all at 0.01 
+    # try playing around to see if we can get more competitive exclusion - see equation in phtots
 
 
     # -----------------------------------------------------------------------------------------------------------#
@@ -131,7 +137,7 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
 
     # Sinking rate for POM  
     ws = zeros(nd)                  
-    ws[1], ws[2], ws[3] = 4.0, 6.0, 8.0
+    ws[1], ws[2], ws[3] = 10.0, 10.0, 10.0
 
 
     #------------------------------------------------------------------------------------------------------------#
@@ -145,15 +151,21 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
         wd[end,:] .= 0                  # no flux boundary (bottom box accumulates D)
 
     # VERTICAL MIXING 
-        season == 1 ? mlz = 25 : mlz = 15 # mixed layer lengthscale
-        kappazmin = 1e-4              # min mixing coeff -value for most of the deep ocean (higher at top and bottom)
+        if season == 1 
+            mlz = 30                    # Mixing lengthscale 
+            kappazmin = 1e-4            # min mixing coeff -value for most of the deep ocean (higher at top and bottom)
+        else
+            mlz = 15
+            kappazmin = 1e-5
+        end
+                     
         kappazmax = 1e-2              # max mixing coeff -value at top of mixed layer (and bottom boundary mixed layer)
         kappa_z = (kappazmax .* exp.(-zf/mlz) .+ kappazmin .+ kappazmax .* exp.((zf .- H) / 100.)) .* 3600 .* 24 
         kappa_z[1] = 0
         kappa_z[end] = 0
 
     # LIGHT (Irradiance, I) 
-        euz = 25                    # euphotic zone lengthscale #NOTE scales with amount of biomass but VERY sensitive
+        euz = 25                    # euphotic zone lengthscale (m)
         light_top = 700             # avg incoming PAR = (1400/2)  Light_avg*(cos(t*dt*2*3.1416)+1) for light daily cycle
         light = light_top .* exp.( -zc ./ euz)
 
@@ -185,7 +197,7 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
 
 
     # -----------------------------------------------------------------------------------------------------------#
-    #   INITIAL CONDITIONS
+    #   INITIAL CONDITIONS (mmol N/m3)
     #------------------------------------------------------------------------------------------------------------#
     
     if run_type != 3
@@ -216,7 +228,7 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
                 e_o, yo_ij, koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, fsaven
             )
 
-    log_params(params) ; print_info(params)
+    log_params(params, season) ; print_info(params)
 
     N, P, Z, B, D, O, track_time = run_NPZBD(params, season)
 
