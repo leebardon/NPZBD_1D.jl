@@ -13,7 +13,7 @@ function plot_seasonal_BP(BP_model, PP_model, BP_Leu, BP_Thy, PP, ds, fsaven, se
     leu_spot = dropmissing(BP_Leu, disallowmissing=true)
     thy_spot = dropmissing(BP_Thy, disallowmissing=true)
 
-    tfs = 9
+    tfs = 9 
     ls = 5
     ls2 = 7
     ab = 0.5
@@ -51,7 +51,7 @@ function plot_seasonal_BP(BP_model, PP_model, BP_Leu, BP_Thy, PP, ds, fsaven, se
         label=" SPOT")
 
     maxdep=20
-    p4 = plot(PP_model[1:maxdep, 1], -zc[1:maxdep], lw=ls2, lc=pcols[1], label=" P1c", legendfontsize=lfs, ylabel="Depth (m)", xlabel=L"mg~C/m3/day" ,
+    p4 = plot(PP_model[1:maxdep, 1], -zc[1:maxdep], lw=ls2, lc=pcols[1], label=" P1c", legendfontsize=lfs, ylabel="Depth (m)", xlabel=L"mg~C/m^{3}/day" ,
         xrotation=45, title =tls[4], titlefontsize=tfs, grid=false, border=:box, legend=lg, xtickfontsize=xtfs, alpha=ab, linestyle=:dot)
         plot!(PP_model[1:maxdep, 2], -zc[1:maxdep], lw=ls2, lc=pcols[2], label=" P2c", legendfontsize=lfs, alpha=ab, linestyle=:dot)
         plot!(PP_model[1:maxdep, 3], -zc[1:maxdep], lw=ls2, lc=pcols[3], label=" P3c", legendfontsize=lfs, alpha=ab, linestyle=:dot)
@@ -67,10 +67,10 @@ function plot_seasonal_BP(BP_model, PP_model, BP_Leu, BP_Thy, PP, ds, fsaven, se
     season_num == 1 ? PP_spot = PP[1] : PP_spot = PP[3]
 
     p5 = plot(sum(PP_model[1:maxdep, :], dims=2), -zc[1:maxdep], lw=ls2, lc="black", label=" Total PP", legendfontsize=lfs, yformatter=Returns(""),  
-        xlabel=L"mg~C/m3/day", xrotation=45, title =tls[5], titlefontsize=tfs, grid=false, border=:box, legend=lg, xtickfontsize=xtfs, alpha=ab)
+        xlabel=L"mg~C/m^{3}/day", xrotation=45, title =tls[5], titlefontsize=tfs, grid=false, border=:box, legend=lg, xtickfontsize=xtfs, alpha=ab)
         scatter!([PP_spot], [-5.0],  markersize=7, markercolor="green3", markerstrokecolor=:black, markershape=:diamond, 
         label=" SPOT")
-        lens!([0, 1300], [-60, 5], inset=(1, bbox(0.05, 0.43, 0.6, 0.3, :top, :right)), subplot=2, xrotation=45, 
+        lens!([800, 3000], [-60, 5], inset=(1, bbox(0.05, 0.43, 0.6, 0.3, :top, :right)), subplot=2, xrotation=45, 
         border=:box, bg_color_inside=:gray98)
 
     l = @layout [ a b c ; d e ] 
@@ -82,6 +82,8 @@ function plot_seasonal_BP(BP_model, PP_model, BP_Leu, BP_Thy, PP, ds, fsaven, se
     size=(600,1000),
     plot_title = "SPOT vs. Model Productivity ($season)\n",
     )
+
+    savefig(f,"$(dir)/$(filename).pdf")
 
     return f, dir, filename 
 

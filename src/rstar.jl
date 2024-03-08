@@ -8,16 +8,19 @@ include("utils/save_utils.jl")
 include("plotting/rstar_plots.jl")
 
 
-function rstar_analysis(fsaven, season_num)
+function rstar_analysis(fsaven, season_num, bloom)
 
-    global fsaven
     ds = NCDataset(fsaven)
     season_num == 1 ? season = "Winter" : season = "Summer"
 
-    if ds["pulse"][:] == 1
-        N, P, Z, B, D = get_endpoints(["n", "p", "z", "b", "d"], ds)
+    if bloom==true
+        N, P, Z, B, D, O = get_bloom_means(["n", "p", "z", "b", "d", "o"], ds)
     else
-        N, P, Z, B, D = mean_over_time(["n", "p", "z", "b", "d"], ds, season)
+        if ds["pulse"][:] == 1
+            N, P, Z, B, D, O = get_endpoints(["n", "p", "z", "b", "d", "o"], ds)
+        else
+            N, P, Z, B, D, O = mean_over_time(["n", "p", "z", "b", "d", "o"], ds, season_num)
+        end
     end
 
     # P = set_extinct_to_zero(P)
@@ -194,12 +197,6 @@ function RstarP(loss, ds, np)
     II, JJ = get_nonzero_axes(ds["CMp"][:,:])
 
     RS = Any[]
-    # for i in range(1, np)
-    #     rs_i = Kp_ij[i] .* loss[:, i] ./ (vmax_ij[i] .* temp_mod .- loss[:, i])
-    #     RS_i = replace!(rs_i, NaN => 0.0)
-    #     push!(RS, RS_i)
-    # end
-
     for j = axes(II, 1)
         rs_j = Kp_ij[II[j],JJ[j]] .* loss[:, j] ./ (vmax_ij[II[j],JJ[j]] .* temp_mod .- loss[:, j])
         RS_j = replace!(rs_j, NaN => 0.0)

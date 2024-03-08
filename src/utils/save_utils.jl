@@ -2,11 +2,35 @@
 using DataFrames, NCDatasets
 
 
-function set_savefiles(launch_time, season, years, np, nz, nb, nd)
+function set_savefiles(launch_time, season, pulse, years, np, nz, nb, nd)
 
     season == 1 ? season_str = "Wi" : season_str = "Su"
-    fsave = "results/outfiles/$(season_str)$(years)y"
-    fsaven = string(fsave, "_", Dates.format(launch_time, "yymmdd_HH:MM"), "_$(np)P$(nz)Z$(nb)B$(nd)D.nc")
+
+    if pulse == 1
+        ptype = "NP"
+    elseif pulse == 2
+        ptype = "PP"
+    else
+        ptype = "SP"
+    end
+
+    fsave = "results/outfiles/"
+    fsaven = string(fsave, Dates.format(launch_time, "yymmdd_HH:MM"), "_$(season_str)$(years)y$(ptype)_$(np)P$(nz)Z$(nb)B$(nd)D.nc")
+
+    return fsaven
+
+end
+
+function continuation_savefile(prev_fname, bloom=false)
+
+    fsave = "results/outfiles/"
+    if bloom == true
+        fname = replace(prev_fname, "_ep.nc" => ".nc")
+        fsaven = string(fsave, "blooms/blm_", fname)
+    else
+        fname = replace(prev_fname, "_ep.nc" => ".nc")
+        fsaven = string(fsave, "cont_", prev_fname)
+    end
 
     return fsaven
 
@@ -39,18 +63,25 @@ end
 # end
 
 
-function save_full_run(p, b, z, n, d, o, timet, uptake_b, tst, tfn, prms, season_num)
+function save_full_run(p, b, z, n, d, o, timet, tst, tfn, prms, season_num)
 
     outdir = "/home/lee/Dropbox/Development/NPZBD_1D/"
-    path = joinpath(outdir, prms.fsaven) 
-    println("\nSaving output file to: ", path)
-
     season_num == 1 ? season = "winter" : season = "summer"
 
+    if prms.pulse == 1
+        pulse_type = "None (steady state)"
+    elseif prms.pulse == 2
+        pulse_type = "Peroidic nutrient pulse"
+    else 
+        pulse_type = "Semi-stochastic nutrient pulse"
+    end
+
+    path = joinpath(outdir, prms.fsaven)
+    println("\nSaving output file to: ", path)
     f = NCDataset(path, "c") 
 
     # define the dim of p, b, z, n, d
-    defDim(f,"np", prms.np)
+    defDim(f,"np",prms.np)
     defDim(f,"nb",prms.nb)
     defDim(f,"nz",prms.nz)
     defDim(f,"nn",prms.nn)
@@ -73,7 +104,7 @@ function save_full_run(p, b, z, n, d, o, timet, uptake_b, tst, tfn, prms, season
     f.attrib["End time"] = string(tfn)
     f.attrib["Run time"] = string(tfn - tst) 
     f.attrib["Season"] = season
-    f.attrib["Pulse Type"] = prms.pulse
+    f.attrib["Pulse Type"] = pulse_type
 
     # simulated results
     w = defVar(f,"p",Float64,("ndepth" ,"np","nrec"))
@@ -230,9 +261,9 @@ function save_full_run(p, b, z, n, d, o, timet, uptake_b, tst, tfn, prms, season
     w[:] = prms.prob_generate_d 
     w.attrib["units"] = "Ind C supply weight: probability"
     
-    w = defVar(f,"pen",Float64,("nb",))
-    w[:] = prms.pen
-    w.attrib["units"] = "penalty"
+    # w = defVar(f,"pen",Float64,("nb",))
+    # w[:] = prms.pen
+    # w.attrib["units"] = "penalty"
 
     # --------------------------------------------------
     
@@ -325,12 +356,20 @@ function save_full_run(p, b, z, n, d, o, timet, uptake_b, tst, tfn, prms, season
 end
 
 
-function save_endpoints(p, b, z, n, d, o, timet, uptake_b, tst, tfn, prms, season)
+function save_endpoints(p, b, z, n, d, o, timet, tst, tfn, prms, season)
 
     outdir = "/home/lee/Dropbox/Development/NPZBD_1D/"
     ep_path = replace(prms.fsaven, "results/outfiles" => "results/outfiles/endpoints", ".nc" => "_ep.nc")
     path = joinpath(outdir, ep_path) 
     println("\nSaving endpoints to: ", path)
+
+    if prms.pulse == 1
+        pulse_type = "None (steady state)"
+    elseif prms.pulse == 2
+        pulse_type = "Peroidic nutrient pulse"
+    else 
+        pulse_type = "Semi-stochastic nutrient pulse"
+    end
 
     n, p, z, b, d, o = get_endpoints([n, p, z, b, d, o])
     # n, p, z, b, d, o = ep[1], ep[2], ep[3], ep[4], ep[5], ep[6]
@@ -359,6 +398,7 @@ function save_endpoints(p, b, z, n, d, o, timet, uptake_b, tst, tfn, prms, seaso
     # info
     f.attrib["title"] = "NPZBD 1D model endpoints"
     f.attrib["Season"] = season
+    f.attrib["Pulse Type"] = pulse_type
 
     # simulated results
     w = defVar(f,"p",Float64,("ndepth" ,"np"))
@@ -515,9 +555,9 @@ function save_endpoints(p, b, z, n, d, o, timet, uptake_b, tst, tfn, prms, seaso
     w[:] = prms.prob_generate_d 
     w.attrib["units"] = "Ind C supply weight: probability"
     
-    w = defVar(f,"pen",Float64,("nb",))
-    w[:] = prms.pen
-    w.attrib["units"] = "penalty"
+    # w = defVar(f,"pen",Float64,("nb",))
+    # w[:] = prms.pen
+    # w.attrib["units"] = "penalty"
 
     # --------------------------------------------------
     

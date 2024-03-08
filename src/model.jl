@@ -10,9 +10,9 @@ set_zero_subnormals(true)
 
 
 #TODO add a sinking (dsink) to remove some detritus or it wont equilibriate 
-function run_NPZBD(prms, season)
+function run_NPZBD(prms, season, bloom=false)
 
-    trec = prms.nt÷prms.nrec # frequency of recording
+    trec = prms.nt/prms.nrec # frequency of recording (no. timesteps / no. recordings - usually 5)
     start_time = now()
 
     # Generate empty arrays
@@ -42,17 +42,18 @@ function run_NPZBD(prms, season)
     dtemp = copy(prms.dIC) 
     otemp = copy(prms.oIC) 
 
+
     # Create quasi-random vector of unique timesteps on which nutrient pulses occur, if pulsing enabled
-    season == 1 ? npulses = floor(prms.days/10) : npulses = floor(prms.days/40) # nutrient pulse on average every 10 days in winter, 40 days in summer
+    season == 1 ? npulses = floor(prms.days/25) : npulses = floor(prms.days/45) # nutrient pulse on average every 10 days in winter, 40 days in summer
     pulse_vec = sample(1:Int(prms.nt), Int(npulses), replace=false)
 
 
     # @time for t = 1:prms.nt 
     for t = 1:prms.nt
         # Runge-Kutta 4th order 
-        ntemp, ptemp, ztemp, btemp, dtemp, otemp = rk4(ntemp, ptemp, ztemp, btemp, dtemp, otemp, prms, t)
+        ntemp, ptemp, ztemp, btemp, dtemp, otemp = rk4(ntemp, ptemp, ztemp, btemp, dtemp, otemp, prms, t, bloom, season)
 
-        if mod(t, trec) == 0
+        if mod(t, trec) == 0 #i.e. if t divisible by 5
 
             track_n, track_p, track_z, track_b, track_d, track_o = update_tracking_arrs(track_n, track_p, track_z, track_b, track_d, track_o, track_time, 
                                                                                         ntemp, ptemp, ztemp, btemp, dtemp, otemp, t, trec, prms)
@@ -63,44 +64,42 @@ function run_NPZBD(prms, season)
             
         end 
 
-        # Nutrient pulsing routine (every 10 or 50 days)
-        if prms.pulse == 2
-            if season == 1
-                if t % 1000 == 0 
-                    println("PULSED at t=$t")
-                    ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)      
+        # Nutrient redistribution pulsing routine (every 25 or 45 days)
+        if bloom == false
+            if prms.pulse == 2
+                if t < 36478000  # no pulse in final 2 months
+                    if season == 1
+                        if t % 2500 == 0 
+                            println("PULSED at t=$t")
+                            ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)      
+                        end
+                    else
+                        if t % 4500 == 0 
+                            println("PULSED at t=$t")
+                            ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)  
+                        end
+                    end
                 end
-            else
-                if t % 5000 == 0 
+            end 
+        end
+
+        #Nutrient redistribution pulsing routine (semi-stochastic, corresponds to every 10 or 40 days)
+        if bloom == false
+            if prms.pulse == 3
+                if t in pulse_vec 
+                    ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse) 
                     println("PULSED at t=$t")
-                    ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse)  
-                end
+                end 
             end
-        end 
-
-        # Nutrient pulsing routine (semi-stochastic)
-        # if prms.pulse == 2
-        #     if t in pulse_vec 
-        #         ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse) 
-        #         println("PULSED at t=$t")
-        #     end 
-        # end
+        end
     
-
-        #calculate bacteria uptake for last timepoint
+        # Save outputs
         if t == prms.nt
-            II, JJ = get_nonzero_axes(prms.CM)
-            uptake_b = zeros(prms.nd, prms.nb) 
-        
-            @inbounds for n = axes(II, 1)
-                v[II[n],JJ[n]] = prms.umax_ij[II[n],JJ[n]] * prms.pen[JJ[n]] .* dtemp[II[n]] ./ (dtemp[II[n]] .+ prms.Km_ij[II[n],JJ[n]]) 
-                uptake_b[II[n],JJ[n]] = v[II[n],JJ[n]] .* btemp[JJ[n]]
-            end  
-            
             end_time = now() 
-            save_full_run(track_p, track_b, track_z, track_n, track_d, track_o, track_time, uptake_b, start_time, end_time, prms, season)
-            save_endpoints(track_p, track_b, track_z, track_n, track_d, track_o, track_time, uptake_b, start_time, end_time, prms, season)
-
+            save_full_run(track_p, track_b, track_z, track_n, track_d, track_o, track_time, start_time, end_time, prms, season)
+            if bloom == false
+                save_endpoints(track_p, track_b, track_z, track_n, track_d, track_o, track_time, start_time, end_time, prms, season)
+            end
         end
     end 
 
@@ -110,15 +109,36 @@ function run_NPZBD(prms, season)
 end 
 
 
-function model_functions(N, P, Z, B, D, O, prms, t)
-    #TODO - figure out if there's any memory issues, is it increasing memory usage over time? seeems to be, figure out why
+function model_functions(N, P, Z, B, D, O, prms, t, bloom, season)
+
+    if bloom == true
+        if t == 90000
+            # D[1:5,:,:] .+= 0.1
+            D[:,:,:] .+= 1.0
+        end
+        if 90000 < t < 104000
+            season == 1 ? mlz = 80 : mlz = 60 
+            zf = [0 : 10 : H;] 
+            kappazmin = 1e-4              # min mixing coeff -value for most of the deep ocean (higher at top and bottom)
+            kappazmax = 1e-2              # max mixing coeff -value at top of mixed layer (and bottom boundary mixed layer)
+            kappa_Z = (kappazmax .* exp.(-zf/mlz) .+ kappazmin .+ kappazmax .* exp.((zf .- H) / 100.)) .* 3600 .* 24 
+            kappa_Z[1] = 0
+            kappa_Z[end] = 0
+            # kappa_Z = prms.kappa_z
+        else
+            kappa_Z = prms.kappa_z
+        end
+    else
+        kappa_Z = prms.kappa_z
+    end
+
     #Transport
-    dNdt = diffusion(N, prms.kappa_z, prms.dz)
-    dPdt = diffusion(P, prms.kappa_z, prms.dz)
-    dZdt = diffusion(Z, prms.kappa_z, prms.dz)
-    dBdt = diffusion(B, prms.kappa_z, prms.dz)
-    dDdt = diffusion(D, prms.kappa_z, prms.dz) .- advection(D, prms.wd, prms.dz)
-    dOdt = diffusion(O, prms.kappa_z, prms.dz)
+    dNdt = diffusion(N, kappa_Z, prms.dz)
+    dPdt = diffusion(P, kappa_Z, prms.dz)
+    dZdt = diffusion(Z, kappa_Z, prms.dz)
+    dBdt = diffusion(B, kappa_Z, prms.dz)
+    dDdt = diffusion(D, kappa_Z, prms.dz) .- advection(D, prms.wd, prms.dz)
+    dOdt = diffusion(O, kappa_Z, prms.dz)
 
     d_gain_total = zeros(prms.ngrid)
 
@@ -157,7 +177,7 @@ function phyto_uptake(prms, N, P, dNdt, dPdt, dOdt, t)
 
     II, JJ = get_nonzero_axes(prms.CMp)
 
-    Iz = calc_light_attenuation(P, prms)
+    Iz = calc_light_attenuation(P, prms, t)
 
     for j = axes(II, 1)
         # uptake = P[:,JJ[j]] .* prms.temp_fun .* prms.vmax_ij[II[j],JJ[j]] .* min.(N./ (N .+ prms.Kp_ij[II[j],JJ[j]]), prms.light ./ (prms.light .+ prms.K_I))
@@ -172,11 +192,12 @@ function phyto_uptake(prms, N, P, dNdt, dPdt, dOdt, t)
 end 
 
 
-function calc_light_attenuation(P, prms)
+function calc_light_attenuation(P, prms, t)
     # Following Zakem et al 2015
 
     I_max = 1400                                        # Incident radiation at surface W/m2 #TODO what's the val at SPOT?
-    I_in = I_max/2                                      # avg incoming PAR = (1400/2)  Light_avg*(cos(t*dt*2*3.1416)+1) for light daily cycle
+    # I_in = I_max/2                                    # avg incoming PAR = (1400/2)  Light_avg*(cos(t*dt*2*3.1416)+1) for light daily cycle
+    I_in = I_max/2*(cos(t*prms.dt*2*3.1416)+1)          # for daily light cycling
     a_chlD = 0.04                                       # Absorption coeff incorporating Chl-a and CDOM (m2/mg Chl) 
     chl2c_max = 0.2                                     # max chlorophyll to carbon ratio (mg Chl/mmol C)
     chl2c_min = 0.02                                    # max chlorophyll to carbon ratio (mg Chl/mmol C)

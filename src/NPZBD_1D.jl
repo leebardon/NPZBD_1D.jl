@@ -27,7 +27,7 @@
     include("rstar.jl")
     include("copio_indexing.jl")
     include("nutrient_pulse.jl")
-    include("plotting/heatmaps.jl")
+    # include("plotting/heatmaps.jl")
     include("plotting/state_var_plots.jl")
     include("plotting/timeseries_plots.jl")
     include("plotting/rstar_plots.jl")
@@ -48,18 +48,22 @@
 
         simulation_time = request(message("TM2"), RadioMenu(message("TM1")))
         if simulation_time == 1
+            years = 0
+            days = 365
+            nrec = 73000
+        elseif simulation_time == 2
             years = 2
             days = 732
             nrec = 14640
-        elseif simulation_time == 2
+        elseif simulation_time == 3
             years = 10
             days = 3660
             nrec = 73200
-        elseif simulation_time == 3
+        elseif simulation_time == 4
             years = 30
             days = 10980
             nrec = 219600
-        elseif simulation_time == 4
+        elseif simulation_time == 5
             years = 50
             days = 18300
             nrec = 366000
@@ -69,8 +73,8 @@
             nrec = 732000
         end
 
-        # 100 ts per day, tracking recorded every 5 ts
-        dt = 0.01
+        # nrec = 20 per day when dt = 0.01 (i.e. 100 ts per day, tracking recorded every 5 ts)
+        simulation_time == 1 ? dt = 0.001 : dt = 0.01
         nt = Int(days/dt)
 
         logger = set_logger(now())
@@ -98,30 +102,59 @@
 
         elseif run_type == 3
             # Continues from end of previous runs (prompts user to select .nc file in results/outfiles )
+            continue_type = request(message("CT2"), RadioMenu(message("CT1")))
+
             H, dz, nIC, pIC, zIC, bIC, dIC, oIC, nn, np, nz, nb, nd, 
             vmax_i, vmax_ij, Kp_i, Kp_ij, m_lp, m_qp, light, temp_fun, K_I, CMp, Fg_p, 
             umax_i, umax_ij, Km_i, Km_ij, m_lb, m_qb, y_ij, prob_generate_d, CM, Fg_b,
-            g_max, K_g, γ, m_lz, m_qz, GrM, pen, kappa_z, wd, ngrid, pulse, e_o, yo_ij,
-            koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, season = get_previous_params()
+            g_max, K_g, γ, m_lz, m_qz, GrM, kappa_z, wd, ngrid, pulse, e_o, yo_ij,
+            koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, season, prev_fname = get_previous_params(continue_type)
 
-            fsaven = set_savefiles(now(), season, years, np, nz, nb, nd)
-
+            fsaven = continuation_savefile(prev_fname)
             params = Prms(
                         days, dt, nt, nrec, H, dz, np, nb, nz, nn, nd, pIC, bIC, zIC, nIC, dIC, oIC, 
                         vmax_i, vmax_ij, Kp_i, Kp_ij, m_lp, m_qp, light, temp_fun, K_I, CMp, Fg_p,
                         umax_i, umax_ij, Km_i, Km_ij, y_ij, m_lb, m_qb, prob_generate_d, CM, Fg_b,
-                        g_max, K_g, γ, m_lz, m_qz, GrM, pen, kappa_z, wd, ngrid, pulse, 
+                        g_max, K_g, γ, m_lz, m_qz, GrM, kappa_z, wd, ngrid, pulse, 
                         e_o, yo_ij, koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, fsaven
             )
 
             log_params(params, season)
             N, P, Z, B, D, O, track_time = run_NPZBD(params, season)
+            exit()
 
+        elseif run_type == 4
+            # Takes output of previous run and tracks single pulse over 365 days
+            H, dz, nIC, pIC, zIC, bIC, dIC, oIC, nn, np, nz, nb, nd, 
+            vmax_i, vmax_ij, Kp_i, Kp_ij, m_lp, m_qp, light, temp_fun, K_I, CMp, Fg_p, 
+            umax_i, umax_ij, Km_i, Km_ij, m_lb, m_qb, y_ij, prob_generate_d, CM, Fg_b,
+            g_max, K_g, γ, m_lz, m_qz, GrM, kappa_z, wd, ngrid, pulse, e_o, yo_ij,
+            koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, season, prev_fname = get_previous_params()
+
+            bIC[:,4:6,:] = bIC[:,9:11,:]
+            bIC[:,12,:] = bIC[:,7,:]
+            bIC[:,13,:] = bIC[:,8,:]
+
+            # dIC[1:5,:,:] .= 1.0
+
+            years = 0
+            bloom=true
+            fsaven = continuation_savefile(prev_fname, bloom)
+            params = Prms(
+                        days, dt, nt, nrec, H, dz, np, nb, nz, nn, nd, pIC, bIC, zIC, nIC, dIC, oIC, 
+                        vmax_i, vmax_ij, Kp_i, Kp_ij, m_lp, m_qp, light, temp_fun, K_I, CMp, Fg_p,
+                        umax_i, umax_ij, Km_i, Km_ij, y_ij, m_lb, m_qb, prob_generate_d, CM, Fg_b,
+                        g_max, K_g, γ, m_lz, m_qz, GrM, kappa_z, wd, ngrid, pulse, 
+                        e_o, yo_ij, koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, fsaven
+            )
+
+            log_params(params, season)
+            N, P, Z, B, D, O, track_time = run_NPZBD(params, season, bloom)     
             exit()
 
         end
 
-        global fsaven = set_savefiles(now(), season, years, np, nz, nb, nd)
+        fsaven = set_savefiles(now(), season, pulse, years, np, nz, nb, nd)
         
         
     #------------------------------------------------------------------------------------------------------------#
@@ -213,9 +246,6 @@
 
         # Sinking rate for POM  
         ws = zeros(nd)                  
-        #NOTE Uncomment for single POM (m/day)
-        # ws_POM = 10.0
-        # ws[1] = ws_POM 
         #NOTE Uncomment for 3 POM (m/day)
         ws_POM1, ws_POM2, ws_POM3 = 6.0, 8.0, 10.0
         ws[1], ws[2], ws[3] = ws_POM1, ws_POM2, ws_POM3
@@ -313,7 +343,7 @@
                     days, dt, nt, nrec, H, dz, np, nb, nz, nn, nd, pIC, bIC, zIC, nIC, dIC, oIC, 
                     vmax_i, vmax_ij, Kp_i, Kp_ij, m_lp, m_qp, light, temp_fun, K_I, CMp, Fg_p,
                     umax_i, umax_ij, Km_i, Km_ij, y_ij, m_lb, m_qb, prob_generate_d, CM, Fg_b,
-                    g_max, K_g, γ, m_lz, m_qz, GrM, pen, kappa_z, wd, ngrid, pulse, 
+                    g_max, K_g, γ, m_lz, m_qz, GrM, kappa_z, wd, ngrid, pulse, 
                     e_o, yo_ij, koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, fsaven
                 )
 

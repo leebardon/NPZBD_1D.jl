@@ -161,13 +161,13 @@ end
 # col_name="CTDATTN"
 # x_lab=L"m^{-1}"
 
-max_depth=400
-var_name="DO"
-col_name="CTDOXY"
-x_lab=L"\mu mol/L"
+# max_depth=400
+# var_name="DO"
+# col_name="CTDOXY"
+# x_lab=L"\mu mol/L"
 
-plot_ctd_data(max_depth, var_name, col_name, x_lab)
-plot_btl_data
+# plot_ctd_data(max_depth, var_name, col_name, x_lab)
+# plot_btl_data
 
 
 

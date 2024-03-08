@@ -17,63 +17,33 @@ function plot_bmass_heatmaps(fsaven, varname)
 
     ds.attrib["Season"] == "winter" ? pulse_freq = 10 : pulse_freq = 30
     p, b = get_final_three_cycles(ds, ["p", "b"], pulse_freq)
-
     varname == "P" ? bmass_heatmaps(p, zc, filename, varname) : bmass_heatmaps(b, zc, filename, varname)
 
 end
 
 
-function get_z_axis(depth, days, daily_data)
-
-    z = Array{Float64}(undef, size(depth, 1), size(daily_data, 2))
-
-    for i in eachindex(depth)
-        for j in eachindex(days)
-            z[i, j] = daily_data[i, j]
-        end
-    end
-
-    return z'
-
-end
-
-
-function set_zmax(species, num_species)
-
-    zmax = 0
-    for s in range(1, num_species)
-        species_max = maximum(species[1:40, s, :])
-        species_max > zmax ? zmax = species_max : nothing
-    end
-
-    return zmax
-
-end
-
-
-function bmass_heatmaps(species, zc, filename, varname)
+function bmass_heatmaps(state_var, zc, filename, varname)
 
     parent_folder = "results/plots/heatmaps/biomass/"
     dir = check_subfolder_exists(filename, parent_folder)
-    
+
     varname == "P" ? max_d = 30 : max_d = 89
     d = -zc[1:max_d]
-    num_species = size(species, 2)
-    zmax = set_zmax(species, num_species)
+    num_state_var = size(state_var, 2)
+    zmax, z97 = set_zmax(state_var, num_state_var)
     println(zmax)
     lfs=9
-    varname == "P" ? res=(1000, 500) : res=(1500, 1200)
+    varname == "P" ? res=(1000, 500) : res=(1200, 1800)
 
     joint_limits = (0, zmax)
-    row = 1
-    col = 1
-    fig = Figure(resolution=res)
-    for i in range(1, num_species)
-        data = species[1:max_d, i, :]
+    row, col = 1, 1
+    fig = Figure(size=res)
+    for i in range(1, num_state_var)
+        data = state_var[1:max_d, i, :]
         survivors = set_extinct_to_zero(data)
         daily_data = survivors[:, 1:20:end]
         days = collect(1:size(daily_data, 2))
-        z = get_z_axis(d, days, daily_data)
+        z = get_hmap_z_axis(d, days, daily_data)
 
         heatmap(fig[row, col], days, reverse(d), reverse(z), xrotation=45,  colorrange=joint_limits)
         col += 1
@@ -185,3 +155,10 @@ end
 # fsaven="results/outfiles/Wi50y_240108_20:47_6P3Z13B8D.nc"
 # plot_bmass_heatmaps(fsaven, "P")
 # plot_bmass_heatmaps(fsaven, "B")
+
+
+# plot_bmass_heatmaps(fsaven, "B")
+
+# for var in ["P", "B"]
+#     plot_bmass_heatmaps(fsaven, var, bloom)
+# end

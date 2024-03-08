@@ -14,11 +14,11 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
     pulse = request(message("P2"), RadioMenu(message("P1")))
     season = request(message("SE2"), RadioMenu(message("SE1")))
 
-    global fsaven = set_savefiles(now(), season, years, np, nz, nb, nd)
+    fsaven = set_savefiles(now(), season, pulse, years, np, nz, nb, nd)
 
 
     #------------------------------------------------------------------------------------------------------------#
-    #   GRID SETUP
+    #                                           GRID SETUP
     #------------------------------------------------------------------------------------------------------------#
     H = 890                         # depth at SPOT (m)
     dz = 10                         # height per box
@@ -28,7 +28,7 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
 
 
     # -----------------------------------------------------------------------------------------------------------#
-    #   PHYTOPLANKTON PARAMS 
+    #                                       PHYTOPLANKTON PARAMS 
     #------------------------------------------------------------------------------------------------------------
     CMp = get_matrix("CMp", nd, nb, nn, np, nz)
     K_I = 10.0         
@@ -37,7 +37,7 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
     Fg_p = [0.1, 0.25, 0.5, 0.68, 0.79, 0.91]      # fraction of proteome optimized to growth
     Fa_p = 1. .- Fg_p                              # fraction optimized to substrate affintiy
 
-    vmax_i = [1.8, 3.0, 5.0, 7.0, 9.0, 12.0]       # max growth rates (per day)
+    vmax_i = [0.5, 2.0, 4.0, 7.0, 10.0, 15.0]      # max growth rates (per day)
     Kp_i = vmax_i./10                              # half saturation of P_i
 
     vmax_ij = set_vmax_ij(nn, np, vmax_i, Fg_p)    # growth rate of P_i on N
@@ -45,7 +45,7 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
 
 
     # -----------------------------------------------------------------------------------------------------------#
-    #   HETEROTROPHIC BACTERIA PARAMS
+    #                                    HETEROTROPHIC BACTERIA PARAMS
     #------------------------------------------------------------------------------------------------------------#
     CM = [1  0  0  0  0  0  0  0  0  0  0  0  0   
           0  1  0  0  0  0  0  0  0  0  0  0  0    
@@ -59,18 +59,12 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
     y_i = ones(nd)*0.3
     y_ij = broadcast(*, y_i, CM) 
     yo_ij = y_ij*10                                # PLACEHOLDER VALUE mol B/mol O2. not realistic
-    num_uptakes = sum(CM, dims=1)[1, :]
-    pen = 1 ./ num_uptakes
 
     Fg_b = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
     Fa_b = 1. .- Fg_b      
 
     umax_i = [1., 1., 1., 1., 1., 1., 1., 1.]      # Fg_b and umax_i are dummy vals - already provided from Emily's previous work (trade-off applied)
     Km_i = umax_i./10 
-
-    # umax_ij =  [5.17  0  0  0  0  0  0  0  0  0  0  0  0    # first 3 are POM, next 10 are DOM
-    #              0  0.92  0  0  0  0  0  0  0  0  0  0  0    
-    #              0  0  0.16  0  0  0  0  0  0  0  0  0  0  
 
     umax_ij =  [10.0  0  0  0  0  0  0  0  0  0  0  0  0    # first 3 are POM, next 10 are DOM
                 0  1.0  0  0  0  0  0  0  0  0  0  0  0    
@@ -93,46 +87,46 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
 
 
     # -----------------------------------------------------------------------------------------------------------#
-    #   ZOOPLANKTON PARAMS 
+    #                                       ZOOPLANKTON PARAMS 
     #------------------------------------------------------------------------------------------------------------#
-        # GrM - first 6 cols are phyto, next 10 are dom consuming bacteria, rows are zoo
-    # Z1 - pom consumers; Z2 - larger (copio, 0.6um) and phyto grazer; Z3 - smaller (oligo, 0.3um) 
-    #NOTE this GrM config messes up the main model code, which expects z1 to graze P
-    # GrM = [1.0  1.0  1.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
-    #        0.0  0.0  0.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  0.0  0.0  0.0  0.0  0.0 
+    # GrM - first 6 cols are phyto, next 3 are POM and then 10 dom consuming bacteria, rows are zoo
+    # z1 grazes P, z2 grazes POM consumers, Z3 grazes large DOM consumers (copio), Z4 grazes small DOM cnsumers (oligo)
+    # GrM = [1.0  1.0  1.0  1.0  1.0  1.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+    #        0.0  0.0  0.0  0.0  0.0  0.0  1.0  1.0  1.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
+    #        0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  1.0  1.0  1.0  1.0  1.0  0.0  0.0  0.0  0.0  0.0 
     #        0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  1.0  1.0  1.0  1.0  1.0 ] 
 
-    # z1 grazes P, z2 grazes POM consumers, Z3 grazes DOM consumers
     GrM = [1.0  1.0  1.0  1.0  1.0  1.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
            0.0  0.0  0.0  0.0  0.0  0.0  1.0  1.0  1.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0 
-           0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0 ] 
+           0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  0.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0  1.0 ] ;
 
-    g_max = ones(nz)*1.0
+    # nz = size(GrM)[1]
+    g_max = ones(nz)*1.6
     K_g = ones(nz)*1.0
     γ = ones(nz)*0.3
 
+    # try increase gmax to 2 next
 
     # -----------------------------------------------------------------------------------------------------------#
-    #   MORTALITY RATES (mmol/day)
+    #                                     MORTALITY RATES (mmol/m3/day)
     #------------------------------------------------------------------------------------------------------------#
     m_lp = ones(np) * 0 
-    m_qp = ones(np) * 0.01  # (.1 if explicit grazers, if not, 1)
+    m_qp = ones(np) * 0.1  # (.1 if explicit grazers, if not, 1)
 
     m_lb = ones(nb) * 0
-    m_qb = ones(nb) * 0.01 
+    m_qb = ones(nb) * 0.05
 
     m_lz = ones(nz) * 0.1
-    m_qz = ones(nz) * 0.01 
-    #TODO try putting quadratic mort for all at 0.01 
-    # try playing around to see if we can get more competitive exclusion - see equation in phtots
+    m_qz = ones(nz) * 0.5
 
 
     # -----------------------------------------------------------------------------------------------------------#
-    #   ORGANIC MATTER
+    #                                           ORGANIC MATTER
     #------------------------------------------------------------------------------------------------------------#
-    # prob_generate_d = [0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125]
+    # prob_generate_d = [0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125, 0.125] # even distribution
     # prob_generate_d = [0.05, 0.4, 0.05, 0.0028, 0.0747, 0.345, 0.0747, 0.0028] # 50% each to POM and DOM
-    prob_generate_d = [0.03, 0.27, 0.03, 0.01, 0.1, 0.45, 0.1, 0.01 ] # 33% to POM, 66 to DOM
+    # prob_generate_d = [0.03, 0.27, 0.03, 0.01, 0.1, 0.45, 0.1, 0.01 ]            # 33% to POM, 66 to DOM
+    prob_generate_d = [0.06, 0.21, 0.06, 0.02, 0.12, 0.39, 0.12, 0.02 ]   
 
 
     # Sinking rate for POM  
@@ -141,7 +135,7 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
 
 
     #------------------------------------------------------------------------------------------------------------#
-    #   PHYSICAL ENVIRONMENT
+    #                                          PHYSICAL ENVIRONMENT
     #------------------------------------------------------------------------------------------------------------#
 
     # VERTICAL VELOCITY
@@ -166,7 +160,7 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
 
     # LIGHT (Irradiance, I) 
         euz = 25                    # euphotic zone lengthscale (m)
-        light_top = 700             # avg incoming PAR = (1400/2)  Light_avg*(cos(t*dt*2*3.1416)+1) for light daily cycle
+        light_top = 700             # avg incoming PAR = total/2  = 1400 kW/m2/year / 2 ??! Light_avg*(cos(t*dt*2*3.1416)+1) for light daily cycle
         light = light_top .* exp.( -zc ./ euz)
 
     # OXYGEN (air-sea exchange)
@@ -197,7 +191,7 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
 
 
     # -----------------------------------------------------------------------------------------------------------#
-    #   INITIAL CONDITIONS (mmol N/m3)
+    #                                   INITIAL CONDITIONS (mmol N/m3)
     #------------------------------------------------------------------------------------------------------------#
     
     if run_type != 3
@@ -218,17 +212,18 @@ function run_prescribed_darwin(years, days, nrec, dt, nt, run_type)
 
 
     # -----------------------------------------------------------------------------------------------------------#
-    #   INSTANTIATE PARAMS & RUN MODEL
+    #                                   INSTANTIATE PARAMS & RUN MODEL
     #------------------------------------------------------------------------------------------------------------#
     params = Prms(
                 days, dt, nt, nrec, H, dz, np, nb, nz, nn, nd, pIC, bIC, zIC, nIC, dIC, oIC, 
                 vmax_i, vmax_ij, Kp_i, Kp_ij, m_lp, m_qp, light, temp_fun, K_I, CMp, Fg_p,
                 umax_i, umax_ij, Km_i, Km_ij, y_ij, m_lb, m_qb, prob_generate_d, CM, Fg_b,
-                g_max, K_g, γ, m_lz, m_qz, GrM, pen, kappa_z, wd, ngrid, pulse, 
+                g_max, K_g, γ, m_lz, m_qz, GrM, kappa_z, wd, ngrid, pulse, 
                 e_o, yo_ij, koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, fsaven
             )
 
     log_params(params, season) ; print_info(params)
+    fsaven = set_savefiles(now(), season, pulse, years, np, nz, nb, nd)
 
     N, P, Z, B, D, O, track_time = run_NPZBD(params, season)
 

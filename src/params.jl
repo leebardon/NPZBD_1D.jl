@@ -48,11 +48,10 @@
     m_lz::Array{Float64,1}         # linear mort of z
     m_qz::Array{Float64,1}         # quadratic mort of z
     GrM::Array{Bool,2}             # grazing matrix: nz x (np + nb)
-    pen::Array{Float64,1}          # generalists penalty
     kappa_z::Array{Float64, 1}     # vertical eddy diffusivities
     wd::Array{Float64, 2}          # sinking rate for POM
     ngrid::Int64                   # number of boxes at depth
-    pulse::Int64                   # 1 = no nutrient pulsing, 2 = N,D redistributed by mean, 3 = N,D redistributed by weighted mean
+    pulse::Int64                   # 1 = no nutrient pulsing, 2 = periodic pulse, 3 = semi-stochastc pulse
     e_o::Float64                   # production of O2 (excretion) (mol O2 per mol N uptake)
     yo_ij::Array{Float64, 2}       # O2 yield rate of bacteria j on d_i (mol B/mol O2)
     koverh::Float64                # gas transfer coefficient for each box comprising the mixed layer

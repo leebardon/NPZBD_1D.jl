@@ -1,17 +1,21 @@
 
 using DataFrames, NCDatasets, Printf
 
+#TODO create savepath that includes pulse type
+
 function message(v::String, nd::Int64=0, nb::Int64=0, nn::Int64=0, np::Int64=0, nz::Int64=0, fsaven::String="")
 
     m = Dict(
         "START" => "\n -------------------------------- STARTING PROGRAM ----------------------------------- \n",
-        "ST1" => ["Start New Run", "Start Prescribed Model Run", "Continue Run"],
+        "ST1" => ["Start New Run", "Start Prescribed Model Run", "Continue Run", "Track Bloom"],
         "ST2" => "\nChoose run type: ",
-        "TM1" => ["2 years (days=732)", "10 years (days=3660)", "30 years (days=10980)", "50 years (days=18300)", "100 years (days=36600)"],
+        "CT2" => "\nContinue primary run or bloom run?",
+        "CT1" => ["Primary run", "Bloom run"],
+        "TM1" => ["bloom (365 days)", "2 years (days=732)", "10 years (days=3660)", "30 years (days=10980)", "50 years (days=18300)", "100 years (days=36600)"],
         "TM2" => "\nSelect Simulation Runtime:",
         "DR1" => ["Yes", "No"],
         "DR2" => "\n Are you using params from prescribed_darwin.jl?",
-        "P1" => ["None (steady state)", "Single pulse at 10 (winter) or 30 (summer) day intervals"],
+        "P1" => ["None (steady state)", "Period pulse at 25 (winter) or 45 (summer) day intervals", "Semi-stochastic pulse at 10 or 40 day intervals"],
         "P2" => "Select nutrient pulsing regime: ",
         "DN" => "\nEnter number of detritus pools (nd): ",
         "BN" => "Enter number of bacteria populations (nb): ",
@@ -95,11 +99,17 @@ function user_select(run_type=0)
 end
 
 
-function get_previous_params()
+function get_previous_params(continue_type=1)
 
-    files = readdir("results/outfiles/endpoints")
-    f = request("\nSelect output file:", RadioMenu(files))
-    ds = NCDataset("results/outfiles/endpoints/$(files[f])")
+    if continue_type == 1
+        files = readdir("results/outfiles/endpoints")
+        f = request("\nSelect output file:", RadioMenu(files))
+        ds = NCDataset("results/outfiles/endpoints/$(files[f])")
+    else
+        files = readdir("results/outfiles/blooms")
+        f = request("\nSelect output file:", RadioMenu(files))
+        ds = NCDataset("results/outfiles/blooms/$(files[f])")
+    end
 
     H = ds["H"][:][1]
     dz = ds["dz"][:][1]
@@ -133,7 +143,6 @@ function get_previous_params()
     m_lz = ds["m_lz"][:]
     m_qz = ds["m_qz"][:]
     GrM = ds["GrM"][:,:]
-    pen = ds["pen"][:]
     kappa_z = ds["kappa_z"][:]
     wd = ds["wd"][:,:]
     ngrid = ds["ngrid"][:][1]
@@ -146,12 +155,13 @@ function get_previous_params()
     t_o2relax = ds["t_o2relax"][:][1]
     o2_deep = ds["o2_deep"][:][1]
     season = ds.attrib["Season"]
+    prev_fname = files[f]
 
     return H, dz, nIC, pIC, zIC, bIC, dIC, oIC, nn, np, nz, nb, nd, 
            vmax_i, vmax_ij, Kp_i, Kp_ij, m_lp, m_qp, light, temp_fun, K_I, CMp, Fg_p, 
            umax_i, umax_ij, Km_i, Km_ij, m_lb, m_qb, y_ij, prob_generate_d, CM, Fg_b,
-           g_max, K_g, γ, m_lz, m_qz, GrM, pen, kappa_z, wd, ngrid, pulse, e_o, yo_ij,
-           koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, season
+           g_max, K_g, γ, m_lz, m_qz, GrM, kappa_z, wd, ngrid, pulse, e_o, yo_ij,
+           koverh, o2_sat, ml_boxes, t_o2relax, o2_deep, season, prev_fname
 
 end
 
@@ -322,7 +332,8 @@ function log_params(prms, season)
 end
 
 
-function update_tracking_arrs(track_n, track_p, track_z, track_b, track_d, track_o, track_time, ntemp, ptemp, ztemp, btemp, dtemp, otemp, t, trec, prms)
+function update_tracking_arrs(track_n, track_p, track_z, track_b, track_d, track_o, track_time, 
+    ntemp, ptemp, ztemp, btemp, dtemp, otemp, t, trec, prms)
 
     j = Int(t÷trec + 1)
     t_id = t.*prms.dt
@@ -430,6 +441,40 @@ function get_zc(H)
 end
 
 
+function get_hmap_z_axis(depth, days, daily_data)
+
+    z = Array{Float64}(undef, size(depth, 1), size(daily_data, 2))
+
+    for i in eachindex(depth)
+        for j in eachindex(days)
+            z[i, j] = daily_data[i, j]
+        end
+    end
+
+    return z'
+
+end
+
+
+
+function set_zmax(state_var, num_state_var)
+
+    zmax, z97 = 0, 0
+
+    for s in range(1, num_state_var)
+        state_var_max = maximum(state_var[:, s, :])
+        state_var_max > zmax ? zmax = state_var_max : nothing
+
+        s_arr = vec(state_var[:, s, :])
+        state_var_97 = quantile(s_arr, 0.97)
+        state_var_97 > z97 ? z97 = state_var_97 : nothing
+    end
+
+    return zmax, z97
+
+end
+
+
 function set_extinct_to_zero(ds)
 
     dss = copy(ds)
@@ -455,6 +500,24 @@ function mean_over_time(state_vars, ds, season_num)
     
 end
 
+function get_bloom_means(vars, ds)
+
+    bloom_start_ts = 10952
+
+    bloom_means = Vector{Any}()
+    for v in vars
+        if v != "o"
+            period = ds["$v"][:,:,bloom_start_ts:end]
+            period_mean = dropdims(mean(period, dims=3), dims=3)
+            append!(bloom_means, [period_mean])
+        else
+            append!(bloom_means, [mean(ds["$v"][:,bloom_start_ts:end], dims=2)])
+        end
+    end
+
+    return bloom_means
+
+end
 
 function get_cycle_means(vars, pulse_freq, ds)
 
@@ -600,120 +663,3 @@ function get_interaction_dict(interactions, n)
 
 end
 
-
-# BELOW WAS INSERTED INTO FUNCTIONS TO TRACE NAN AND INF WEIRDNESS - CAUSED BY USING UNDEF TO 
-# INITIALISE EMPTY ARRS TO BE LATER USED DURING INTEGRATION
-
-# function test_vals(arr)
-
-#     e_msg = "\n Nan or inf found in timestep "
-#     w_msg = "\n Weird values found in timestep "
-#     check = run_checks(arr)
-
-#     return check, arr, e_msg, w_msg
-
-# end
-
-
-# function run_checks(vals)
-
-#     for x in vals
-#         if nan_or_inf(x)
-#             return "e"
-#         elseif big_or_small(x)
-#             return "w"
-#         end
-#     end
-
-# end
-
-
-# function big_or_small(x)
-
-#     if typeof(x) == Float64 || typeof(x) == Int64
-#         if x > 1e10 || x < -1e10 
-#             return true
-#         end
-#     else
-#         for i in x
-#             if i > 1e10 || i < -1e10
-#                 return true
-#             end
-#         end
-#     end
-
-#     return false
-
-# end
-
-# check, data, e_msg, w_msg = test_vals([dNdt, dPdt, dZdt, dBdt, dDdt])
-# if check=="e"
-#     @error("$e_msg $t at j=$j: \n $data \n")
-# elseif check=="w"
-#     print("warn")
-#     @error("$w_msg $t at j=$j: \n $data \n")
-# end
-
-#         #TODO find a better way to do this so can traceback source of fault and not need to repeat code blocks
-#         #NOTE this is probably something that can be improved with proper unit testing
-#         check, data, e_msg, w_msg = test_vals([uptake, mort, dNdt, dPdt, d_gain_total])
-#         if check=="e"
-#             @error("$e_msg $t at i=$i: \n $data \n")
-#         elseif check=="w"
-#             print("warn")
-#             @error("$w_msg $t at i=$i: \n $data \n ")
-#         end
-
-
-#         check, data, e_msg, w_msg = test_vals([uptake, dDdt, dBdt, dNdt])
-#         if check=="e"
-#             @error("$e_msg $t at j=$j: \n $data \n")
-#         elseif check=="w"
-#             print("warn")
-#             @error("$w_msg $t at j=$j: \n $data \n")
-#         end
-
-
-#         check, data, e_msg, w_msg = test_vals([prey, g, dZdt, dNdt, dPdt])
-#         if check=="e"
-#             @error("$e_msg $t at k=$k: \n $data \n")
-#         elseif check=="w"
-#             print("warn")
-#             @error("$w_msg $t at k=$k: \n $data \n")
-#         end  
-
-
-#         check, data, e_msg, w_msg = test_vals([prey, g, dZdt, dNdt, dBdt])
-#         if check=="e"
-#             @error("$e_msg $t at k=$k: \n $data \n")
-#         elseif check=="w"
-#             print("warn")
-#             @error("$w_msg $t at k=$k: \n $data \n")
-#         end
-
-
-#         check, data, e_msg, w_msg = test_vals([bmort, dBdt, d_gain_total])
-#         if check=="e"
-#             @error("$e_msg $t : \n $data \n")
-#         elseif check=="w"
-#             print("warn")
-#             @error("$w_msg $t : \n $data \n")
-#         end
-
-
-#         check, data, e_msg, w_msg = test_vals([zmort, dZdt, d_gain_total])
-#         if check=="e"
-#             @error("$e_msg $t : \n $data \n")
-#         elseif check=="w"
-#             print("warn")
-#             @error("$w_msg $t : \n $data \n")
-#         end
-
-
-#         check, data, e_msg, w_msg = test_vals([dDdt])
-#         if check=="e"
-#             @error("$e_msg $t : \n $data \n")
-#         elseif check=="w"
-#             print("warn")
-#             @error("$w_msg $t : \n $data \n")
-#         end

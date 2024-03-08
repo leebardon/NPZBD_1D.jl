@@ -1,7 +1,7 @@
 
-function rk4(ntemp, ptemp, ztemp, btemp, dtemp, otemp, prms, t)
+function rk4(ntemp, ptemp, ztemp, btemp, dtemp, otemp, prms, t, bloom, season)
 
-    dNdt1, dPdt1, dZdt1, dBdt1, dDdt1, dOdt1 = model_functions(ntemp, ptemp, ztemp, btemp, dtemp, otemp, prms, t)
+    dNdt1, dPdt1, dZdt1, dBdt1, dDdt1, dOdt1 = model_functions(ntemp, ptemp, ztemp, btemp, dtemp, otemp, prms, t, bloom, season)
     
     track_n1 = ntemp .+ prms.dt/2 .* dNdt1
     track_p1 = ptemp .+ prms.dt/2 .* dPdt1
@@ -13,7 +13,7 @@ function rk4(ntemp, ptemp, ztemp, btemp, dtemp, otemp, prms, t)
     N1tot = sum(track_p1) + sum(track_b1) + sum(track_z1) + sum(track_n1) + sum(track_d1)
     nan_or_inf(N1tot) && @error("Nan or Inf at t=$t: \n N1tot: $N1tot")
     
-    dNdt2, dPdt2, dZdt2, dBdt2, dDdt2, dOdt2 = model_functions(track_n1, track_p1, track_z1, track_b1, track_d1, track_o1, prms, t)
+    dNdt2, dPdt2, dZdt2, dBdt2, dDdt2, dOdt2 = model_functions(track_n1, track_p1, track_z1, track_b1, track_d1, track_o1, prms, t, bloom, season)
 
     track_n2 = ntemp .+ prms.dt/2 .* dNdt2
     track_p2 = ptemp .+ prms.dt/2 .* dPdt2
@@ -25,7 +25,7 @@ function rk4(ntemp, ptemp, ztemp, btemp, dtemp, otemp, prms, t)
     N2tot = sum(track_p2) + sum(track_b2) + sum(track_z2) + sum(track_n2) + sum(track_d2)
     nan_or_inf(N2tot) && @error("Nan or Inf at t=$t: \n N2tot: $N2tot") 
     
-    dNdt3, dPdt3, dZdt3, dBdt3, dDdt3, dOdt3  = model_functions(track_n2, track_p2, track_z2, track_b2, track_d2, track_o2, prms, t)
+    dNdt3, dPdt3, dZdt3, dBdt3, dDdt3, dOdt3  = model_functions(track_n2, track_p2, track_z2, track_b2, track_d2, track_o2, prms, t, bloom, season)
 
     track_n3 = ntemp .+ prms.dt .* dNdt3
     track_p3 = ptemp .+ prms.dt .* dPdt3
@@ -37,7 +37,7 @@ function rk4(ntemp, ptemp, ztemp, btemp, dtemp, otemp, prms, t)
     N3tot = sum(track_p3) + sum(track_b3) + sum(track_z3) + sum(track_n3) + sum(track_d3)
     nan_or_inf(N3tot) && @error("Nan or Inf at t=$t: \n N3tot: $N3tot") 
     
-    dNdt4, dPdt4, dZdt4, dBdt4, dDdt4, dOdt4 = model_functions(track_n3, track_p3, track_z3, track_b3, track_d3, track_o3, prms, t)
+    dNdt4, dPdt4, dZdt4, dBdt4, dDdt4, dOdt4 = model_functions(track_n3, track_p3, track_z3, track_b3, track_d3, track_o3, prms, t, bloom, season)
 
     ntemp .+= (dNdt1 .+ 2 .* dNdt2 .+ 2 .* dNdt3 .+ dNdt4) .* (prms.dt / 6)
     ptemp .+= (dPdt1 .+ 2 .* dPdt2 .+ 2 .* dPdt3 .+ dPdt4) .* (prms.dt / 6)

@@ -160,7 +160,7 @@ function convert_units_PP(PP)
     # according to e.g. https://www.mdpi.com/2072-4292/9/3/301 so surface box of model may be considered
     # comparable to PP estimates from satellite
 
-    return PP .*= 92.4
+    return PP .*= 920.4
 
 end
 
@@ -168,98 +168,14 @@ end
 # fsaven = "results/outfiles/Wi50y_240108_20:47_6P3Z13B8D.nc" # win pulsed
 # fsaven="results/outfiles/Su50y_240104_14:04_6P3Z13B8D.nc" # sum steady
 # fsaven="results/outfiles/Su50y_240109_00:03_6P3Z13B8D.nc" #sum pulsed
+
+#changed z mq to 0.05
+# fsaven = "results/outfiles/Wi50ySP_240118_13:16_6P3Z13B8D.nc" # win pulsed
+# fsaven="results/outfiles/Su50ySP_240118_15:39_6P3Z13B8D.nc" #sum pulsed
+
+# fsaven = "results/outfiles/240124_17:58_Wi50yPP_6P4Z13B8D.nc" # win pulsed
+fsaven="results/outfiles/240124_19:30_Su50yPP_6P4Z13B8D.nc" #sum pulsed
+
 get_productivity(fsaven)
 
 
-# function get_spot_productivity()
-
-#     csv_path = "data/spot_data/SPOT_CTD_Nutrients_BP_5Depths.csv"
-#     df = DataFrame(CSV.File(csv_path))
-
-#     leu_BP, thy_BP = get_BP(df)
-
-#     return leu, thy
-
-# end
-
-#TODO group all measurements by depth bin, get average DCM depth in each season
-# then get average BP for each depthbin for each season
-# use average DCM value for plotting
-#NOTE remembered I had already processed this with earlier python work! Added csv's to spot data folder
-# function get_spot_productivity()
-
-#     csv_path = "data/spot_data/SPOT_CTD_Nutrients_BP_5Depths.csv"
-#     df = DataFrame(CSV.File(csv_path))
-
-#     leu_BP, thy_BP = get_BP(df)
-
-#     return leu, thy
-
-# end
-
-
-# function get_BP(df)
-
-#     leu_df, thy_df = select_cols(df)
-
-#     mean_Leu, mean_Thy = replace_missing(leu_df), replace_missing(thy_df)
-#     leu_, thy_ = to_float(mean_Leu), to_float(mean_Thy)
-#     leu, thy = to_cells_per_m3(leu_), to_cells_per_m3(thy_)
-
-#     return leu, thy
-# end
-
-
-# function replace_missing(df)
-
-#     out = ifelse.(df .== "No data", missing, df)
-
-#     return out
-# end
-
-
-# function select_cols(df)
-
-#     leu_df = select(df[3:end,:], :depth, :mean_Leu, :sd_Leu)
-#     thy_df = select(df[3:end,:], :depth, :mean_Thy, :sd_Thy)
-
-#     return leu_df, thy_df
-# end
-
-
-# function to_float(df)
-
-#     return passmissing(parse).(Float64, df)
-# end
-
-
-# function to_cells_per_m3(df)
-
-#     df[:, 2:3] = df[:, 2:3] .* 1e6
-
-#     return df
-# end
-
-
-# function plot_spot_vs_model(spot, model)
-
-
-# end
-
-
-# function make_chunks(depth, n)
-
-#     c = length(depth) ÷ n
-#     return [depth[1+c*i:(i == n-1 ? end : c*i+c)] for i = 0:n-1]
-
-# end
-
-
-
-
-
-
-
-
-# fsaven = "/home/lee/Dropbox/Development/NPZBD_1D/results/outfiles/Wi100y_231019_17:22_10P3Z18B8D.nc"
-# get_npp(fsaven, 30)
