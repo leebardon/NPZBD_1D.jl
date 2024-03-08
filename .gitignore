@@ -26,6 +26,4 @@ docs/site/
 /results/saved_params/*.jdl
 /data
 /src/prescribed.jl
-/notebooks/plots
-/notebooks
 /*.png
