@@ -29,3 +29,5 @@ docs/site/
 /*.png
 /results/SPOT_guilds
 /results/outfiles/bloom_tests
+bloom_tests
+SPOT_guilds
