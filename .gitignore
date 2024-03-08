@@ -27,3 +27,5 @@ docs/site/
 /data
 /src/prescribed.jl
 /notebooks/plots
+/notebooks
+/*.png
