@@ -455,7 +455,13 @@ function get_hmap_z_axis(depth, days, daily_data)
 
 end
 
+function check_dir_exists(path)
 
+    if isdir(path) == false
+        mkdir(path)
+    end
+
+end
 
 function set_zmax(state_var, num_state_var)
 

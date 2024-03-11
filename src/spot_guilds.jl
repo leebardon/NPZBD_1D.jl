@@ -1,4 +1,5 @@
 using DataFrames, CSV, Dates, StatsPlots, Statistics, CategoricalArrays, Measures
+include("/home/lee/Dropbox/Development/NPZBD_1D/src/utils/utils.jl")
 
 function load_guilds_csv(path)
 
@@ -8,24 +9,27 @@ function load_guilds_csv(path)
 
 end
 
-function load_monthly_csvs(path, mean=0)
+function load_monthly_csvs(path, mean=false)
 
     month_names = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
     out = Any[]
+    sem_out = Any[]
 
-    if mean == 0
+    if mean == false
         for m in month_names
             csv = DataFrame(CSV.File("$(path)/$(m).csv"))
             push!(out, csv)
         end
     else
         for m in month_names
-            csv = DataFrame(CSV.File("$(path)/$(m)_mean_RA.csv"))
+            csv = DataFrame(CSV.File("$(path)/RA_FL/$(m)_mean_RA_FL.csv"))
+            sem = DataFrame(CSV.File("$(path)/sem_FL/$(m)_mean_RA_FL_sem.csv"))
             push!(out, csv)
+            push!(sem_out, sem)
         end
     end
 
-    return out
+    return out, sem_out
 
 end 
 
@@ -207,25 +211,38 @@ function filter_by_year(month_df, yr)
 
 end ;
 
-function filter_by_depth(month_df, dep)
+function filter_by_depth(month_df, dep, mean=false)
 
-    data_by_depth = filter(row -> row.Depth == dep, month_df)
+    if mean==false
+        data_by_depth = filter(row -> row.Depth == dep, month_df)
+    else
+        data_by_depth = filter(row -> row.DepthBin == dep, month_df)
+    end
 
     return data_by_depth
 
 end ;
 
-function get_year_depth_df(all_months_data, yr, dep, month_nums)
+function get_year_depth_df(all_months_data, yr, dep, month_nums, mean=false)
+       
     out = Any[]
-    for num in month_nums
-        data = filter_by_depth(filter_by_year(all_months_data[num], yr), dep);
-        push!(out, data)
+    if mean==false
+        for num in month_nums
+            data = filter_by_depth(filter_by_year(all_months_data[num], yr), dep);
+            push!(out, data)
+        end
+    else
+        for num in month_nums
+            data = filter_by_depth(all_months_data[num], dep, mean);
+            push!(out, data)
+        end
     end
 
     merged_df = vcat(out...)
 
     return merged_df
 end ;
+
 
 function create_data_matrices_months(months_dep_df, all_clade_colnames)
 
@@ -325,86 +342,193 @@ function get_anomalies(all_in_year, all_clade_colnames)
 
 end
 
-function plot_annual_RA(mat_5m, mat_150m, all_clade_colnames)
+function plot_monthly_RA_for_year(colnames, matrices, deps, year, copio, slow_copio, oligo)
+
+    dirname = "results/plots/SPOT/monthly_RA_$(year)"
+    check_dir_exists(dirname)
+
+    fnames = ["Actinomarinales", "Enterobacterales", "Dadabacteriales","Flavobacteriales","Planctomycetota",
+    "Rhodobacterales","SAR11","SAR202","SAR324","SAR406","SAR86","Thioglobaceae","Thermoplasmata","Verrucomicrobiota",
+    "Pseudomonadales","Gemmatimonadota","UBA10353","HOC36","Microtrichales","Puniceispirillales", "Rhodospirillales",
+    "Ammonia_Ox","Nitrite_Ox"];
+    cols=["seagreen3", "seagreen", "darkcyan", "darkblue", "grey20"]
+    gnames = ["copio", "slow_copio", "oligo"]
+    groups = [copio, slow_copio, oligo]
 
     a1=0.9
-    a2=0.5;
-    lfs=20;
-    fnames = ["Actino","Entero","Dada","Flavo","Plancto","Rhodobac","SAR11","SAR202","SAR324","SAR406","SAR86","Thio",
-    "Thermo","Verruco","Pseudomon","Gemma","UBA10353","HOC36","Microtric","Punice","Rhodospir","Ammon_ox","Nitrite_ox"];
+    ylfont=14
 
-    for i in range(1, 24)
+    for g in eachindex(groups)
 
-        if i == 24
-            p1 = bar(mat_5m[:, 2], color=:cyan3, label=" 5m", ylabel="", left_margin=5mm, grid=false, foreground_color_legend=nothing, 
-            background_color_legend=nothing, legend=:outertop, lw=0, alpha=a1, legendfontsize=lfs, framestyle=:none);
-            p2 = bar(mat_150m[:, 2], color=:deeppink3, label=" 150m", xlabel="", grid=false, foreground_color_legend = nothing, 
-            background_color_legend=nothing, legend=:outertop, lw=0, alpha=a1, legendfontsize=lfs, framestyle=:none);
+        fsize = size(groups[g])[1]
+        n_deps = size(deps)[1]
 
-            fig = plot(p1, p2, layout=(1,2), size=(750,200), bottom_margin=10mm, top_margin=5mm)
-            savefig(fig, "results/plots/SPOT/monthly_RA_2014/legend.pdf")
-        else
-            yl1 = get_bar_limits(mat_150m, mat_5m, i) 
-            lbl1, lbl2 = nothing, nothing
+        f = Vector{Any}(undef, fsize)
+        for (i,v) in enumerate(groups[g])
+            
+            yl = get_bar_limits(v, matrices) 
+            dep_plts = Vector{Any}(undef, n_deps)
 
-            p1 = bar(mat_5m[:, i], color=:cyan3, label=lbl1, ylabel="RA", xlabel="", xformatter=:none, left_margin=5mm, grid=false, foreground_color_legend = nothing, 
-            background_color_legend = nothing, legend=:top, ylimits=yl1, lw=0, alpha=a1, legendfontsize=lfs);
-            p2 = bar(mat_150m[:, i], color=:deeppink3, label=lbl2, xlabel="", xformatter=:none, grid=false, foreground_color_legend = nothing, 
-            background_color_legend = nothing, legend=:top, ylimits=yl1, lw=0, alpha=a1, legendfontsize=lfs);
+            for j in eachindex(deps)
+                lmar=4mm
+                if i == 1
+                    dep_plts[j] = bar(matrices[j][:, v], color=cols[j], xlabel="", ylabel=deps[j], left_margin=lmar, xformatter=:none, grid=false, 
+                        legend=false, ylimits=yl, lw=0, alpha=a1, ylabelfontsize=ylfont, top_margin=-5mm);
+                else
+                    dep_plts[j] = bar(matrices[j][:, v], color=cols[j], xlabel="", ylabel="", xformatter=:none, grid=false, 
+                        legend=false, ylimits=yl, lw=0, alpha=a1, ylabelfontsize=ylfont);
+                end
+            end
 
-            fig = plot(p1, p2, layout=(1,2), size=(750,200), bottom_margin=10mm, 
-            plot_title=all_clade_colnames[i], top_margin=5mm)
-            savefig(fig, "results/plots/SPOT/monthly_RA_2014/$(fnames[i]).pdf")
+            tit = fnames[v]
+            p = plot(dep_plts..., layout=(n_deps,1), size=(400,500), plot_title="$tit  ")
+            f[i] = plot(p)
+        
+            # check_dir_exists("results/plots/SPOT/monthly_RA_$(year)")
+            savefig(p, "results/plots/SPOT/monthly_RA_$(year)/$(fnames[v]).png")
         end
 
+        flength=fsize*250
+        fig=plot(f..., layout=(1, fsize), size=(flength, 500))
+        savefig(fig, "$dirname/$(gnames[g])_$(year).png")
     end
-
 end
 
-function get_bar_limits(m1, m2, i)
 
-    if i !=2 && i !=16 && i != 23
-        max_1 = [maximum(skipmissing(m1[:,i])) for row in eachrow(m1[:, i])];
-        max_2 = [maximum(skipmissing(m2[:,i])) for row in eachrow(m2[:, i])];
-        max_1[1] > max_2[1] ? yl=(0, max_1[1]) : yl=(0, max_2[1]);
-    else
-        if i == 2
-            yl=(0, 0.0002)
-        elseif i == 16
-            yl=(0, 0.004)
-        elseif i == 23
-            yl=(0, 0.05)
+function plot_mean_RA(colnames, matrices, deps, copio, slow_copio, oligo, sems)
+
+    dirname = "results/plots/SPOT/mean_monthly_RA"
+    check_dir_exists(dirname)
+
+    fnames = ["Actinomarinales", "Enterobacterales", "Dadabacteriales","Flavobacteriales","Planctomycetota",
+    "Rhodobacterales","SAR11","SAR202","SAR324","SAR406","SAR86","Thioglobaceae","Thermoplasmata","Verrucomicrobiota",
+    "Pseudomonadales","Gemmatimonadota","UBA10353","HOC36","Microtrichales","Puniceispirillales", "Rhodospirillales",
+    "Ammonia_Ox","Nitrite_Ox"];
+    cols=["seagreen3", "seagreen", "darkcyan", "darkblue", "grey20"]
+    gnames = ["copio", "slow_copio", "oligo"]
+    groups = [copio, slow_copio, oligo]
+
+    a1=0.9
+    ylfont=14
+
+    for g in eachindex(groups)
+
+        fsize = size(groups[g])[1]
+        n_deps = size(deps)[1]
+
+        f = Vector{Any}(undef, fsize)
+        for (i,v) in enumerate(groups[g])
+            
+            yl = get_bar_limits(v, matrices) 
+            dep_plts = Vector{Any}(undef, n_deps)
+
+            for j in eachindex(deps)
+                lmar=4mm
+                if i == 1
+                    dep_plts[j] = bar(matrices[j][:, v], color=cols[j], xlabel="", ylabel=deps[j], left_margin=lmar, xformatter=:none, grid=false, 
+                        legend=false, ylimits=yl, lw=0, alpha=a1, ylabelfontsize=ylfont, top_margin=-5mm);
+                else
+                    dep_plts[j] = bar(matrices[j][:, v], color=cols[j], xlabel="", ylabel="", xformatter=:none, grid=false, 
+                        legend=false, ylimits=yl, lw=0, alpha=a1, ylabelfontsize=ylfont);
+                end
+            end
+
+            tit = fnames[v]
+            p = plot(dep_plts..., layout=(n_deps,1), size=(400,500), plot_title="$tit  ")
+            f[i] = plot(p)
+        
+            # check_dir_exists("results/plots/SPOT/monthly_RA_$(year)")
+            savefig(p, "results/plots/SPOT/mean_monthly_RA/$(fnames[v]).png")
         end
+
+        flength=fsize*250
+        fig=plot(f..., layout=(1, fsize), size=(flength, 500))
+        savefig(fig, "$dirname/$(gnames[g]).png")
+    end
+end
+
+function get_bar_limits(i, matrices)
+
+    maxes = Any[];
+    for m in matrices
+        push!(maxes, unique!([maximum(skipmissing(m[:,i]), init=0) for row in eachrow(m[:, i])])[1])
     end
 
+    maxval = findmax(maxes)[1]
+    yl = (0, maxval)
+    
     return yl
 
 end
 
-month_nums = [1,2,3,4,5,6,7,8,9,10,11,12]
+function plot_RA_for_year(months_data, month_nums, all_clade_colnames, copio, slow_copio, oligo, year)
 
-function plot_annual_guild_RA(months_data, month_nums, year, all_clade_colnames)
+    deps = ["5m", "DCM", "150m", "500m", "890m"];
 
-    df_5_year = get_year_depth_df(months_data, year, "5m", month_nums);
-    df_150_year = get_year_depth_df(months_data, year, "150m", month_nums);
+    dfs = Any[];
+    for d in deps
+        push!(dfs, get_year_depth_df(months_data, year, d, month_nums))
+    end
 
-    mat_5m = create_data_matrices_months(df_5_year, all_clade_colnames);
-    mat_150m = create_data_matrices_months(df_150_year, all_clade_colnames);
+    matrices = Any[];
+    for df in dfs
+        push!(matrices, create_data_matrices_months(df, all_clade_colnames))
+    end
 
-    plot_annual_RA(mat_5m, mat_150m, all_clade_colnames)
+    plot_monthly_RA_for_year(all_clade_colnames, matrices, deps, year, copio, slow_copio, oligo)
 
 end
 
+
+function plot_mean_monthly_RA(means_data, month_nums, all_clade_colnames, copio, slow_copio, oligo, sem_data)
+
+    deps = [5, 0, 150, 500, 890];
+
+    means_by_depth = Any[];
+    sems_by_depth = Any[];
+    for d in deps
+        push!(means_by_depth, get_year_depth_df(means_data, year, d, month_nums, true))
+        push!(sems_by_depth, get_year_depth_df(sem_data, year, d, month_nums, true))
+    end
+
+    matrices = Any[];
+    for df in means_by_depth
+        push!(matrices, create_data_matrices_months(df, all_clade_colnames))
+    end
+
+    plot_mean_RA(all_clade_colnames, matrices, deps, copio, slow_copio, oligo, sems_by_depth)
+
+end
+
+
+
+# -----------------------------------------------------------------------------------------------------
+
+year=2015;
+
 month_nums = [1,2,3,4,5,6,7,8,9,10,11,12];
-year=2014;
-all_clade_colnames = ["Actinomarinales", "Enterobacterales", "Dadabacteriales","Flavobacteriales","Planctomycetota",
-"Rhodobacterales","SAR11_clade","SAR202_clade","SAR324_clade","Marinimicrobia_SAR406_clade","SAR86_clade",
-"Thioglobaceae","Thermoplasmata","Verrucomicrobiota","Pseudomonadales","Gemmatimonadota","UBA10353_marine_group",
-"HOC36","Microtrichales","Puniceispirillales","Rhodospirillales","Ammonia_oxidizers","Nitrite_oxidizers"];
+all_clade_colnames = [
+"Actinomarinales", "Enterobacterales", "Dadabacteriales","Flavobacteriales","Planctomycetota",
+"Rhodobacterales","SAR11_clade","SAR202_clade","SAR324_clade","Marinimicrobia_SAR406_clade",
+"SAR86_clade","Thioglobaceae","Thermoplasmata","Verrucomicrobiota","Pseudomonadales",
+"Gemmatimonadota","UBA10353_marine_group","HOC36","Microtrichales","Puniceispirillales",
+"Rhodospirillales","Ammonia_oxidizers","Nitrite_oxidizers"
+];
 
-months_data = load_monthly_csvs("data/spot_data/monthly/monthly_FL");
+copio = [2,6,15,5,14,4];
+slow_copio = [16,9,19,20,12,10,17,8,13];
+oligo = [18,21,11,1,3,7];
 
-plot_annual_guild_RA(months_data, month_nums, year, all_clade_colnames);
+monthly_FL_RA = load_monthly_csvs("data/spot_data/monthly_RA/monthly_FL");
+plot_RA_for_year(monthly_FL_RA, month_nums, all_clade_colnames, copio, slow_copio, oligo, year);
+
+# MEANS EXCLUDE ANOMALOUS YEAR 2014
+# monthly_means_FL_RA, sems = load_monthly_csvs("data/spot_data/monthly_means_RA/", true);
+
+# plot_mean_monthly_RA(monthly_means_FL_RA, month_nums, all_clade_colnames, copio, slow_copio, oligo, sems);
+
+
+
 
 
 
