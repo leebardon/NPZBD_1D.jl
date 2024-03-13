@@ -395,10 +395,12 @@ function plot_monthly_RA_for_year(colnames, matrices, deps, year, copio, slow_co
 end
 
 
-function plot_mean_RA(colnames, matrices, deps, copio, slow_copio, oligo, sems)
+function plot_mean_RA(colnames, matrices, deps, copio, slow_copio, oligo, sem_matrices)
 
     dirname = "results/plots/SPOT/mean_monthly_RA"
     check_dir_exists(dirname)
+
+    depths = ["5m", "DCM", "150m", "500m", "890m"];
 
     fnames = ["Actinomarinales", "Enterobacterales", "Dadabacteriales","Flavobacteriales","Planctomycetota",
     "Rhodobacterales","SAR11","SAR202","SAR324","SAR406","SAR86","Thioglobaceae","Thermoplasmata","Verrucomicrobiota",
@@ -424,12 +426,13 @@ function plot_mean_RA(colnames, matrices, deps, copio, slow_copio, oligo, sems)
 
             for j in eachindex(deps)
                 lmar=4mm
+                sems = nomissing(sem_matrices[j][:,v],NaN)
                 if i == 1
-                    dep_plts[j] = bar(matrices[j][:, v], color=cols[j], xlabel="", ylabel=deps[j], left_margin=lmar, xformatter=:none, grid=false, 
-                        legend=false, ylimits=yl, lw=0, alpha=a1, ylabelfontsize=ylfont, top_margin=-5mm);
+                    dep_plts[j] = bar(matrices[j][:, v], yerror=sems, color=cols[j], xlabel="", ylabel=depths[j], left_margin=lmar, xformatter=:none, grid=false, 
+                        legend=false, ylimits=yl, lw=1, alpha=a1, ylabelfontsize=ylfont, top_margin=-5mm);
                 else
-                    dep_plts[j] = bar(matrices[j][:, v], color=cols[j], xlabel="", ylabel="", xformatter=:none, grid=false, 
-                        legend=false, ylimits=yl, lw=0, alpha=a1, ylabelfontsize=ylfont);
+                    dep_plts[j] = bar(matrices[j][:, v], yerror=sems, color=cols[j], xlabel="", ylabel="", xformatter=:none, grid=false, 
+                        legend=false, ylimits=yl, lw=1, alpha=a1, ylabelfontsize=ylfont);
                 end
             end
 
@@ -467,7 +470,7 @@ function plot_RA_for_year(months_data, month_nums, all_clade_colnames, copio, sl
 
     dfs = Any[];
     for d in deps
-        push!(dfs, get_year_depth_df(months_data, year, d, month_nums))
+        push!(dfs, get_year_depth_df(months_data[1], year, d, month_nums))
     end
 
     matrices = Any[];
@@ -492,8 +495,10 @@ function plot_mean_monthly_RA(means_data, month_nums, all_clade_colnames, copio,
     end
 
     matrices = Any[];
-    for df in means_by_depth
-        push!(matrices, create_data_matrices_months(df, all_clade_colnames))
+    sem_matrices = Any[];
+    for i in eachindex(means_by_depth)
+        push!(matrices, create_data_matrices_months(means_by_depth[i], all_clade_colnames))
+        push!(sem_matrices, create_data_matrices_months(sems_by_depth[i], all_clade_colnames))
     end
 
     plot_mean_RA(all_clade_colnames, matrices, deps, copio, slow_copio, oligo, sems_by_depth)
@@ -504,7 +509,7 @@ end
 
 # -----------------------------------------------------------------------------------------------------
 
-year=2015;
+year=2010;
 
 month_nums = [1,2,3,4,5,6,7,8,9,10,11,12];
 all_clade_colnames = [
