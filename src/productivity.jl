@@ -1,18 +1,29 @@
 using NCDatasets, SparseArrays, LinearAlgebra, Statistics
-using CSV, DataFrames, LaTeXStrings, Plots
+using CSV, DataFrames, LaTeXStrings, Plots, Measures
 
 include("/home/lee/Dropbox/Development/NPZBD_1D/src/utils/utils.jl")
 include("/home/lee/Dropbox/Development/NPZBD_1D/src/utils/save_utils.jl")
 include("/home/lee/Dropbox/Development/NPZBD_1D/src/plotting/productivity_plots.jl")
 
 
-function get_productivity(fsaven)
+function get_productivity(fsaven, bloom=0)
 
     ds = NCDataset(fsaven)
     ds.attrib["Season"] == "winter" ? season_num = 1 : season_num = 2
 
     if ds["pulse"][:] == 1
         N, P, Z, B, D = get_endpoints(["n", "p", "z", "b", "d"], ds)
+
+    elseif bloom == 1
+        N, P, Z, B, D = load_bloom(["n", "p", "z", "b", "d"], ds)
+        SPOT_BP_meso, SPOT_BP_oli, SPOT_PP_meso, SPOT_PP_oli = get_productivity_spot("dummy", bloom)
+        BP_pre, BP_blm = bloom_BP(B, D, ds)
+        PP_pre, PP_blm = bloom_PP(P, N, ds)
+        fig1 = bloom_productivity_plot(BP_pre, BP_blm, SPOT_BP_meso, SPOT_BP_oli, ds)
+        fig2 = bloom_PP_plot(PP_pre, PP_blm, SPOT_PP_meso, SPOT_PP_oli, ds)
+
+        return
+
     else
         N, P, Z, B, D = mean_over_time(["n", "p", "z", "b", "d"], ds, season_num)
     end
@@ -25,7 +36,6 @@ function get_productivity(fsaven)
     savefig(fig,"$(dir)/$(filename).pdf")
 
 end
-
 
 function bacterial_productivity(B, D, ds)
 
@@ -50,7 +60,6 @@ function bacterial_productivity(B, D, ds)
     return BP_out
 
 end
-
 
 function primary_productivity(P, N, ds)
 
@@ -78,6 +87,46 @@ function primary_productivity(P, N, ds)
 
 end
 
+function bloom_BP(B, D, ds)
+    # assumes bloom tracked over 365 days
+
+    prebloom = B[:, :, 1:17999];
+    prebloom_D = D[:, :, 1:17999];
+    bloom = B[:,:,18000:end];
+    bloom_D = D[:, :, 18000:end];
+
+    prebloom_mean = dropdims(mean(prebloom, dims=3), dims=3);
+    prebloom_D_mean = dropdims(mean(prebloom_D, dims=3), dims=3);
+    bloom_mean = dropdims(mean(bloom, dims=3), dims=3);
+    bloom_D_mean = dropdims(mean(bloom_D, dims=3), dims=3);
+
+    BP_prebloom = bacterial_productivity(prebloom_mean, prebloom_D_mean, ds);
+    BP_bloom = bacterial_productivity(bloom_mean, bloom_D_mean, ds);
+
+    return BP_prebloom, BP_bloom
+
+end   
+
+function bloom_PP(P, N, ds)
+    # assumes bloom tracked over 365 days
+
+    prebloom = P[:, :, 1:17999];
+    prebloom_N = N[:, :, 1:17999];
+    bloom = P[:,:,18000:end];
+    bloom_N = N[:, :, 18000:end];
+
+    prebloom_mean = dropdims(mean(prebloom, dims=3), dims=3);
+    prebloom_N_mean = dropdims(mean(prebloom_N, dims=3), dims=3);
+    bloom_mean = dropdims(mean(bloom, dims=3), dims=3);
+    bloom_N_mean = dropdims(mean(bloom_N, dims=3), dims=3);
+
+    PP_prebloom = primary_productivity(prebloom_mean, prebloom_N_mean, ds);
+    PP_bloom = primary_productivity(bloom_mean, bloom_N_mean, ds);
+
+    return PP_prebloom, PP_bloom
+
+end  
+
 function light_atten(P)
     # Following Zakem et al 2015 (using chl2_min as default)
 
@@ -101,24 +150,28 @@ function light_atten(P)
 
 end
 
-
-
-
-function get_productivity_spot(season)
+function get_productivity_spot(season,bloom=0)
 
     csv_path = "data/spot_data/seasonal_means/bottle/seasonal_means.csv"
     df = DataFrame(CSV.File(csv_path))
 
-    BP_leu, BP_thy = select_cols(df)
-    mean_leu, mean_thy = filter_by_season(BP_leu, BP_thy, season)
-
     # Winter, spring, summer, fall
     mean_seasonal_PP_spot = [1018.022752636842, 1903.5313703434347, 1179.4424693131705, 892.4915176739885]
 
-    return mean_leu, mean_thy, mean_seasonal_PP_spot
+    if bloom==0
+        BP_leu, BP_thy = select_cols(df)
+        mean_leu, mean_thy = filter_by_season(BP_leu, BP_thy, season)
+
+        return mean_leu, mean_thy, mean_seasonal_PP_spot
+    else
+        BP_leu, BP_thy = select_cols(df)
+        meanBP_meso, meanBP_oli = filter_by_season_bloom(BP_leu, "spring", "fall")
+        PP_meso, PP_oli = mean_seasonal_PP_spot[2], mean_seasonal_PP_spot[4]
+
+        return meanBP_meso, meanBP_oli, PP_meso, PP_oli
+    end
 
 end
-
 
 function select_cols(df)
 
@@ -127,7 +180,6 @@ function select_cols(df)
 
     return BP_leu, BP_thy
 end
-
 
 function filter_by_season(leu_df, thy_df, seson)
 
@@ -138,6 +190,14 @@ function filter_by_season(leu_df, thy_df, seson)
 
 end 
 
+function filter_by_season_bloom(leu_df, spring, fall)
+
+    meanBP_meso = filter(row -> row.season == spring, leu_df)
+    meanBP_oli = filter(row -> row.season == fall, leu_df)
+
+    return meanBP_meso, meanBP_oli
+
+end 
 
 function convert_units(BP)
 
@@ -164,6 +224,8 @@ function convert_units_PP(PP)
 
 end
 
+
+
 # fsaven = "results/outfiles/Wi50y_240103_14:18_6P3Z13B8D.nc" # win steady
 # fsaven = "results/outfiles/Wi50y_240108_20:47_6P3Z13B8D.nc" # win pulsed
 # fsaven="results/outfiles/Su50y_240104_14:04_6P3Z13B8D.nc" # sum steady
@@ -174,8 +236,11 @@ end
 # fsaven="results/outfiles/Su50ySP_240118_15:39_6P3Z13B8D.nc" #sum pulsed
 
 # fsaven = "results/outfiles/240124_17:58_Wi50yPP_6P4Z13B8D.nc" # win pulsed
-fsaven="results/outfiles/240124_19:30_Su50yPP_6P4Z13B8D.nc" #sum pulsed
+# fsaven="results/outfiles/240124_19:30_Su50yPP_6P4Z13B8D.nc" #sum pulsed
 
-get_productivity(fsaven)
+# get_productivity(fsaven)
+fsaven="results/outfiles/blooms/blm_240213_18:16_Wi50yNP_6P3Z13B8D.nc"
+bloom=1
+get_productivity(fsaven, bloom)
 
 

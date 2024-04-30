@@ -57,6 +57,7 @@ function run_NPZBD(prms, season, bloom=false)
 
             track_n, track_p, track_z, track_b, track_d, track_o = update_tracking_arrs(track_n, track_p, track_z, track_b, track_d, track_o, track_time, 
                                                                                         ntemp, ptemp, ztemp, btemp, dtemp, otemp, t, trec, prms)
+            
             println("Total N: ", sum(ptemp) + sum(btemp) + sum(ntemp) + sum(dtemp) + sum(ztemp))
             println("n = ", sum(ntemp))
             println("d = ", sum(dtemp))
@@ -84,14 +85,14 @@ function run_NPZBD(prms, season, bloom=false)
         end
 
         #Nutrient redistribution pulsing routine (semi-stochastic, corresponds to every 10 or 40 days)
-        if bloom == false
-            if prms.pulse == 3
-                if t in pulse_vec 
-                    ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse) 
-                    println("PULSED at t=$t")
-                end 
-            end
-        end
+        # if bloom == false
+        #     if prms.pulse == 3
+        #         if t in pulse_vec 
+        #             ntemp, dtemp = pulse_nutrients(ntemp, dtemp, prms, prms.pulse) 
+        #             println("PULSED at t=$t")
+        #         end 
+        #     end
+        # end
     
         # Save outputs
         if t == prms.nt
@@ -213,13 +214,6 @@ function calc_light_attenuation(P, prms, t)
 
     return Iz
 
-    # #NOTE: to implement daily light cycling, use below:
-    # if dailycycle == 1 
-    #     I_in = I_max/2*(cos(t*prms.dt*2*3.1416)+1)
-    # else 
-    #     I_in = I_max/2
-    # end
-
 end
 
 
@@ -230,11 +224,11 @@ function bacteria_uptake(prms, B, D, dDdt, dBdt, dNdt, dOdt, t)
     for j = axes(II, 1)
         growth_rate = prms.temp_fun .* prms.umax_ij[II[j],JJ[j]] .* D[:,II[j]] ./ (D[:,II[j]] .+ prms.Km_ij[II[j],JJ[j]])
         uptake = B[:,JJ[j]] .* growth_rate
-        # uptake = B[:,JJ[j]] .* prms.temp_fun .* prms.umax_ij[II[j],JJ[j]] .* D[:,II[j]] ./ (D[:,II[j]] .+ prms.Km_ij[II[j],JJ[j]])
         yield = prms.y_ij[II[j],JJ[j]]
+        respired = (1 - yield)
         dDdt[:,II[j]] += -uptake
         dBdt[:,JJ[j]] += uptake .* yield
-        dNdt += uptake .* (1 - yield)
+        dNdt += uptake .* respired
         dOdt +=  -uptake .* (yield ./ prms.yo_ij[II[j],JJ[j]])
     end
 
@@ -342,5 +336,25 @@ function get_nonzero_axes(M)
     return II, JJ
 
 end 
+
+
+function update_tracking_arrs(track_n, track_p, track_z, track_b, track_d, track_o, track_time, 
+    ntemp, ptemp, ztemp, btemp, dtemp, otemp, t, trec, prms)
+
+    j = Int(t÷trec + 1)
+    t_id = t.*prms.dt
+    track_p[:,:,j] .= ptemp
+    track_b[:,:,j] .= btemp 
+    track_z[:,:,j] .= ztemp 
+    track_n[:,:,j] .= ntemp 
+    track_d[:,:,j] .= dtemp
+    track_o[:,:,j] .= otemp
+    track_time[j] = t_id 
+
+    @printf("Day %7.1f out of %5.0f = %4.0f%% done at %s \n", t_id, prms.days, t_id/prms.days*100, now())
+
+    return track_n, track_p, track_z, track_b, track_d, track_o, track_time
+
+end
 
 

@@ -511,3 +511,57 @@ pulse_day = 90
 # fsaven="results/outfiles/bloom_tests/unsteady_blm_240213_18:16_Wi50yNP_6P3Z13B8D.nc"
 # fsaven="results/outfiles/blooms/blm_240213_18:16_Wi50yNP_6P3Z13B8D.nc"
 # plot_bloom_heatmaps(fsaven, "B", "days", pulse_day)
+
+
+# function BP_plt(BP_pre, BP_blm, ds)
+
+#     H = 890
+#     zc = get_zc(H)
+
+#     tfs = 9 
+#     ls = 3
+#     ls2 = 7
+#     ab = 0.3
+#     lfs = 7
+#     ls3 = 3
+#     xtfs = 8
+#     lg = :bottomright
+
+#     pcols = ["hotpink2", "darkgreen","red4", "cyan4", "gold3", "mediumpurple3"]
+#     bcols = ["teal", "azure4", "red4", "black", "seagreen", "purple4", "maroon", "brown3", "grey", "lime", "orchid", "pink2", "coral"]
+#     tls = ["\nPicohet. Prod. (pre-bloom)", "\nPicohet. Prod. (bloom)", "\nTotal BP", "\nPhytoplankton (model)","\nTotal PP"]
+
+#     lab_c = dropdims(sum(BP_pre[1:89, 4:6, :], dims=2), dims=2);
+#     lab_o = dropdims(sum(BP_pre[1:89, 9:11, :], dims=2), dims=2);
+#     lab_c_blm = dropdims(sum(BP_blm[1:89, 4:6, :], dims=2), dims=2);
+#     lab_o_blm = dropdims(sum(BP_blm[1:89, 9:11, :], dims=2), dims=2);
+
+
+#     p1 = plot(lab_c[:, :], -zc, lw=ls2, lc=bcols[4], label=" LC", legendfontsize=lfs, ylabel="Depth (m)", xlabel=L"cells/mL/day" ,
+#             xrotation=45, title =tls[1], titlefontsize=tfs, grid=false, border=:box, legend=lg, xtickfontsize=xtfs, alpha=ab,
+#             foreground_color_legend = nothing)
+#             plot!(lab_o[:, :], -zc, lw=ls, lc=bcols[9], label=" LO", legendfontsize=lfs)
+#             plot!(BP_pre[:, 7], -zc, lw=ls2, lc=bcols[7], label=" SLC", legendfontsize=lfs, alpha=ab)
+#             plot!(BP_pre[:, 12], -zc, lw=ls, lc=bcols[12], label=" SLO", legendfontsize=lfs)
+#             plot!(BP_pre[:, 8], -zc, lw=ls2, lc=bcols[8], label=" RC", legendfontsize=lfs, alpha=ab)
+#             plot!(BP_pre[:, 13], -zc, lw=ls, lc=bcols[13], label=" RO", legendfontsize=lfs)
+#             lens!([100, 11000], [-450, -100], inset=(1, bbox(0.05, 0.22, 0.6, 0.3, :top, :right)), subplot=2, xrotation=45, 
+#             border=:box, bg_color_inside=:gray98, yticks=false)
+
+#     p2 = plot(lab_c_blm[:, :], -zc, lw=ls2, lc=bcols[4], label=" LC", legendfontsize=lfs, yformatter=Returns(""), xlabel=L"cells/mL/day" ,
+#             xrotation=45, title =tls[2], titlefontsize=tfs, grid=false, border=:box, legend=lg, xtickfontsize=xtfs, alpha=ab,
+#             foreground_color_legend = nothing)
+#             plot!(lab_o_blm[:, :], -zc, lw=ls, lc=bcols[9], label=" LO", legendfontsize=lfs)
+#             plot!(BP_blm[:, 7], -zc, lw=ls2, lc=bcols[7], label=" SLC", legendfontsize=lfs, alpha=ab)
+#             plot!(BP_blm[:, 12], -zc, lw=ls, lc=bcols[12], label=" SLO", legendfontsize=lfs)
+#             plot!(BP_blm[:, 8], -zc, lw=ls2, lc=bcols[8], label=" RC", legendfontsize=lfs, alpha=ab)
+#             plot!(BP_blm[:, 13], -zc, lw=ls, lc=bcols[13],label=" RO", legendfontsize=lfs); 
+#             lens!([100, 11000], [-450, -100], inset=(1, bbox(0.05, 0.22, 0.6, 0.3, :top, :right)), subplot=2, xrotation=45, 
+#             border=:box, bg_color_inside=:gray98, yticks=false)
+
+#     fig = plot(p1, p2, layout=(1,2))
+
+#     savefig(fig,"bloom_prod.png")
+
+#     return fig
+# end

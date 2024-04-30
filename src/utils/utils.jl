@@ -331,27 +331,6 @@ function log_params(prms, season)
 
 end
 
-
-function update_tracking_arrs(track_n, track_p, track_z, track_b, track_d, track_o, track_time, 
-    ntemp, ptemp, ztemp, btemp, dtemp, otemp, t, trec, prms)
-
-    j = Int(t÷trec + 1)
-    t_id = t.*prms.dt
-    track_p[:,:,j] .= ptemp
-    track_b[:,:,j] .= btemp 
-    track_z[:,:,j] .= ztemp 
-    track_n[:,:,j] .= ntemp 
-    track_d[:,:,j] .= dtemp
-    track_o[:,:,j] .= otemp
-    track_time[j] = t_id 
-
-    @printf("Day %7.1f out of %5.0f = %4.0f%% done at %s \n", t_id, prms.days, t_id/prms.days*100, now())
-
-    return track_n, track_p, track_z, track_b, track_d, track_o, track_time
-
-end
-
-
 function nan_or_inf(x)
 
     if typeof(x) == Float64 || typeof(x) == Int64
@@ -367,7 +346,6 @@ function nan_or_inf(x)
     return false
 
 end
-
 
 function get_endpoints(vars, ds=nothing)
 
@@ -394,7 +372,6 @@ function get_endpoints(vars, ds=nothing)
     return endpoints
 end
 
-
 function get_final_year(ds, vars)
     # where year is 12 * 30 days
     final_yr = Vector{Any}()
@@ -410,7 +387,6 @@ function get_final_year(ds, vars)
     return final_yr
 
 end
-
 
 function get_final_three_cycles(ds, vars, pulse_freq)
     # where year is 12 * 30 days
@@ -430,7 +406,6 @@ function get_final_three_cycles(ds, vars, pulse_freq)
 
 end
 
-
 function get_zc(H)
 
     dz = 10
@@ -439,7 +414,6 @@ function get_zc(H)
     return zc
 
 end
-
 
 function get_hmap_z_axis(depth, days, daily_data)
 
@@ -480,7 +454,6 @@ function set_zmax(state_var, num_state_var)
 
 end
 
-
 function set_extinct_to_zero(ds)
 
     dss = copy(ds)
@@ -490,7 +463,6 @@ function set_extinct_to_zero(ds)
     return dss
 
 end
-
 
 function mean_over_time(state_vars, ds, season_num)
 
@@ -549,8 +521,21 @@ function get_cycle_means(vars, pulse_freq, ds)
 
 end
 
+function load_bloom(vars, ds)
 
+    bloom_data = Vector{Any}()
 
+    for v in vars
+        if v != "o"
+            append!(bloom_data, [ds[v][:, :, :]])
+        else
+            append!(bloom_data, [ds[v][:, :]])
+        end
+    end
+
+    return bloom_data
+
+end
 
 function check_for_negatives(RS)
 
@@ -563,7 +548,6 @@ function check_for_negatives(RS)
     return RS
 
 end
-
 
 function get_temp_mod(ds)
     
@@ -582,7 +566,6 @@ function get_temp_mod(ds)
     end
 
 end
-
 
 function get_light()
     return CSV.read("/home/lee/Dropbox/Development/NPZBD_1D/data/light/light.csv", DataFrame, header=false)

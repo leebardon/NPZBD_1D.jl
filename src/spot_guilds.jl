@@ -9,7 +9,7 @@ function load_guilds_csv(path)
 
 end
 
-function load_monthly_csvs(path, mean=false)
+function load_monthly_csvs(path, plot_type, mean=false)
 
     month_names = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
     out = Any[]
@@ -22,8 +22,8 @@ function load_monthly_csvs(path, mean=false)
         end
     else
         for m in month_names
-            csv = DataFrame(CSV.File("$(path)/RA_FL/$(m)_mean_RA_FL.csv"))
-            sem = DataFrame(CSV.File("$(path)/sem_FL/$(m)_mean_RA_FL_sem.csv"))
+            csv = DataFrame(CSV.File("$(path)/$(plot_type)_FL/$(m).csv"))
+            sem =  DataFrame(CSV.File("$(path)/$(plot_type)_sem_FL/$(m).csv"))
             push!(out, csv)
             push!(sem_out, sem)
         end
@@ -171,7 +171,6 @@ function plot_grouped_bar_means(depth_matrices, depthstrings, season, month_name
     return plts_arr[1], plts_arr[2], plts_arr[3], plts_arr[4], plts_arr[5]
 
 end
-
 
 function plot_gbars(mpath)
 
@@ -342,9 +341,9 @@ function get_anomalies(all_in_year, all_clade_colnames)
 
 end
 
-function plot_monthly_RA_for_year(colnames, matrices, deps, year, copio, slow_copio, oligo)
+function plot_monthly_var_for_year(colnames, matrices, deps, year, copio, slow_copio, oligo, plot_type)
 
-    dirname = "results/plots/SPOT/monthly_RA_$(year)"
+    dirname = "results/plots/SPOT/$(plot_type)/monthly_$(plot_type)_$(year)"
     check_dir_exists(dirname)
 
     fnames = ["Actinomarinales", "Enterobacterales", "Dadabacteriales","Flavobacteriales","Planctomycetota",
@@ -385,7 +384,7 @@ function plot_monthly_RA_for_year(colnames, matrices, deps, year, copio, slow_co
             f[i] = plot(p)
         
             # check_dir_exists("results/plots/SPOT/monthly_RA_$(year)")
-            savefig(p, "results/plots/SPOT/monthly_RA_$(year)/$(fnames[v]).png")
+            savefig(p, "results/plots/SPOT/$(plot_type)/monthly_$(plot_type)_$(year)/$(fnames[v]).png")
         end
 
         flength=fsize*250
@@ -394,10 +393,9 @@ function plot_monthly_RA_for_year(colnames, matrices, deps, year, copio, slow_co
     end
 end
 
+function plot_mean_var(colnames, matrices, deps, copio, slow_copio, oligo, sem_matrices, plot_type)
 
-function plot_mean_RA(colnames, matrices, deps, copio, slow_copio, oligo, sem_matrices)
-
-    dirname = "results/plots/SPOT/mean_monthly_RA"
+    dirname = "results/plots/SPOT/$(plot_type)/mean_monthly_$(plot_type)"
     check_dir_exists(dirname)
 
     depths = ["5m", "DCM", "150m", "500m", "890m"];
@@ -441,7 +439,7 @@ function plot_mean_RA(colnames, matrices, deps, copio, slow_copio, oligo, sem_ma
             f[i] = plot(p)
         
             # check_dir_exists("results/plots/SPOT/monthly_RA_$(year)")
-            savefig(p, "results/plots/SPOT/mean_monthly_RA/$(fnames[v]).png")
+            savefig(p, "results/plots/SPOT/$(plot_type)/mean_monthly_$(plot_type)/$(fnames[v]).png")
         end
 
         flength=fsize*250
@@ -464,13 +462,13 @@ function get_bar_limits(i, matrices)
 
 end
 
-function plot_RA_for_year(months_data, month_nums, all_clade_colnames, copio, slow_copio, oligo, year)
+function plot_var_for_year(months_data, month_nums, all_clade_colnames, copio, slow_copio, oligo, year, plot_type)
 
     deps = ["5m", "DCM", "150m", "500m", "890m"];
 
     dfs = Any[];
-    for d in deps
-        push!(dfs, get_year_depth_df(months_data[1], year, d, month_nums))
+    for dep in deps
+        push!(dfs, get_year_depth_df(months_data[1], year, dep, month_nums))
     end
 
     matrices = Any[];
@@ -478,12 +476,11 @@ function plot_RA_for_year(months_data, month_nums, all_clade_colnames, copio, sl
         push!(matrices, create_data_matrices_months(df, all_clade_colnames))
     end
 
-    plot_monthly_RA_for_year(all_clade_colnames, matrices, deps, year, copio, slow_copio, oligo)
+    plot_monthly_var_for_year(all_clade_colnames, matrices, deps, year, copio, slow_copio, oligo, plot_type)
 
 end
 
-
-function plot_mean_monthly_RA(means_data, month_nums, all_clade_colnames, copio, slow_copio, oligo, sem_data)
+function plot_mean_monthly_var(means_data, month_nums, all_clade_colnames, copio, slow_copio, oligo, sem_data, plot_type)
 
     deps = [5, 0, 150, 500, 890];
 
@@ -501,16 +498,13 @@ function plot_mean_monthly_RA(means_data, month_nums, all_clade_colnames, copio,
         push!(sem_matrices, create_data_matrices_months(sems_by_depth[i], all_clade_colnames))
     end
 
-    plot_mean_RA(all_clade_colnames, matrices, deps, copio, slow_copio, oligo, sems_by_depth)
+    plot_mean_var(all_clade_colnames, matrices, deps, copio, slow_copio, oligo, sems_by_depth, plot_type)
 
 end
 
 
 
 # -----------------------------------------------------------------------------------------------------
-
-year=2010;
-
 month_nums = [1,2,3,4,5,6,7,8,9,10,11,12];
 all_clade_colnames = [
 "Actinomarinales", "Enterobacterales", "Dadabacteriales","Flavobacteriales","Planctomycetota",
@@ -524,121 +518,98 @@ copio = [2,6,15,5,14,4];
 slow_copio = [16,9,19,20,12,10,17,8,13];
 oligo = [18,21,11,1,3,7];
 
-monthly_FL_RA = load_monthly_csvs("data/spot_data/monthly_RA/monthly_FL");
-plot_RA_for_year(monthly_FL_RA, month_nums, all_clade_colnames, copio, slow_copio, oligo, year);
+# ------------------------------------------------------------------------------------------------------------------
 
-# MEANS EXCLUDE ANOMALOUS YEAR 2014
-# monthly_means_FL_RA, sems = load_monthly_csvs("data/spot_data/monthly_means_RA/", true);
+# For RA plots
+# plot_type = "RA"
 
-# plot_mean_monthly_RA(monthly_means_FL_RA, month_nums, all_clade_colnames, copio, slow_copio, oligo, sems);
+# # load monthly data for year
+# year=2014;
+# path_RA = "data/spot_data/monthly_guild/monthly_RA_FL"
+# monthly_data = load_monthly_csvs(path_RA, plot_type);
+# plot_var_for_year(monthly_data, month_nums, all_clade_colnames, copio, slow_copio, oligo, year, plot_type);
 
+# Monthly means (EXCLUDES ANOMALOUS YEAR 2015)
+# path_means_RA = "data/spot_data/monthly_means_guild/RA_FL"
+# monthly_means_FL_RA, sems = load_monthly_csvs(path_means_RA, plot_type, true);
+# plot_mean_monthly_var(monthly_means_FL_RA, month_nums, all_clade_colnames, copio, slow_copio, oligo, sems, "RA");
 
+# ------------------------------------------------------------------------------------------------------------------
 
+# # For BPLeu plots
+# plot_type = "BPLeu"
 
+# # load monthly data for year
+# path_BPLeu = "data/spot_data/monthly_guild/monthly_BPLeu_FL"
+# year=2014;
+# monthly_data = load_monthly_csvs(path_BPLeu, plot_type);
+# plot_var_for_year(monthly_data, month_nums, all_clade_colnames, copio, slow_copio, oligo, year, plot_type);
 
+# # Monthly means (EXCLUDES ANOMALOUS YEAR 2015)
+# path_means_BPLeu_FL = "data/spot_data/monthly_means_guild"
+# monthly_means_BPLeu_FL, sems = load_monthly_csvs(path_means_BPLeu_FL, plot_type, true);
+# plot_mean_monthly_var(monthly_means_BPLeu_FL, month_nums, all_clade_colnames, copio, slow_copio, oligo, sems, plot_type);
 
+# ------------------------------------------------------------------------------------------------------------------
 
+# For BPThy plots
+# plot_type = "BPThy"
 
+# # # load monthly data for year
+# # path_BPThy = "data/spot_data/monthly_guild/monthly_BPThy_FL"
+# # year=2014;
+# # monthly_data = load_monthly_csvs(path_BPThy, plot_type);
+# # plot_var_for_year(monthly_data, month_nums, all_clade_colnames, copio, slow_copio, oligo, year, plot_type);
 
-# spring_2014_5 = get_year_depth_df(months_data, 2014, "5m", [3,4,5]);
-# spring_2014_dcm = get_year_depth_df(months_data, 2014, "DCM", [3,4,5]);
-# spring_2014_150 = get_year_depth_df(months_data, 2014, "150m", [3,4,5]);
-# spring_2014_500 = get_year_depth_df(months_data, 2014, "500m", [3,4,5]);
-# spring_2014_890 = get_year_depth_df(months_data, 2014, "890m", [3,4,5]);
+# #Monthly means (EXCLUDES ANOMALOUS YEAR 2015)
+# path_means_BPThy_FL = "data/spot_data/monthly_means_guild"
+# monthly_means_BPThy_FL, sems = load_monthly_csvs(path_means_BPThy_FL, plot_type, true);
+# plot_mean_monthly_var(monthly_means_BPThy_FL, month_nums, all_clade_colnames, copio, slow_copio, oligo, sems, plot_type);
 
-# spring_2015_5 = get_year_depth_df(months_data, 2015, "5m", [3,4,5]);
-# spring_2015_dcm = get_year_depth_df(months_data, 2015, "DCM", [3,4,5]);
-# spring_2015_150 = get_year_depth_df(months_data, 2015, "150m", [3,4,5]);
-# spring_2015_500 = get_year_depth_df(months_data, 2015, "500m", [3,4,5]);
-# spring_2015_890 = get_year_depth_df(months_data, 2015, "890m", [3,4,5]);
+# ------------------------------------------------------------------------------------------------------------------
 
-# m1 = create_data_matrices_months(spring_2014_5);
-# m2 = create_data_matrices_months(spring_2014_dcm);
-# m3 = create_data_matrices_months(spring_2014_150);
-# m4 = create_data_matrices_months(spring_2014_500);
-# m5 = create_data_matrices_months(spring_2014_890);
+# # For PP plots
+# plot_type = "PP"
 
-# m12 = create_data_matrices_months(spring_2015_5);
-# m22 = create_data_matrices_months(spring_2015_dcm);
-# m32 = create_data_matrices_months(spring_2015_150);
-# m42 = create_data_matrices_months(spring_2015_500);
-# m52 = create_data_matrices_months(spring_2015_890);
+# load monthly data for year
+# path_PP = "data/spot_data/monthly_guild/monthly_PP_FL"
+# year=2014;
+# monthly_data = load_monthly_csvs(path_PP, plot_type);
+# plot_var_for_year(monthly_data, month_nums, all_clade_colnames, copio, slow_copio, oligo, year, plot_type);
 
-# diff1 = (m12 .- m1) .* 100;
-# diff2 = (m22 .- m2) .* 100;
-# diff3 = (m32 .- m3) .* 100;
-# diff4 = (m42 .- m4) .* 100;
-# diff5 = (m52 .- m5) .* 100;
+# Monthly means (EXCLUDES ANOMALOUS YEAR 2015)
+# path_means_PP_FL = "data/spot_data/monthly_means_guild"
+# monthly_means_PP_FL, sems = load_monthly_csvs(path_means_PP_FL, plot_type, true);
+# plot_mean_monthly_var(monthly_means_PP_FL, month_nums, all_clade_colnames, copio, slow_copio, oligo, sems, plot_type);
 
-#------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------
 
+# # For BacAbu plots
+plot_type = "BacAbu"
 
-# _2014_5 = get_year_depth_df(months_data, 2014, "5m", [9,10,11]);
-# _2014_dcm = get_year_depth_df(months_data, 2014, "DCM", [9,10,11]);
-# _2014_150 = get_year_depth_df(months_data, 2014, "150m", [9,10,11]);
-# _2014_500 = get_year_depth_df(months_data, 2014, "500m", [9,10,11]);
-# _2014_890 = get_year_depth_df(months_data, 2014, "890m", [9,10,11]);
+# # load monthly data for year
+# path_BacAbu = "data/spot_data/monthly_guild/monthly_BacAbu_FL"
+# year=2014;
+# monthly_data = load_monthly_csvs(path_BacAbu, plot_type);
+# plot_var_for_year(monthly_data, month_nums, all_clade_colnames, copio, slow_copio, oligo, year, plot_type);
 
-# _2015_5 = get_year_depth_df(months_data, 2015, "5m", [9,10,11]);
-# _2015_dcm = get_year_depth_df(months_data, 2015, "DCM", [9,10,11]);
-# _2015_150 = get_year_depth_df(months_data, 2015, "150m", [9,10,11]);
-# _2015_500 = get_year_depth_df(months_data, 2015, "500m", [9,10,11]);
-# _2015_890 = get_year_depth_df(months_data, 2015, "890m", [9,10,11]);
+# # Monthly means (EXCLUDES ANOMALOUS YEAR 2015)
+path_means_BacAbu_FL = "data/spot_data/monthly_means_guild"
+monthly_means_BacAbu_FL, sems = load_monthly_csvs(path_means_BacAbu_FL, plot_type, true);
+plot_mean_monthly_var(monthly_means_BacAbu_FL, month_nums, all_clade_colnames, copio, slow_copio, oligo, sems, plot_type);
 
-# m1 = create_data_matrices_months(_2014_5);
-# m2 = create_data_matrices_months(_2014_dcm);
-# m3 = create_data_matrices_months(_2014_150);
-# m4 = create_data_matrices_months(_2014_500);
-# m5 = create_data_matrices_months(_2014_890);
+# ------------------------------------------------------------------------------------------------------------------
 
-# m12 = create_data_matrices_months(_2015_5);
-# m22 = create_data_matrices_months(_2015_dcm);
-# m32 = create_data_matrices_months(_2015_150);
-# m42 = create_data_matrices_months(_2015_500);
-# m52 = create_data_matrices_months(_2015_890);
+# # For VirAbu plots
+plot_type = "VirAbu"
 
-# diff1 = (m12 .- m1) .* 100;
-# diff2 = (m22 .- m2) .* 100;
-# diff3 = (m32 .- m3) .* 100;
-# diff4 = (m42 .- m4) .* 100;
-# diff5 = (m52 .- m5) .* 100;
+# # load monthly data for year
+# path_VirAbu = "data/spot_data/monthly_guild/monthly_VirAbu_FL"
+# year=2014;
+# monthly_data = load_monthly_csvs(path_VirAbu, plot_type);
+# plot_var_for_year(monthly_data, month_nums, all_clade_colnames, copio, slow_copio, oligo, year, plot_type);
 
-
-
-
-guild_labs = ["Actinomar", "Enterobac", "Dadabac","Flavobac","Planctomy",
-"Rhodobac","SAR11","SAR202","SAR324","SAR406","SAR86",
-"Thioglobac","Thermoplas","Verrucomic","Pseudomon","Gemmatim","UBA10353",
-"HOC36","Microtric","Puniceispir","Rhodospir","Ammonia_ox","Nitrite_ox"];
-
-# function str_to_datetime(guilds_df)
-
-#     guilds_df.Date = Dates.format.(DateTime.(guilds_df.Date, dateformat"m/d/y") .+ Dates.Year(2000), dateformat"yyyy-mm-dd")
-#     guilds_df.Date = Date.(guilds_df.Date)
-
-#     return guilds_df
-
-# end
-
-
-# function filter_by_depth(guilds_df)
-
-#     guilds_5m = filter(row -> row.Depth == "5m", guilds)
-#     guilds_150m = filter(row -> row.Depth == "150m", guilds)
-
-#     return guilds_5m, guilds_150m
-
-# end
-
-
-# function filter_by_guild()
-#     mar2014_sar11 = filter(row -> row.Guild == "SAR11_clade", mar2014)
-# end
-
-# path = "data/spot_data/monthly/monthly_FL"
-# months_data = load_monthly_csvs(path);
-
-# use Depth.m to split into depths. 
-# group rows by month and get monthly averages. Get annual averages too. 
-# group by the 4 key guilds emily used 
-# plot depths over relative abundance  for annual and seasonal means for each key guild
+# # Monthly means (EXCLUDES ANOMALOUS YEAR 2015)
+path_means_VirAbu_FL = "data/spot_data/monthly_means_guild"
+monthly_means_VirAbu_FL, sems = load_monthly_csvs(path_means_VirAbu_FL, plot_type, true);
+plot_mean_monthly_var(monthly_means_VirAbu_FL, month_nums, all_clade_colnames, copio, slow_copio, oligo, sems, plot_type);
